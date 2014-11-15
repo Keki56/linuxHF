@@ -6,34 +6,84 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>669</width>
+    <height>335</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>LobbyWindow</string>
+   <string>PewPew Artillery</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>240</x>
-      <y>80</y>
-      <width>67</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Kéki</string>
-    </property>
-   </widget>
+   <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="3,2">
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QPlainTextEdit" name="gameListBox"/>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="gameBottomPanel">
+        <property name="spacing">
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="QPushButton" name="newGameButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Új játék</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="joinButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Csatlakozás</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="chatPanel">
+      <item>
+       <widget class="QPlainTextEdit" name="chatBox"/>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="chatBottomPanel">
+        <item>
+         <widget class="QLineEdit" name="chatInputBox"/>
+        </item>
+        <item>
+         <widget class="QPushButton" name="chatButton">
+          <property name="text">
+           <string>Küldés</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>400</width>
+     <width>669</width>
      <height>25</height>
     </rect>
    </property>

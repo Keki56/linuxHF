@@ -13,8 +13,17 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        lobbywindow.cpp
+        lobbywindow.cpp \
+    gamewindow.cpp \
+    gameengine.cpp \
+    player.cpp \
+    map.cpp
 
-HEADERS  += lobbywindow.h
+HEADERS  += lobbywindow.h \
+    gamewindow.h \
+    gameengine.h \
+    player.h \
+    map.h
 
-FORMS    += lobbywindow.ui
+FORMS    += lobbywindow.ui \
+    gamewindow.ui

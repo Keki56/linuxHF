@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core
+QT       += core network
 
 QT       -= gui
 
@@ -14,5 +14,12 @@ CONFIG   -= app_bundle
 
 TEMPLATE = app
 
+QMAKE_CXXFLAGS += -std=c++11
 
-SOURCES += main.cpp
+INCLUDEPATH += ../common/
+
+SOURCES += \
+    server.cpp
+
+HEADERS += \
+    server.h

@@ -11,6 +11,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = pewpew-artillery
 TEMPLATE = app
 
+INCLUDEPATH += ../common/
 
 SOURCES += main.cpp\
         lobbywindow.cpp

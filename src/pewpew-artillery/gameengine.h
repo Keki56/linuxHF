@@ -2,16 +2,26 @@
 #define GAMEENGINE_H
 
 #include <qstring.h>
-#include "player.h"
-#include "map.h"
 
 class GameEngine
 {
 private:
-    Player localPlayer, remotePlayer;
-    Map map;
+    struct Player {
+        int hp;
+        double position;
+        double angle;
+        double power;
+    };
 
-    double getTrajectoryHeight(double x);
+    struct Wall {
+        double left, right, top;
+    };
+
+    Player localPlayer, remotePlayer;
+    Wall wall;
+
+    double getTrajectoryHeight(Player* p, double x);
+    bool wallHit(Player* player);
 public:
     GameEngine();
 

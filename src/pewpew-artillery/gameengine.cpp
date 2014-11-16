@@ -6,7 +6,16 @@
 
 GameEngine::GameEngine() {}
 
+double GameEngine::getTrajectoryHeight(Player* p, double x){
+    double t = (x - p->position) / (p->power * cos(p->angle));
+    return t * (sin(p->angle) - g*t/2);
+}
 
+bool GameEngine::wallHit(Player* player){
+    double left = getTrajectoryHeight(player, wall.left);
+    double right = getTrajectoryHeight(player, wall.right);
+    return (left <= wall.top || right <= wall.right);
+}
 
 void GameEngine::setLocalPlayer(double position, double angle, double power){
     localPlayer.position = position;

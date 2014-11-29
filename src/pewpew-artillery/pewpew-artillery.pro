@@ -15,14 +15,16 @@ INCLUDEPATH += ../common/
 
 SOURCES += main.cpp\
         lobbywindow.cpp \
-    gamewindow.cpp \
     gameengine.cpp \
-    map.cpp
+    map.cpp \
+    controler.cpp \
+    gamewindow.cpp
 
 HEADERS  += lobbywindow.h \
-    gamewindow.h \
     gameengine.h \
-    map.h
+    map.h \
+    controler.h \
+    gamewindow.h
 
 FORMS    += lobbywindow.ui \
     gamewindow.ui

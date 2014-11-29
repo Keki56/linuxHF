@@ -22,7 +22,14 @@ private:
 
     double getTrajectoryHeight(Player* p, double x);
     bool wallHit(Player* player);
+    double getImpactPosition(Player* p);
+    bool firePlayer(Player* source, Player* target);
 public:
+    struct Position {
+        double x;
+        double y;
+    };
+
     GameEngine();
 
     void setLocalPlayer(double position, double angle, double power);
@@ -33,6 +40,8 @@ public:
 
     int getLocalPlayerHp();
     int getRemotePlayerHp();
+
+    Position getBulletPosition(double deltaTime);
 };
 
 #endif // GAMEENGINE_H

@@ -1,10 +1,25 @@
 #include "gameengine.h"
 #include <math.h>
 
-#define g 9.81      //a gracitációs gyorsulás
-#define MAX_V 100   //a lövedék maximális kezdősebessége
+//A pálya 0.0-tól 1.0-ig tart
 
-GameEngine::GameEngine() {}
+#define g 9.81                  //a gracitációs gyorsulás
+#define MAX_V 100               //a lövedék maximális kezdősebessége
+
+#define WALL_LEFT 0.45          //a fal bal széle
+#define WALL_RIGHT 0.55         //a fal jobb széle
+#define WALL_TOP 0.3            //a fal magassága
+#define DEFAULT_POSITION 0.2    //a játékosok alapértelmezett pozíciója     |-x-P1-----WALL-----P2-x-|
+
+GameEngine::GameEngine() {
+    wall = Wall();
+    wall.left = WALL_LEFT;
+    wall.right = WALL_RIGHT;
+    wall.top = WALL_TOP;
+
+    setLocalPlayer(DEFAULT_POSITION, M_PI_4, 0);
+    setLocalPlayer(1.0 - DEFAULT_POSITION, M_PI_4 * 3, 0);
+}
 
 double GameEngine::getTrajectoryHeight(Player* p, double x){
     double t = (x - p->position) / (p->power * cos(p->angle));
@@ -15,6 +30,22 @@ bool GameEngine::wallHit(Player* player){
     double left = getTrajectoryHeight(player, wall.left);
     double right = getTrajectoryHeight(player, wall.right);
     return (left <= wall.top || right <= wall.right);
+}
+
+double GameEngine::getImpactPosition(Player* player) {
+    double dS = 2 * (player->power * MAX_V)*(player->power * MAX_V) * cos(player->angle) * sin(player->angle) / g;
+    return player->position + dS;
+ }
+
+bool GameEngine::firePlayer(Player* source, Player* target) {
+    if (!wallHit(source)) {
+        double impactPosition = getImpactPosition(source);
+        if (impactPosition-0.05 < target->position || impactPosition+0.05 > target->position) {     //Eltalálta
+            target->power -= 10;
+            return true;
+        }
+    }
+    return false;
 }
 
 void GameEngine::setLocalPlayer(double position, double angle, double power){
@@ -37,14 +68,16 @@ int GameEngine::getRemotePlayerHp(){
     return remotePlayer.hp;
 }
 
-//Nincs még normálosan kész, de addig is visszaad valamit
 bool GameEngine::fireLocalPlayer(){
-    localPlayer.hp -= 10;
-    return (localPlayer.hp > 0);
+    return firePlayer(&localPlayer, &remotePlayer);
 }
 
-//Nincs még normálosan kész, de addig is visszaad valamit
 bool GameEngine::fireRemotePlayer(){
-    remotePlayer.hp -= 10;
-    return (remotePlayer.hp > 0);
+    return firePlayer(&remotePlayer, &localPlayer);
+}
+
+GameEngine::Position GameEngine::getBulletPosition(double deltaTime){
+    //Nincs még implementálva
+    Position position;
+    return position;
 }

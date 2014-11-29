@@ -16,7 +16,14 @@ TEMPLATE = app
 
 QMAKE_CXXFLAGS += -std=c++11
 
-INCLUDEPATH += ../common/
+INCLUDEPATH += ../messagetypes/ \
+               ../../include/
+
+Debug:LIBS += -L../../build/messagetypes/debug
+Release:LIBS += -L../../build/messagetypes/release
+LIBS += ../../lib/
+
+LIBS += -lmessagetypes
 
 SOURCES += \
     server.cpp

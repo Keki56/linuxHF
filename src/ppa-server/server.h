@@ -3,9 +3,9 @@
 
 #include <QTcpServer>
 #include <QTcpSocket>
-#include <QTextStream>
 #include <QMap>
 #include <stdlib.h>
+#include "messagetypes.h"
 
 struct Player;
 
@@ -24,7 +24,6 @@ class Server : public QObject {
     Q_OBJECT
 
 private:
-    QTextStream output;
     QTcpServer serverSocket;
     QMap<QTcpSocket*, Player> players;
 
@@ -35,9 +34,12 @@ public:
 public slots:
     void newConnection();
     void receivePacket();
-
+    void handleSocketError(QAbstractSocket::SocketError error);
 private:
     Player* getOpponent(Player* player) const;
+    void broadcastExcept(const QTcpSocket* senderSocket, const Message& msg);
+    void sendTo(const QTcpSocket* socket, const Message& msg);
+    void playerDisconnected(Player* player);
 };
 
 #endif // SERVER_H

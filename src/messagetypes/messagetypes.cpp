@@ -1,7 +1,11 @@
 #include "messagetypes.h"
 
-Message* Message::readMessage(QDataStream& stream)
-{
+/**
+ * @brief Message::readMessage Read a message packet from a stream.
+ * @param stream The stream to read from.
+ * @return A dynamically constructed message packet: the caller is responsible for deleting.
+ */
+Message* Message::readMessage(QDataStream& stream) {
     Message* result;
     int typeVal;
     MessageType type;
@@ -27,33 +31,27 @@ Message* Message::readMessage(QDataStream& stream)
     return result;
 }
 
-QDataStream& SimpleMessage::operator<<(QDataStream& stream) const
-{
+QDataStream& SimpleMessage::operator<<(QDataStream& stream) const {
+    return (stream << type);
+}
+
+QDataStream& SimpleMessage::operator>>(QDataStream& stream) {
     return stream;
 }
 
-QDataStream& SimpleMessage::operator>>(QDataStream& stream)
-{
-    return stream;
+
+QDataStream& StringMessage::operator<<(QDataStream& stream) const {
+    return (stream << type << str);
 }
 
-
-QDataStream& StringMessage::operator<<(QDataStream& stream) const
-{
-    return (stream << str);
-}
-
-QDataStream& StringMessage::operator>>(QDataStream& stream)
-{
+QDataStream& StringMessage::operator>>(QDataStream& stream) {
     return (stream >> str);
 }
 
-QDataStream& operator<<(QDataStream& stream, const Message& msg)
-{
+QDataStream& operator<<(QDataStream& stream, const Message& msg) {
     return msg.operator<<(stream);
 }
 
-QDataStream& operator>>(QDataStream& stream, Message& msg)
-{
+QDataStream& operator>>(QDataStream& stream, Message& msg) {
     return msg.operator>>(stream);
 }

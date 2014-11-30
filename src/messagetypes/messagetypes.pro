@@ -21,3 +21,15 @@ unix:!symbian {
     }
     INSTALLS += target
 }
+
+Release:DESTDIR = ../../build/messagetypes/release
+Release:OBJECTS_DIR = ../../build/messagetypes/release
+Release:MOC_DIR = ../../build/messagetypes/release
+Release:RCC_DIR = ../../build/messagetypes/release
+Release:UI_DIR = ../../build/messagetypes/release
+
+Debug:DESTDIR = ../../build/messagetypes/debug
+Debug:OBJECTS_DIR = ../../build/messagetypes/debug
+Debug:MOC_DIR = ../../build/messagetypes/debug
+Debug:RCC_DIR = ../../build/messagetypes/debug
+Debug:UI_DIR = ../../build/messagetypes/debug

@@ -9,23 +9,33 @@
 
 struct Player;
 
+/**
+ * @brief The representation of a game running on the server.
+ */
 struct Game {
     QString name;
     Player* player1 = NULL, *player2 = NULL;
 };
 
+/**
+ * @brief The representation of a player connected to the server.
+ */
 struct Player {
-    QString name;
+    QString name = "";
     Game* game = NULL;
     QTcpSocket* socket = NULL;
 };
 
+/**
+ * @brief The class of the main server instance.
+ */
 class Server : public QObject {
     Q_OBJECT
 
 private:
     QTcpServer serverSocket;
     QMap<QTcpSocket*, Player> players;
+    quint32 blockSize;
 
 public:
     Server(int port);
@@ -38,8 +48,11 @@ public slots:
 private:
     Player* getOpponent(Player* player) const;
     void broadcastExcept(const QTcpSocket* senderSocket, const Message& msg);
-    void sendTo(const QTcpSocket* socket, const Message& msg);
+    void sendTo(QTcpSocket* socket, const Message& msg);
     void playerDisconnected(Player* player);
+
+    void onConnectionRequest(QTcpSocket* sender, StringMessage* msg);
+    void onChatMessage(QTcpSocket* sender, StringMessage* msg);
 };
 
 #endif // SERVER_H

@@ -5,10 +5,11 @@
 #define DEFAULT_PORT 4050
 
 /**
- * @brief Server::Server The standard constructor of the server instance.
+ * @brief The standard constructor of the server instance.
  * @param port The port which the server will use.
  */
 Server::Server(int port) {
+    blockSize = 0;
     connect(&serverSocket, SIGNAL(newConnection()), SLOT(newConnection()));
     if (!serverSocket.listen(QHostAddress::Any, port)) {
         perror("listen");
@@ -20,7 +21,7 @@ Server::Server(int port) {
 }
 
 /**
- * @brief Server::~Server The destructor of the server instance.
+ * @brief The destructor of the server instance.
  */
 Server::~Server() {
     for (QMap<QTcpSocket*, Player>::Iterator it = players.begin(); it != players.end(); ++it) {
@@ -30,9 +31,10 @@ Server::~Server() {
 }
 
 /**
- * @brief Server::newConnection Handle a new incoming connection.
+ * @brief Handle a new incoming connection.
  */
 void Server::newConnection() {
+    printf("INCOMING TRANSMISSION\n");
     while (serverSocket.hasPendingConnections()) {
         QTcpSocket* socket = serverSocket.nextPendingConnection();
         connect(socket, SIGNAL(readyRead()), SLOT(receivePacket()));
@@ -44,18 +46,44 @@ void Server::newConnection() {
 }
 
 /**
- * @brief Server::receivePacket Receive a new message from a client socket.
+ * @brief Receive a new message from a client socket.
  */
 void Server::receivePacket() {
+    {QTextStream st(stdout); st << "INCOMING DATA\n";}
+    QTcpSocket* socket = static_cast<QTcpSocket*>(sender());
+    while (socket->bytesAvailable() > 0) {
+        QDataStream input(socket);
+        input.setVersion(QDataStream::Qt_4_0);
+        if (blockSize == 0) {
+            // read the block size
+            if (socket->bytesAvailable() < sizeof(quint32)) return;
+            input >> blockSize;
+        }
+        // read the message itself
+        if (socket->bytesAvailable() < blockSize) return;
+        Message* msg = Message::readMessage(input);
+        if (msg != NULL) {
+            switch (msg->type) {
+                case MSGT_CONNECTION_REQUEST: {
+                    StringMessage* strmsg = static_cast<StringMessage*>(msg);
+                    onConnectionRequest(socket, strmsg);
+                    break;
+                }
+                default:
 
+                break;
+            }
+            delete msg;
+        }
+        blockSize = 0;
+    }
 }
 
 /**
- * @brief Server::handleSocketError Handle a socket error.
+ * @brief Handle a socket error.
  * @param error The type of error received, only QAbstractSocket::RemoteHostClosedError is handled
  */
-void Server::handleSocketError(QAbstractSocket::SocketError error)
-{
+void Server::handleSocketError(QAbstractSocket::SocketError error) {
     QTcpSocket* socket = static_cast<QTcpSocket*>(sender());
     if (error == QAbstractSocket::RemoteHostClosedError) {
         // one of the connections has closed
@@ -63,7 +91,7 @@ void Server::handleSocketError(QAbstractSocket::SocketError error)
         output << QString("Connection from %1 closed\n").arg(socket->peerAddress().toString());
         Player* player = &players[socket];
         playerDisconnected(player);
-        players.remove(socket);
+        players.remove(player->socket);
         socket->close();
     } else {
         QTextStream output(stdout);
@@ -72,12 +100,11 @@ void Server::handleSocketError(QAbstractSocket::SocketError error)
 }
 
 /**
- * @brief Server::getOpponent Get the opponent of a player.
+ * @brief Get the opponent of a player.
  * @param player The player queried.
  * @return The opponent of the player.
  */
-Player *Server::getOpponent(Player *player) const
-{
+Player *Server::getOpponent(Player *player) const {
     if (player == NULL) return NULL;
     Game* game = player->game;
     if (game == NULL) return NULL;
@@ -87,37 +114,44 @@ Player *Server::getOpponent(Player *player) const
 }
 
 /**
- * @brief Server::broadcastExcept Send a message to everyone except the sender.
+ * @brief Send a message to everyone except the sender.
  * @param senderSocket The client to exclude, NULL if there is noone to exclude.
  * @param msg The message to be sent.
  */
-void Server::broadcastExcept(const QTcpSocket* senderSocket, const Message& msg)
-{
+void Server::broadcastExcept(const QTcpSocket* senderSocket, const Message& msg) {
+    QByteArray buf;
+    QDataStream outputStream(&buf, QIODevice::WriteOnly);
+    outputStream.setVersion(QDataStream::Qt_4_0);
+    outputStream << quint32(0) << msg;
+    outputStream.device()->seek(0);
+    outputStream << (quint32)(buf.size() - sizeof(quint32));
     for (QMap<QTcpSocket*, Player>::Iterator i = players.begin(); i != players.end(); ++i) {
         QTcpSocket* sock = i.key();
         if (senderSocket == sock) continue;
-        QDataStream outputStream(*sock);
-        outputStream << msg;
+        sock->write(buf);
     }
 }
 
 /**
- * @brief Server::sendTo Send a message to a client.
+ * @brief Send a message to a client.
  * @param socket The socket of the client.
  * @param msg The message to be sent.
  */
-void Server::sendTo(const QTcpSocket* socket, const Message& msg)
-{
-    QDataStream outputStream(*socket);
-    outputStream << msg;
+void Server::sendTo(QTcpSocket* socket, const Message& msg) {
+    QByteArray buf;
+    QDataStream outputStream(&buf, QIODevice::WriteOnly);
+    outputStream.setVersion(QDataStream::Qt_4_0);
+    outputStream << quint32(0) << msg;
+    outputStream.device()->seek(0);
+    outputStream << (quint32)(buf.size() - sizeof(quint32));
+    socket->write(buf);
 }
 
 /**
- * @brief Server::playerDisconnected Inform the opponent of a player that they have disconnected.
+ * @brief Inform the opponent of a player that they have disconnected.
  * @param player The player who disconnected.
  */
-void Server::playerDisconnected(Player* player)
-{
+void Server::playerDisconnected(Player* player) {
     Player* opp = getOpponent(player);
     Game* game = player->game;
     if (game != NULL) {
@@ -132,19 +166,55 @@ void Server::playerDisconnected(Player* player)
     }
     StringMessage chatMessage;
     chatMessage.type = MSGT_CHAT_MESSAGE;
-    chatMessage.str = tr("%1 lekapcsolódott").arg(player->name);
+    chatMessage.str = tr("*** %1 kilépett. ***").arg(player->name);
     broadcastExcept(player->socket, chatMessage);
 }
 
 /**
- * @brief main The main method of the application.
+ * @brief Handle a connection request.
+ * @param sender The socket of the client.
+ * @param msg The message packet received.
+ */
+void Server::onConnectionRequest(QTcpSocket* sender, StringMessage* msg) {
+    bool found = false;
+    for (QMap<QTcpSocket*, Player>::Iterator i = players.begin(); i != players.end(); ++i) {
+        Player* p = &(i.value());
+        if (p->name == msg->str) {
+            found = true;
+            break;
+        }
+    }
+    if (found) {
+        SimpleMessage response;
+        response.type = MSGT_CONNECTION_REFUSED;
+        sendTo(sender, response);
+        players.remove(sender);
+        QTextStream output(stdout);
+        output << QString("Player %1 refused: name already taken\n").arg(msg->str);
+    } else {
+        SimpleMessage response;
+        Player* player = &players[sender];
+        player->name = msg->str;
+        response.type = MSGT_CONNECTION_ACCEPTED;
+        sendTo(sender, response);
+        StringMessage chatMsg;
+        chatMsg.type = MSGT_CHAT_MESSAGE;
+        chatMsg.str = tr("*** %1 kapcsolódott.***").arg(msg->str);
+        broadcastExcept(sender, chatMsg);
+        QTextStream output(stdout);
+        output << QString("Player %1 connected to server\n").arg(msg->str);
+    }
+}
+
+/**
+ * @brief The main method of the application.
  * @param argc The number of command line parameters.
  * @param argv The array of command line parameters.
  * @return The standard return value of the Qt application.
  */
 int main(int argc, char *argv[]) {
     QCoreApplication a(argc, argv);
-    Server(DEFAULT_PORT);
+    Server server(DEFAULT_PORT);
 
     StringMessage sm;
     sm.str = "hello";

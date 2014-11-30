@@ -21,7 +21,7 @@ INCLUDEPATH += ../messagetypes/ \
 
 Debug:LIBS += -L../../build/messagetypes/debug
 Release:LIBS += -L../../build/messagetypes/release
-LIBS += ../../lib/
+LIBS += -L../../lib/
 
 LIBS += -lmessagetypes
 
@@ -30,3 +30,15 @@ SOURCES += \
 
 HEADERS += \
     server.h
+
+Release:DESTDIR = ../../build/ppa-server/release
+Release:OBJECTS_DIR = ../../build/ppa-server/release
+Release:MOC_DIR = ../../build/ppa-server/release
+Release:RCC_DIR = ../../build/ppa-server/release
+Release:UI_DIR = ../../build/ppa-server/release
+
+Debug:DESTDIR = ../../build/ppa-server/debug
+Debug:OBJECTS_DIR = ../../build/ppa-server/debug
+Debug:MOC_DIR = ../../build/ppa-server/debug
+Debug:RCC_DIR = ../../build/ppa-server/debug
+Debug:UI_DIR = ../../build/ppa-server/debug

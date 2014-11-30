@@ -84,9 +84,19 @@
      <x>0</x>
      <y>0</y>
      <width>669</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuSzerver">
+    <property name="title">
+     <string>Szerver</string>
+    </property>
+    <addaction name="actionConnect"/>
+    <addaction name="actionDisconnect"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
+   </widget>
+   <addaction name="menuSzerver"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -97,8 +107,64 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionConnect">
+   <property name="text">
+    <string>Csatlakozás...</string>
+   </property>
+  </action>
+  <action name="actionDisconnect">
+   <property name="text">
+    <string>Lekapcsolódás</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Kilépés</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+X</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>actionExit</sender>
+   <signal>triggered()</signal>
+   <receiver>LobbyWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>334</x>
+     <y>167</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionConnect</sender>
+   <signal>triggered()</signal>
+   <receiver>LobbyWindow</receiver>
+   <slot>connectToServerClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>334</x>
+     <y>167</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>sendButtonClicked()</slot>
+  <slot>connectToServerClicked()</slot>
+  <slot>disconnectClicked()</slot>
+ </slots>
 </ui>

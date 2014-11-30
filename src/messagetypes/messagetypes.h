@@ -4,16 +4,18 @@
 #include <stdlib.h>
 #include <QDataStream>
 
-typedef enum {
+enum MessageType {
     MSGT_CONNECTION_REQUEST,
     MSGT_CONNECTION_ACCEPTED,
     MSGT_CONNECTION_REFUSED,
-    MSGT_DISCONNECTED,
     MSGT_PLAYER_DISCONNECTED,
     MSGT_GAME_CREATED,
-    MSGT_GAME_JOINED,
+    MSGT_GAME_REMOVED,
     MSGT_GAME_STARTED,
-    MSGT_CHAT_MESSAGE } MessageType;
+    MSGT_NEW_GAME,
+    MSGT_JOIN_GAME,
+    MSGT_CHAT_MESSAGE
+};
 
 /**
  * @brief The abstract base class of all message packets.

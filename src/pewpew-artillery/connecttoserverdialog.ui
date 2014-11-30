@@ -33,7 +33,11 @@
       </widget>
      </item>
      <item row="1" column="0">
-      <widget class="QLineEdit" name="nicknameField"/>
+      <widget class="QLineEdit" name="nicknameField">
+       <property name="text">
+        <string>Player</string>
+       </property>
+      </widget>
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="label_2">
@@ -56,6 +60,9 @@
          <horstretch>3</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="text">
+        <string>localhost</string>
        </property>
       </widget>
      </item>

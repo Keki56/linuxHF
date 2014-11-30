@@ -35,6 +35,7 @@ class Server : public QObject {
 private:
     QTcpServer serverSocket;
     QMap<QTcpSocket*, Player> players;
+    QMap<QString, Game> games;
     quint32 blockSize;
 
 public:
@@ -50,6 +51,9 @@ private:
     void broadcastExcept(const QTcpSocket* senderSocket, const Message& msg);
     void sendTo(QTcpSocket* socket, const Message& msg);
     void playerDisconnected(Player* player);
+    void newGame(Player* host, const QString& gameName);
+    void endGame(Game* game);
+    void joinGame(Player* player, Game* game);
 
     void onConnectionRequest(QTcpSocket* sender, StringMessage* msg);
     void onChatMessage(QTcpSocket* sender, StringMessage* msg);

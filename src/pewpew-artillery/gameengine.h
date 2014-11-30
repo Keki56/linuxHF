@@ -19,6 +19,7 @@ private:
 
     Player localPlayer, remotePlayer;
     Wall wall;
+    bool isLocalTurn;
 
     double getTrajectoryHeight(Player* p, double x);
     bool wallHit(Player* player);
@@ -30,10 +31,10 @@ public:
         double y;
     };
 
-    GameEngine();
+    GameEngine(/*bool localStarts*/);
 
-    void setLocalPlayer(double position, double angle, double power);
-    void setRemotePlayer(double position, double angle, double power);
+    bool setLocalPlayer(double position, double angle, double power);
+    bool setRemotePlayer(double position, double angle, double power);
 
     bool fireLocalPlayer();
     bool fireRemotePlayer();

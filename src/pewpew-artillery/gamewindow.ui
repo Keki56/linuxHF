@@ -28,20 +28,39 @@
        </widget>
       </item>
       <item>
-       <widget class="QSlider" name="verticalSlider">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="maximum">
-         <number>999</number>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QSlider" name="verticalSlider">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item alignment="Qt::AlignBottom">
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>Ágyú foka</string>
+            </property>
+           </widget>
+          </item>
+          <item alignment="Qt::AlignBottom">
+           <widget class="QLineEdit" name="lineEdit_2"/>
+          </item>
+          <item alignment="Qt::AlignBottom">
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>Tűzerő</string>
+            </property>
+           </widget>
+          </item>
+          <item alignment="Qt::AlignTop">
+           <widget class="QLineEdit" name="lineEdit"/>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </item>
       <item>
        <widget class="QSlider" name="horizontalSlider">
@@ -54,7 +73,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="fireButton">
+       <widget class="QPushButton" name="localFireButton">
         <property name="text">
          <string>Tűz</string>
         </property>
@@ -75,11 +94,39 @@
        </widget>
       </item>
       <item>
-       <widget class="QSlider" name="verticalSlider_2">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QSlider" name="verticalSlider_2">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item alignment="Qt::AlignBottom">
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>Ágyó foka</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEdit_3"/>
+          </item>
+          <item alignment="Qt::AlignBottom">
+           <widget class="QLabel" name="label_7">
+            <property name="text">
+             <string>Tűzerő</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEdit_4"/>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </item>
       <item>
        <widget class="QSlider" name="horizontalSlider_2">

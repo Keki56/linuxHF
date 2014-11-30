@@ -17,14 +17,14 @@ SOURCES += main.cpp\
         lobbywindow.cpp \
     gameengine.cpp \
     map.cpp \
-    controler.cpp \
-    gamewindow.cpp
+    gamewindow.cpp \
+    controller.cpp
 
 HEADERS  += lobbywindow.h \
     gameengine.h \
     map.h \
-    controler.h \
-    gamewindow.h
+    gamewindow.h \
+    controller.h
 
 FORMS    += lobbywindow.ui \
     gamewindow.ui

@@ -11,7 +11,7 @@
 #define WALL_TOP 0.3            //a fal magassága
 #define DEFAULT_POSITION 0.2    //a játékosok alapértelmezett pozíciója     |-x-P1-----WALL-----P2-x-|
 
-GameEngine::GameEngine() {
+GameEngine::GameEngine(/*bool localStarts): isLocalTurn(localStarts*/) {
     wall = Wall();
     wall.left = WALL_LEFT;
     wall.right = WALL_RIGHT;
@@ -48,16 +48,26 @@ bool GameEngine::firePlayer(Player* source, Player* target) {
     return false;
 }
 
-void GameEngine::setLocalPlayer(double position, double angle, double power){
-    localPlayer.position = position;
-    localPlayer.angle = angle;
-    localPlayer.power = power;
+bool GameEngine::setLocalPlayer(double position, double angle, double power){
+    if (isLocalTurn) {
+        localPlayer.position = position;
+        localPlayer.angle = angle;
+        localPlayer.power = power;
+        return true;
+    } else {
+        return false;
+    }
 }
 
-void GameEngine::setRemotePlayer(double position, double angle, double power) {
-    remotePlayer.position = position;
-    remotePlayer.angle = angle;
-    remotePlayer.power = power;
+bool GameEngine::setRemotePlayer(double position, double angle, double power) {
+    if (!isLocalTurn) {
+        remotePlayer.position = position;
+        remotePlayer.angle = angle;
+        remotePlayer.power = power;
+        return false;
+    } else {
+        return true;
+    }
 }
 
 int GameEngine::getLocalPlayerHp(){

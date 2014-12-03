@@ -13,12 +13,12 @@ TEMPLATE = app
 
 QMAKE_CXXFLAGS += -std=c++11
 
-INCLUDEPATH += ../messagetypes/ \
-               ../../include/
+INCLUDEPATH += $$PWD/../messagetypes/ \
+               $$PWD/../../include/
 
-Debug:LIBS += -L../../build/messagetypes/debug
-Release:LIBS += -L../../build/messagetypes/release
-LIBS += -L../../lib/
+CONFIG(debug, debug|release):LIBS += -L$$PWD/../../build/messagetypes/debug
+CONFIG(release, debug|release):LIBS += -L$$PWD/../../build/messagetypes/release
+LIBS += -L$$PWD/../../lib/
 
 LIBS += -lmessagetypes
 
@@ -30,8 +30,7 @@ SOURCES +=\
     gamewindow.cpp \
     controller.cpp \
     connecttoserverdialog.cpp \
-    lobby.cpp \
-    connecttoserverdialog.cpp
+    lobby.cpp
 
 HEADERS  += \
     lobbywindow.h \
@@ -40,23 +39,20 @@ HEADERS  += \
     gamewindow.h \
     controller.h \
     connecttoserverdialog.h \
-    lobby.h \
-    gamewindow.h \
-    lobby.h \
-    connecttoserverdialog.h
+    lobby.h
 
 FORMS    += lobbywindow.ui \
     gamewindow.ui \
     connecttoserverdialog.ui
 
-Release:DESTDIR = ../../build/pewpew-artillery/release
-Release:OBJECTS_DIR = ../../build/pewpew-artillery/release
-Release:MOC_DIR = ../../build/pewpew-artillery/release
-Release:RCC_DIR = ../../build/pewpew-artillery/release
-Release:UI_DIR = ../../build/pewpew-artillery/release
+CONFIG(release, debug|release):DESTDIR = $$PWD/../../build/pewpew-artillery/release
+CONFIG(release, debug|release):OBJECTS_DIR = $$PWD/../../build/pewpew-artillery/release
+CONFIG(release, debug|release):MOC_DIR = $$PWD/../../build/pewpew-artillery/release
+CONFIG(release, debug|release):RCC_DIR = $$PWD/../../build/pewpew-artillery/release
+CONFIG(release, debug|release):UI_DIR = $$PWD/../../build/pewpew-artillery/release
 
-Debug:DESTDIR = ../../build/pewpew-artillery/debug
-Debug:OBJECTS_DIR = ../../build/pewpew-artillery/debug
-Debug:MOC_DIR = ../../build/pewpew-artillery/debug
-Debug:RCC_DIR = ../../build/pewpew-artillery/debug
-Debug:UI_DIR = ../../build/pewpew-artillery/debug
+CONFIG(debug, debug|release):DESTDIR = $$PWD/../../build/pewpew-artillery/debug
+CONFIG(debug, debug|release):OBJECTS_DIR = $$PWD/../../build/pewpew-artillery/debug
+CONFIG(debug, debug|release):MOC_DIR = $$PWD/../../build/pewpew-artillery/debug
+CONFIG(debug, debug|release):RCC_DIR = $$PWD/../../build/pewpew-artillery/debug
+CONFIG(debug, debug|release):UI_DIR = $$PWD/../../build/pewpew-artillery/debug

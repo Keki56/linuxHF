@@ -16,12 +16,11 @@ TEMPLATE = app
 
 QMAKE_CXXFLAGS += -std=c++11
 
-INCLUDEPATH += ../messagetypes/ \
-               ../../include/
+INCLUDEPATH += $$PWD/../messagetypes/ \
+               $$PWD/../../include/
 
-Debug:LIBS += -L../../build/messagetypes/debug
-Release:LIBS += -L../../build/messagetypes/release
-LIBS += -L../../lib/
+CONFIG(debug, debug|release):LIBS += -L$$PWD/../../build/messagetypes/debug
+CONFIG(release, debug|release):LIBS += -L$$PWD/../../build/messagetypes/release
 
 LIBS += -lmessagetypes
 
@@ -31,14 +30,14 @@ SOURCES += \
 HEADERS += \
     server.h
 
-Release:DESTDIR = ../../build/ppa-server/release
-Release:OBJECTS_DIR = ../../build/ppa-server/release
-Release:MOC_DIR = ../../build/ppa-server/release
-Release:RCC_DIR = ../../build/ppa-server/release
-Release:UI_DIR = ../../build/ppa-server/release
+CONFIG(release, debug|release):DESTDIR = $$PWD/../../build/ppa-server/release
+CONFIG(release, debug|release):OBJECTS_DIR = $$PWD/../../build/ppa-server/release
+CONFIG(release, debug|release):MOC_DIR = $$PWD/../../build/ppa-server/release
+CONFIG(release, debug|release):RCC_DIR = $$PWD/../../build/ppa-server/release
+CONFIG(release, debug|release):UI_DIR = $$PWD/../../build/ppa-server/release
 
-Debug:DESTDIR = ../../build/ppa-server/debug
-Debug:OBJECTS_DIR = ../../build/ppa-server/debug
-Debug:MOC_DIR = ../../build/ppa-server/debug
-Debug:RCC_DIR = ../../build/ppa-server/debug
-Debug:UI_DIR = ../../build/ppa-server/debug
+CONFIG(debug, debug|release):DESTDIR = $$PWD/../../build/ppa-server/debug
+CONFIG(debug, debug|release):OBJECTS_DIR = $$PWD/../../build/ppa-server/debug
+CONFIG(debug, debug|release):MOC_DIR = $$PWD/../../build/ppa-server/debug
+CONFIG(debug, debug|release):RCC_DIR = $$PWD/../../build/ppa-server/debug
+CONFIG(debug, debug|release):UI_DIR = $$PWD/../../build/ppa-server/debug

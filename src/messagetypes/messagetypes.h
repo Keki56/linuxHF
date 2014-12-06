@@ -9,6 +9,7 @@ enum MessageType {
     MSGT_CONNECTION_ACCEPTED,
     MSGT_CONNECTION_REFUSED,
     MSGT_PLAYER_DISCONNECTED,
+    MSGT_PLAYER_STEPPED,
     MSGT_GAME_CREATED,
     MSGT_GAME_REMOVED,
     MSGT_GAME_STARTED,
@@ -47,6 +48,17 @@ public:
 class StringMessage : public Message {
 public:
     QString str;
+
+    virtual QDataStream& operator<<(QDataStream& stream) const;
+    virtual QDataStream& operator>>(QDataStream& stream);
+};
+
+/**
+ * @brief A message packer with four double fields. | Általánosan megírhatnánk úgy is, hogy egy tetszőleges hosszúságú tömböt vigyen át, de elsőre így is jó.
+ */
+class QuadDoubleMessage : public Message {
+public:
+    double data[4];
 
     virtual QDataStream& operator<<(QDataStream& stream) const;
     virtual QDataStream& operator>>(QDataStream& stream);

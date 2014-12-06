@@ -168,6 +168,12 @@ void Lobby::receivePacket() {
                     onGameRemoved(strmsg->str);
                     break;
                 }
+                case MSGT_PLAYER_STEPPED: {
+                    QuadDoubleMessage* qdmsg = (QuadDoubleMessage*)msg;
+                    double* data = qdmsg->data;
+                    controller->onMessageReceived(data[0], data[1], data[2], data[3]);
+                    break;
+                }
                 default:
 
                 break;
@@ -256,6 +262,17 @@ int main(int argc, char *argv[])
     Controller controller(false);
 /*    GameWindow w2(&controller);
     w2.show();*/
+
+  /*  double data[4];
+    data[0] = 2;
+    data[1] = 4;
+    data[2] = 6;
+    data[3] = 8;
+    QTextStream out(stdout);
+    out << data;
+    out << "ZZZ";
+    out << data[0];*/
+
 
     return a.exec();
 }

@@ -21,3 +21,7 @@ bool Controller::fireLocalPlayer(){
     printf("Controller::fireLocaPlayer\n");
 }
 
+void Controller::onMessageReceived(double position, double angle, double power, double deltaHP){
+    printf("Controller::onMessageReceived - position=%f angle=%f power=%f deltaHP=%f\n", position, angle, power, deltaHP);
+}
+

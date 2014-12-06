@@ -26,6 +26,7 @@ public:
     void updateGameList(const QMap<QString, QString>& games);
     void addGameToList(const QString& playerName, const QString& gameName);
     void removeGameFromList(const QString& playerName);
+    void refreshButtons();
 
 protected:
     virtual void closeEvent(QCloseEvent * event);

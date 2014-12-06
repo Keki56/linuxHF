@@ -90,6 +90,14 @@ bool Lobby::isGameRunning() const {
 }
 
 /**
+ * @brief Return whether the client is currently connected to a server.
+ * @return True if the client is connected.
+ */
+bool Lobby::isConnected() const {
+    return connection;
+}
+
+/**
  * @brief Get the name of the player.
  * @return The name of the player.
  */
@@ -110,6 +118,7 @@ void Lobby::newGame(const QString& gameName) {
     msg.str = gameName;
     sendMessage(msg);
     controller = new Controller(true, this);
+    lobbywindow.refreshButtons();
 }
 
 /**
@@ -224,7 +233,10 @@ void Lobby::handleSocketError(QAbstractSocket::SocketError error) {
  * @brief Event handler which is called after the game was closed.
  */
 void Lobby::gameClosed() {
-
+    if (controller == NULL) return;
+    SimpleMessage msg;
+    msg.type = MSGT_GAME_CLOSED;
+    lobbywindow.refreshButtons();
 }
 
 /**
@@ -281,6 +293,7 @@ void Lobby::startGame(const QString& opponentName) {
         controller = new Controller(false, this);
         controller->onOpponentJoined(opponentName);
     }
+    lobbywindow.refreshButtons();
 }
 
 /**

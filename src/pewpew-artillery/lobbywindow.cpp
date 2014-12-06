@@ -75,6 +75,21 @@ void LobbyWindow::removeGameFromList(const QString& playerName) {
 }
 
 /**
+ * @brief Refresh the buttons in the lobby window.
+ */
+void LobbyWindow::refreshButtons() {
+    if (lobby->isGameRunning() || !lobby->isConnected()) {
+        ui->newGameButton->setEnabled(false);
+        ui->joinButton->setEnabled(false);
+    } else {
+        ui->newGameButton->setEnabled(true);
+        QList<QTableWidgetItem*> selected = ui->gamesTable->selectedItems();
+        ui->joinButton->setEnabled(ui->gamesTable->rowCount() > 0 && !selected.isEmpty());
+    }
+    ui->chatButton->setEnabled(lobby->isConnected());
+}
+
+/**
  * @brief Handle the closure of the window.
  * @param event The close event received from the system.
  */
@@ -184,5 +199,5 @@ void LobbyWindow::joinGameClicked() {
  */
 void LobbyWindow::gameSelectionChanged() {
     QList<QTableWidgetItem*> selected = ui->gamesTable->selectedItems();
-    ui->joinButton->setEnabled(!selected.empty());
+    ui->joinButton->setEnabled(!selected.empty() && !lobby->isGameRunning());
 }

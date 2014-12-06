@@ -32,6 +32,7 @@ public:
     void showWindow();
     void sendChat(const QString& line);
     bool isGameRunning() const;
+    bool isConnected() const;
     QString getPlayerName() const;
     void newGame(const QString& gameName);
     void joinGame(const QString& hostName);

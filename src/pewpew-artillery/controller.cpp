@@ -25,6 +25,10 @@ void Controller::onMessageReceived(double position, double angle, double power, 
     printf("Controller::onMessageReceived - position=%f angle=%f power=%f deltaHP=%f\n", position, angle, power, deltaHP);
 }
 
+void Controller::onOpponentQuited() {
+    printf("Controller::onOpponentQuited\n");
+}
+
 void Controller::onWindowClosed() {
     printf("Controller::onWindowClosed\n");
 }

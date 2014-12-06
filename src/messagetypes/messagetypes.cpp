@@ -30,6 +30,11 @@ Message* Message::readMessage(QDataStream& stream) {
             result = new SimpleMessage();
             result->type = type;
         break;
+        case MSGT_PLAYER_MOVED:
+            result = new QuadDoubleMessage();
+            result->type = type;
+            stream >> *result;
+        break;
         default:
             return NULL;
         break;
@@ -54,7 +59,7 @@ QDataStream& StringMessage::operator>>(QDataStream& stream) {
 }
 
 QDataStream& QuadDoubleMessage::operator<<(QDataStream& stream) const {
-    return stream << type << data[0] << data[1] << data[2] << data[3];
+    return (stream << type << data[0] << data[1] << data[2] << data[3]);
 }
 
 QDataStream& QuadDoubleMessage::operator>>(QDataStream& stream) {

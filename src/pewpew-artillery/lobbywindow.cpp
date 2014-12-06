@@ -75,6 +75,22 @@ void LobbyWindow::removeGameFromList(const QString& playerName) {
 }
 
 /**
+ * @brief Handle the closure of the window.
+ * @param event The close event received from the system.
+ */
+void LobbyWindow::closeEvent(QCloseEvent* event) {
+    if (lobby->isGameRunning()) {
+        if (QMessageBox::question(this, tr("PewPew Artillery"), tr("Van futó játék folyamatban. Tényleg ki akarsz lépni?")) == QMessageBox::Yes) {
+            event->accept();
+        } else {
+            event->ignore();
+        }
+    } else {
+        event->accept();
+    }
+}
+
+/**
  * @brief The event handler which is called when sending a chat message.
  */
 void LobbyWindow::sendButtonClicked() {
@@ -110,7 +126,7 @@ void LobbyWindow::connectToServerClicked() {
  * @brief The event handler which is called when clicking "Disconnect" in the menu.
  */
 void LobbyWindow::disconnectClicked() {
-
+    lobby->disconnectFromServer();
 }
 
 /**
@@ -127,7 +143,13 @@ void LobbyWindow::connected(const QString& address) {
  * @brief The event handler which is called after the client has disconnected from the server.
  */
 void LobbyWindow::disconnected() {
-
+    ui->newGameButton->setEnabled(false);
+    ui->joinButton->setEnabled(false);
+    ui->chatButton->setEnabled(false);
+    ui->chatInputBox->clear();
+    ui->chatBox->clear();
+    ui->gamesTable->clear();
+    statusBar()->showMessage(tr("A lekapcsolódás sikeres."), 5000);
 }
 
 /**

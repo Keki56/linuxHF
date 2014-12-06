@@ -27,6 +27,9 @@ public:
     void addGameToList(const QString& playerName, const QString& gameName);
     void removeGameFromList(const QString& playerName);
 
+protected:
+    virtual void closeEvent(QCloseEvent * event);
+
 public slots:
     void sendButtonClicked();
     void connectToServerClicked();

@@ -54,6 +54,15 @@ void Lobby::connectToServer(const QString& nickname, const QString& address, int
 }
 
 /**
+ * @brief Disconnect the client from the server.
+ */
+void Lobby::disconnectFromServer() {
+    playerName = "";
+    socket.close();
+    emit disconnected();
+}
+
+/**
  * @brief Show the lobby window.
  */
 void Lobby::showWindow() {
@@ -168,10 +177,16 @@ void Lobby::receivePacket() {
                     onGameRemoved(strmsg->str);
                     break;
                 }
-                case MSGT_PLAYER_STEPPED: {
-                    QuadDoubleMessage* qdmsg = (QuadDoubleMessage*)msg;
+                case MSGT_GAME_CLOSED: {
+                    /***************
+                     * TODO: handle opponent quitting
+                     **************/
+                    break;
+                }
+                case MSGT_PLAYER_MOVED: {
+                    QuadDoubleMessage* qdmsg = static_cast<QuadDoubleMessage*>(msg);
                     double* data = qdmsg->data;
-                    controller->onMessageReceived(data[0], data[1], data[2], data[3]);
+                    if (controller != NULL) controller->onMessageReceived(data[0], data[1], data[2], data[3]);
                     break;
                 }
                 default:
@@ -192,6 +207,7 @@ void Lobby::handleSocketError(QAbstractSocket::SocketError error) {
     if (error == QAbstractSocket::RemoteHostClosedError) {
         // one of the connections has closed
         QMessageBox::critical(&lobbywindow, tr("Hiba"), tr("Megszakadt a kapcsolat a szerverrel."));
+        emit disconnected();
         socket.close();
     } else {
         QMessageBox::critical(&lobbywindow, tr("Hiba"), tr("Ismeretlen hálózati hiba"));

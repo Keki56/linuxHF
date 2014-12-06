@@ -7,7 +7,8 @@ class GameEngine
 {
 private:
     struct Player {
-        int hp;
+        double defaultPosition;
+        double hp;
         double position;
         double angle;
         double power;
@@ -19,25 +20,47 @@ private:
 
     Player localPlayer, remotePlayer;
     Wall wall;
-    bool isLocalTurn;
+    bool isLocalTurn, isLocalLeft;
 
     double getTrajectoryHeight(Player* p, double x);
     bool wallHit(Player* player);
     double getImpactPosition(Player* p);
     bool firePlayer(Player* source, Player* target);
+    bool positionValidator(Player* player, double position) const;
+    bool angleValidator(double angle) const;
 public:
     struct Position {
         double x;
         double y;
     };
 
-    GameEngine(bool localStarts);
+    GameEngine(bool isLocalStart, bool isLocalLeft);
 
-    bool setLocalPlayer(double position, double angle, double power);
-    bool setRemotePlayer(double position, double angle, double power);
+    bool setLocalPlayer(double position, double angle, double power);       //TODO törölni.
+    bool fireRemotePlayer(double position, double angle, double power, double deltaHP);
+
+    /**
+     * @brief setLPPosition
+     * @param position
+     * @return true if @param is a valid position
+     */
+    bool setLocalPlayerPosition(double position);
+
+    /**
+     * @brief setLPAngle
+     * @param angle
+     * @return true if @param is a valid angle
+     */
+    bool setLocalPlayerAngle(double angle);
+
+    /**
+     * @brief setPower
+     * @param power
+     * @return true if @param is a valid power
+     */
+    bool setLocalPlayerPower(double power);
 
     bool fireLocalPlayer();
-    bool fireRemotePlayer();
 
     int getLocalPlayerHp();
     int getRemotePlayerHp();

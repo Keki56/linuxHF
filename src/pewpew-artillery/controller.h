@@ -19,7 +19,7 @@ public:
     explicit Controller(bool localStarts, Lobby *parent = 0);
 
     bool setRemotePlayer(double position, double angle, double power);
-    bool fireRemotePlayer();
+    bool fireRemotePlayer();        //csak debug célra!!!
     bool fireLocalPlayer();
 
     void onMessageReceived(double position, double angle, double power, double deltaHP);

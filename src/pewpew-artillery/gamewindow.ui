@@ -30,7 +30,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <widget class="QSlider" name="verticalSlider">
+         <widget class="QSlider" name="localAngleSlider">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
@@ -40,8 +40,17 @@
          <layout class="QVBoxLayout" name="verticalLayout">
           <item alignment="Qt::AlignBottom">
            <widget class="QLabel" name="label_3">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="text">
              <string>Ágyú foka</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -55,7 +64,7 @@
             </property>
            </widget>
           </item>
-          <item alignment="Qt::AlignTop">
+          <item alignment="Qt::AlignBottom">
            <widget class="QLineEdit" name="lineEdit"/>
           </item>
          </layout>
@@ -63,7 +72,7 @@
        </layout>
       </item>
       <item>
-       <widget class="QSlider" name="horizontalSlider">
+       <widget class="QSlider" name="localPowerSlider">
         <property name="maximum">
          <number>999</number>
         </property>
@@ -96,7 +105,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
-         <widget class="QSlider" name="verticalSlider_2">
+         <widget class="QSlider" name="remoteAndleSlider">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
@@ -107,7 +116,7 @@
           <item alignment="Qt::AlignBottom">
            <widget class="QLabel" name="label_6">
             <property name="text">
-             <string>Ágyó foka</string>
+             <string>Ágyú foka</string>
             </property>
            </widget>
           </item>
@@ -129,14 +138,14 @@
        </layout>
       </item>
       <item>
-       <widget class="QSlider" name="horizontalSlider_2">
+       <widget class="QSlider" name="remotePowerSlider">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="fireButton_2">
+       <widget class="QPushButton" name="remoteFireButton">
         <property name="text">
          <string>Tűz</string>
         </property>

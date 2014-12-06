@@ -247,8 +247,8 @@ int main(int argc, char *argv[])
     lobby.showWindow();
 
     Controller controller(false);
-    GameWindow w2(&controller);
-    w2.show();
+/*    GameWindow w2(&controller);
+    w2.show();*/
 
     return a.exec();
 }

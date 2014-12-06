@@ -8,7 +8,8 @@ GameWindow::GameWindow(Controller* controller, QWidget *parent) :
     controller(controller)
 {
     ui->setupUi(this);
-    connect(ui->localFireButton, SIGNAL(clicked(bool)), SLOT(localFireButtonClicked(bool)));
+    connect(ui->localFireButton, SIGNAL(clicked()), SLOT(localFireButtonClicked()));
+    connect(ui->remoteFireButton, SIGNAL(clicked()), SLOT(remoteFireButtonClicked()));
 }
 
 GameWindow::~GameWindow()
@@ -16,6 +17,10 @@ GameWindow::~GameWindow()
     delete ui;
 }
 
-void GameWindow::localFireButtonClicked(bool checked){
+void GameWindow::localFireButtonClicked(){
     controller->fireLocalPlayer();
+}
+
+void GameWindow::remoteFireButtonClicked(){
+    controller->fireRemotePlayer();
 }

@@ -31,7 +31,7 @@ public:
         double y;
     };
 
-    GameEngine(/*bool localStarts*/);
+    GameEngine(bool localStarts);
 
     bool setLocalPlayer(double position, double angle, double power);
     bool setRemotePlayer(double position, double angle, double power);

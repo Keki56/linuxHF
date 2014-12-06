@@ -21,7 +21,8 @@ private:
     Controller* controller;
 
 public slots:
-    void localFireButtonClicked(bool checked);
+    void localFireButtonClicked();
+    void remoteFireButtonClicked();
 };
 
 #endif // GAMEWINDOW_H

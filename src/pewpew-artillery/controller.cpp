@@ -27,8 +27,12 @@ void Controller::onMessageReceived(double position, double angle, double power, 
 
 }
 
-void Controller::onOpponentQuited() {
-    printf("Controller::onOpponentQuited\n");
+void Controller::onOpponentJoined(const QString& name) {
+    printf("Controller::onOpponentJoined - name=%s\n", name.toLocal8Bit().data());
+}
+
+void Controller::onOpponentQuit() {
+    printf("Controller::onOpponentQuit\n");
 }
 
 void Controller::onWindowClosed() {

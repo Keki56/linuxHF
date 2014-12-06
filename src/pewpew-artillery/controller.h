@@ -2,6 +2,7 @@
 #define CONTROLLER_H
 
 #include <QObject>
+#include <QString>
 #include "gameengine.h"
 #include "gamewindow.h"
 class Lobby;
@@ -23,7 +24,8 @@ public:
     bool fireLocalPlayer();
 
     void onMessageReceived(double position, double angle, double power, double deltaHP);
-    void onOpponentQuited();
+    void onOpponentJoined(const QString& name);
+    void onOpponentQuit();
     void onWindowClosed();
 
 signals:

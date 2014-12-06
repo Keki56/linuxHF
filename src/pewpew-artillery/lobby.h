@@ -32,6 +32,7 @@ public:
     void showWindow();
     void sendChat(const QString& line);
     bool isGameRunning() const;
+    bool isConnected() const;
     QString getPlayerName() const;
     void newGame(const QString& gameName);
     void joinGame(const QString& hostName);
@@ -51,6 +52,7 @@ private:
     void onConnected(const QString& address);
     void onGameCreated(const QString& hostName, const QString& gameName);
     void onGameRemoved(const QString& hostName);
+    void startGame(const QString& opponentName);
 };
 
 #endif // LOBBY_H

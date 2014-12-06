@@ -90,6 +90,14 @@ bool Lobby::isGameRunning() const {
 }
 
 /**
+ * @brief Return whether the client is currently connected to a server.
+ * @return True if the client is connected.
+ */
+bool Lobby::isConnected() const {
+    return connection;
+}
+
+/**
  * @brief Get the name of the player.
  * @return The name of the player.
  */
@@ -109,6 +117,8 @@ void Lobby::newGame(const QString& gameName) {
     msg.type = MSGT_NEW_GAME;
     msg.str = gameName;
     sendMessage(msg);
+    controller = new Controller(true, this);
+    lobbywindow.refreshButtons();
 }
 
 /**
@@ -177,6 +187,11 @@ void Lobby::receivePacket() {
                     onGameRemoved(strmsg->str);
                     break;
                 }
+                case MSGT_GAME_STARTED: {
+                    StringMessage* strmsg = static_cast<StringMessage*>(msg);
+                    startGame(strmsg->str);
+                    break;
+                }
                 case MSGT_GAME_CLOSED: {
                     /***************
                      * TODO: handle opponent quitting
@@ -218,7 +233,10 @@ void Lobby::handleSocketError(QAbstractSocket::SocketError error) {
  * @brief Event handler which is called after the game was closed.
  */
 void Lobby::gameClosed() {
-
+    if (controller == NULL) return;
+    SimpleMessage msg;
+    msg.type = MSGT_GAME_CLOSED;
+    lobbywindow.refreshButtons();
 }
 
 /**
@@ -261,6 +279,21 @@ void Lobby::onGameCreated(const QString& hostName, const QString& gameName) {
 void Lobby::onGameRemoved(const QString& hostName) {
     openGames.remove(hostName);
     lobbywindow.removeGameFromList(hostName);
+}
+
+/**
+ * @brief Start the game with the given opponent.
+ * @param opponentName The name of the opponent.
+ */
+void Lobby::startGame(const QString& opponentName) {
+    if (isGameRunning()) {
+        // this player is the host
+        controller->onOpponentJoined(opponentName);
+    } else {
+        controller = new Controller(false, this);
+        controller->onOpponentJoined(opponentName);
+    }
+    lobbywindow.refreshButtons();
 }
 
 /**

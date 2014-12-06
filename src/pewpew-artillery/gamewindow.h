@@ -3,7 +3,6 @@
 
 #include <QMainWindow>
 class Controller;
-//#include "controller.h"
 
 namespace Ui {
 class GameWindow;
@@ -16,6 +15,8 @@ public:
     explicit GameWindow(Controller* controller, QWidget *parent = 0);
     ~GameWindow();
 
+protected:
+    virtual void closeEvent(QCloseEvent *event);
 private:
     Ui::GameWindow *ui;
     Controller* controller;

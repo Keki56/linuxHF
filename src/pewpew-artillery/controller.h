@@ -24,7 +24,9 @@ public:
     bool fireLocalPlayer();
 
     void onMessageReceived(double position, double angle, double power, double deltaHP);
-    void opponentJoined(const QString& name);
+    void onOpponentJoined(const QString& name);
+    void onOpponentQuit();
+    void onWindowClosed();
 
 signals:
 

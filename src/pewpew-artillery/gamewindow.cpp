@@ -1,3 +1,4 @@
+#include <QCloseEvent>
 #include "gamewindow.h"
 #include "ui_gamewindow.h"
 #include "controller.h"
@@ -10,6 +11,11 @@ GameWindow::GameWindow(Controller* controller, QWidget *parent) :
     ui->setupUi(this);
     connect(ui->localFireButton, SIGNAL(clicked()), SLOT(localFireButtonClicked()));
     connect(ui->remoteFireButton, SIGNAL(clicked()), SLOT(remoteFireButtonClicked()));
+}
+
+void GameWindow::closeEvent(QCloseEvent *event){
+    controller->onWindowClosed();
+    event->accept();
 }
 
 GameWindow::~GameWindow()

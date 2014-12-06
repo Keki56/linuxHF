@@ -54,6 +54,7 @@ private:
     void newGame(Player* host, const QString& gameName);
     void endGame(Game* game);
     void joinGame(Player* player, Game* game);
+    void closeGame(Player* player);
 
     void onConnectionRequest(QTcpSocket* sender, StringMessage* msg);
     void onChatMessage(QTcpSocket* sender, StringMessage* msg);

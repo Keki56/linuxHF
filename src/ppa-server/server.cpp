@@ -84,6 +84,15 @@ void Server::receivePacket() {
                     }
                     break;
                 }
+                case MSGT_GAME_CLOSED: {
+                    closeGame(&players[socket]);
+                    break;
+                }
+                case MSGT_PLAYER_MOVED: {
+                    Player* opponent = getOpponent(&players[socket]);
+                    if (opponent != NULL) sendTo(opponent->socket, *msg);
+                    break;
+                }
                 default:
 
                 break;
@@ -169,11 +178,7 @@ void Server::sendTo(QTcpSocket* socket, const Message& msg) {
  */
 void Server::playerDisconnected(Player* player) {
     Player* opp = getOpponent(player);
-    Game* game = player->game;
-    if (game != NULL) {
-        if (game->player1 == player) game->player1 = NULL;
-        else game->player2 = NULL;
-    }
+    closeGame(player);
     if (opp != NULL) {
         StringMessage msg;
         msg.type = MSGT_PLAYER_DISCONNECTED;
@@ -241,9 +246,37 @@ void Server::joinGame(Player* player, Game* game) {
     msg.type = MSGT_GAME_REMOVED;
     msg.str = game->player1->name;
     broadcastExcept(NULL, msg);
-    /*************
-     * TODO: tell the players that the game has started
-     ************/
+    // tell the players that the game has started
+    msg.type = MSGT_GAME_STARTED;
+    sendTo(player->socket, msg);
+    msg.str = player->name;
+    sendTo(game->player1->socket, msg);
+}
+
+/**
+ * @brief Called after a player has closed a game.
+ * @param player The player who closed the game.
+ */
+void Server::closeGame(Player* player) {
+    Game* game = player->game;
+    if (game == NULL) return; // the game was already closed
+    QString hostName = game->player1->name;
+    if (game->player2 == NULL) {
+        // it was an open game
+        StringMessage msg;
+        msg.type = MSGT_GAME_REMOVED;
+        msg.str = hostName;
+        broadcastExcept(player->socket, msg);
+    } else {
+        // the game has already started
+        Player* opp = getOpponent(player);
+        SimpleMessage msg;
+        msg.type = MSGT_GAME_CLOSED;
+        sendTo(opp->socket, msg);
+        opp->game = NULL;
+    }
+    player->game = NULL;
+    games.remove(hostName);
 }
 
 /**

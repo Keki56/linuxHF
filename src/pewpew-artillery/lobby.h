@@ -28,6 +28,7 @@ public:
     Lobby();
     ~Lobby();
     void connectToServer(const QString& nickname, const QString& address, int port);
+    void disconnectFromServer();
     void showWindow();
     void sendChat(const QString& line);
     bool isGameRunning() const;

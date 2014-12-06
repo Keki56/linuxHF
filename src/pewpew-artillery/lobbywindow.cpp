@@ -1,4 +1,4 @@
-#include "lobbywindow.h"
+﻿#include "lobbywindow.h"
 #include "lobby.h"
 #include "ui_lobbywindow.h"
 #include "connecttoserverdialog.h"
@@ -66,11 +66,27 @@ void LobbyWindow::addGameToList(const QString& playerName, const QString& gameNa
 void LobbyWindow::removeGameFromList(const QString& playerName) {
     int rows = ui->gamesTable->rowCount();
     for (int i = 0; i < rows; i++) {
-        QTableWidgetItem* item = ui->gamesTable->itemAt(i, 0);
+        QTableWidgetItem* item = ui->gamesTable->item(i, 0);
         if (item->text() == playerName) {
             ui->gamesTable->removeRow(i);
             break;
         }
+    }
+}
+
+/**
+ * @brief Handle the closure of the window.
+ * @param event The close event received from the system.
+ */
+void LobbyWindow::closeEvent(QCloseEvent* event) {
+    if (lobby->isGameRunning()) {
+        if (QMessageBox::question(this, tr("PewPew Artillery"), tr("Van futó játék folyamatban. Tényleg ki akarsz lépni?")) == QMessageBox::Yes) {
+            event->accept();
+        } else {
+            event->ignore();
+        }
+    } else {
+        event->accept();
     }
 }
 
@@ -101,6 +117,7 @@ void LobbyWindow::connectToServerClicked() {
             QMessageBox::critical(this, tr("Hiba"), tr("Nincs cím megadva!"));
             return;
         }
+        nickname = nickname.replace('\n', ' ');
         lobby->connectToServer(nickname, address, port);
     }
 }
@@ -109,7 +126,7 @@ void LobbyWindow::connectToServerClicked() {
  * @brief The event handler which is called when clicking "Disconnect" in the menu.
  */
 void LobbyWindow::disconnectClicked() {
-
+    lobby->disconnectFromServer();
 }
 
 /**
@@ -126,7 +143,13 @@ void LobbyWindow::connected(const QString& address) {
  * @brief The event handler which is called after the client has disconnected from the server.
  */
 void LobbyWindow::disconnected() {
-
+    ui->newGameButton->setEnabled(false);
+    ui->joinButton->setEnabled(false);
+    ui->chatButton->setEnabled(false);
+    ui->chatInputBox->clear();
+    ui->chatBox->clear();
+    ui->gamesTable->clear();
+    statusBar()->showMessage(tr("A lekapcsolódás sikeres."), 5000);
 }
 
 /**
@@ -136,6 +159,8 @@ void LobbyWindow::newGameClicked() {
     QString gameName = QInputDialog::getText(this, tr("Új játék"), tr("Az új játék neve:"),
                                              QLineEdit::Normal, tr("%1 játéka").arg(lobby->getPlayerName()));
     if (gameName.isNull()) return; // cancel was clicked
+    if (gameName.isEmpty()) QMessageBox::critical(this, tr("Hiba"), tr("Nincs játéknév megadva!"));
+    gameName = gameName.replace('\n', ' ');
     lobby->newGame(gameName);
 }
 
@@ -143,12 +168,19 @@ void LobbyWindow::newGameClicked() {
  * @brief The event handler which is called after the player has clicked the "Join game" button.
  */
 void LobbyWindow::joinGameClicked() {
-
+    QList<QTableWidgetItem*> selected = ui->gamesTable->selectedItems();
+    for (QList<QTableWidgetItem*>::iterator i = selected.begin(); i != selected.end(); ++i) {
+        if ((*i)->column() > 0) continue;
+        QString hostName = (*i)->text();
+        lobby->joinGame(hostName);
+        return;
+    }
 }
 
 /**
  * @brief The event handler which is called after a game was selected from the list of open games.
  */
 void LobbyWindow::gameSelectionChanged() {
-
+    QList<QTableWidgetItem*> selected = ui->gamesTable->selectedItems();
+    ui->joinButton->setEnabled(!selected.empty());
 }

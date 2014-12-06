@@ -1,5 +1,5 @@
-#ifndef CONTROLER_H
-#define CONTROLER_H
+#ifndef CONTROLLER_H
+#define CONTROLLER_H
 
 #include <QObject>
 #include "gameengine.h"
@@ -33,4 +33,4 @@ public slots:
 
 };
 
-#endif // CONTROLER_H
+#endif // CONTROLLER_H

@@ -23,6 +23,7 @@ public:
     bool fireLocalPlayer();
 
     void onMessageReceived(double position, double angle, double power, double deltaHP);
+    void onWindowClosed();
 
 signals:
 

@@ -35,6 +35,7 @@ public slots:
     void disconnected();
     void newGameClicked();
     void joinGameClicked();
+    void gameSelectionChanged();
 };
 
 #endif // LOBBYWINDOW_H

@@ -34,9 +34,6 @@
         <property name="showGrid">
          <bool>false</bool>
         </property>
-        <property name="rowCount">
-         <number>5</number>
-        </property>
         <property name="columnCount">
          <number>2</number>
         </property>
@@ -64,11 +61,6 @@
         <attribute name="verticalHeaderDefaultSectionSize">
          <number>17</number>
         </attribute>
-        <row/>
-        <row/>
-        <row/>
-        <row/>
-        <row/>
         <column>
          <property name="text">
           <string>Játékos</string>
@@ -79,56 +71,6 @@
           <string>Játék neve</string>
          </property>
         </column>
-        <item row="0" column="0">
-         <property name="text">
-          <string>asdf</string>
-         </property>
-        </item>
-        <item row="0" column="1">
-         <property name="text">
-          <string>jklé</string>
-         </property>
-        </item>
-        <item row="1" column="0">
-         <property name="text">
-          <string>a</string>
-         </property>
-        </item>
-        <item row="1" column="1">
-         <property name="text">
-          <string>1</string>
-         </property>
-        </item>
-        <item row="2" column="0">
-         <property name="text">
-          <string>b</string>
-         </property>
-        </item>
-        <item row="2" column="1">
-         <property name="text">
-          <string>2</string>
-         </property>
-        </item>
-        <item row="3" column="0">
-         <property name="text">
-          <string>c</string>
-         </property>
-        </item>
-        <item row="3" column="1">
-         <property name="text">
-          <string>3</string>
-         </property>
-        </item>
-        <item row="4" column="0">
-         <property name="text">
-          <string>d</string>
-         </property>
-        </item>
-        <item row="4" column="1">
-         <property name="text">
-          <string>4</string>
-         </property>
-        </item>
        </widget>
       </item>
       <item>
@@ -329,6 +271,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>gamesTable</sender>
+   <signal>itemSelectionChanged()</signal>
+   <receiver>LobbyWindow</receiver>
+   <slot>gameSelectionChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>202</x>
+     <y>158</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>334</x>
+     <y>167</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>sendButtonClicked()</slot>
@@ -338,5 +296,6 @@
   <slot>disconnected()</slot>
   <slot>newGameClicked()</slot>
   <slot>joinGameClicked()</slot>
+  <slot>gameSelectionChanged()</slot>
  </slots>
 </ui>

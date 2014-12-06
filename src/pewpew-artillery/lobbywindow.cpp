@@ -145,3 +145,10 @@ void LobbyWindow::newGameClicked() {
 void LobbyWindow::joinGameClicked() {
 
 }
+
+/**
+ * @brief The event handler which is called after a game was selected from the list of open games.
+ */
+void LobbyWindow::gameSelectionChanged() {
+
+}

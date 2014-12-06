@@ -193,6 +193,13 @@ void Lobby::handleSocketError(QAbstractSocket::SocketError error) {
 }
 
 /**
+ * @brief Event handler which is called after the game was closed.
+ */
+void Lobby::gameClosed() {
+
+}
+
+/**
  * @brief Send a message to the server.
  * @param msg The message to be sent.
  */

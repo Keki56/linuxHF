@@ -14,8 +14,7 @@
 #define M_PI_4		0.78539816339744830962
 #endif
 
-GameEngine::GameEngine(/*bool localStarts): isLocalTurn(localStarts*/) {
-    wall = Wall();
+GameEngine::GameEngine(bool localStarts): isLocalTurn(localStarts) {
     wall.left = WALL_LEFT;
     wall.right = WALL_RIGHT;
     wall.top = WALL_TOP;
@@ -73,6 +72,24 @@ bool GameEngine::setRemotePlayer(double position, double angle, double power) {
     }
 }
 
+bool GameEngine::fireLocalPlayer(){
+    if (isLocalTurn) {
+        firePlayer(&localPlayer, &remotePlayer);
+        return true;
+    } else {
+        return false;
+    }
+}
+
+bool GameEngine::fireRemotePlayer(){
+    if (!isLocalTurn) {
+        firePlayer(&remotePlayer, &localPlayer);
+        return true;
+    } else {
+        return false;
+    }
+}
+
 int GameEngine::getLocalPlayerHp(){
     return localPlayer.hp;
 }
@@ -81,13 +98,6 @@ int GameEngine::getRemotePlayerHp(){
     return remotePlayer.hp;
 }
 
-bool GameEngine::fireLocalPlayer(){
-    return firePlayer(&localPlayer, &remotePlayer);
-}
-
-bool GameEngine::fireRemotePlayer(){
-    return firePlayer(&remotePlayer, &localPlayer);
-}
 
 GameEngine::Position GameEngine::getBulletPosition(double deltaTime){
     //Nincs még implementálva

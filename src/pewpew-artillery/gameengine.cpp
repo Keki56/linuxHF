@@ -10,6 +10,9 @@
 #define WALL_RIGHT 0.55         //a fal jobb széle
 #define WALL_TOP 0.3            //a fal magassága
 #define DEFAULT_POSITION 0.2    //a játékosok alapértelmezett pozíciója     |-x-P1-----WALL-----P2-x-|
+#ifndef M_PI_4
+#define M_PI_4		0.78539816339744830962
+#endif
 
 GameEngine::GameEngine(/*bool localStarts): isLocalTurn(localStarts*/) {
     wall = Wall();

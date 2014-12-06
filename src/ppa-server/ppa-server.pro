@@ -21,6 +21,8 @@ INCLUDEPATH += $$PWD/../messagetypes/ \
 
 CONFIG(debug, debug|release):LIBS += -L$$PWD/../../build/messagetypes/debug
 CONFIG(release, debug|release):LIBS += -L$$PWD/../../build/messagetypes/release
+Debug:LIBS += -L$$PWD../../build/messagetypes/debug
+Release:LIBS += -L$$PWD/../../build/messagetypes/release
 
 LIBS += -lmessagetypes
 

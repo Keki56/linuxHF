@@ -9,7 +9,7 @@ QT       += core network
 QT       -= gui
 
 TARGET = ppa-server
-CONFIG   += console
+CONFIG   += console debug_and_release
 CONFIG   -= app_bundle
 
 TEMPLATE = app

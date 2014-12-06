@@ -11,6 +11,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = pewpew-artillery
 TEMPLATE = app
 
+CONFIG += debug_and_release
+
 QMAKE_CXXFLAGS += -std=c++11
 
 INCLUDEPATH += $$PWD/../messagetypes/ \

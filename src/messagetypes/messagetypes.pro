@@ -8,7 +8,7 @@ QT       -= gui
 
 TARGET = messagetypes
 TEMPLATE = lib
-CONFIG += staticlib
+CONFIG += staticlib debug_and_release
 
 SOURCES += messagetypes.cpp
 

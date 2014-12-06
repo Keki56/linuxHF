@@ -40,7 +40,7 @@ void LobbyWindow::printChat(const QString& line) {
 void LobbyWindow::updateGameList(const QMap<QString, QString>& games) {
     ui->gamesTable->clearContents();
     int row = 0;
-    for (QMap<QString, QString>::const_iterator i = games.cbegin(); i != games.cend(); ++i, ++row) {
+    for (QMap<QString, QString>::const_iterator i = games.begin(); i != games.end(); ++i, ++row) {
         ui->gamesTable->setRowCount(row + 1);
         ui->gamesTable->setItem(row, 0, new QTableWidgetItem(i.key()));
         ui->gamesTable->setItem(row, 1, new QTableWidgetItem(i.value()));

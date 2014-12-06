@@ -26,6 +26,7 @@ Message* Message::readMessage(QDataStream& stream) {
         break;
         case MSGT_CONNECTION_ACCEPTED:
         case MSGT_CONNECTION_REFUSED:
+        case MSGT_GAME_CLOSED:
             result = new SimpleMessage();
             result->type = type;
         break;

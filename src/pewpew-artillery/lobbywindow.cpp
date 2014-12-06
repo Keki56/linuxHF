@@ -1,4 +1,4 @@
-#include "lobbywindow.h"
+﻿#include "lobbywindow.h"
 #include "lobby.h"
 #include "ui_lobbywindow.h"
 #include "connecttoserverdialog.h"
@@ -66,7 +66,7 @@ void LobbyWindow::addGameToList(const QString& playerName, const QString& gameNa
 void LobbyWindow::removeGameFromList(const QString& playerName) {
     int rows = ui->gamesTable->rowCount();
     for (int i = 0; i < rows; i++) {
-        QTableWidgetItem* item = ui->gamesTable->itemAt(i, 0);
+        QTableWidgetItem* item = ui->gamesTable->item(i, 0);
         if (item->text() == playerName) {
             ui->gamesTable->removeRow(i);
             break;
@@ -101,6 +101,7 @@ void LobbyWindow::connectToServerClicked() {
             QMessageBox::critical(this, tr("Hiba"), tr("Nincs cím megadva!"));
             return;
         }
+        nickname = nickname.replace('\n', ' ');
         lobby->connectToServer(nickname, address, port);
     }
 }
@@ -136,6 +137,8 @@ void LobbyWindow::newGameClicked() {
     QString gameName = QInputDialog::getText(this, tr("Új játék"), tr("Az új játék neve:"),
                                              QLineEdit::Normal, tr("%1 játéka").arg(lobby->getPlayerName()));
     if (gameName.isNull()) return; // cancel was clicked
+    if (gameName.isEmpty()) QMessageBox::critical(this, tr("Hiba"), tr("Nincs játéknév megadva!"));
+    gameName = gameName.replace('\n', ' ');
     lobby->newGame(gameName);
 }
 
@@ -143,12 +146,19 @@ void LobbyWindow::newGameClicked() {
  * @brief The event handler which is called after the player has clicked the "Join game" button.
  */
 void LobbyWindow::joinGameClicked() {
-
+    QList<QTableWidgetItem*> selected = ui->gamesTable->selectedItems();
+    for (QList<QTableWidgetItem*>::iterator i = selected.begin(); i != selected.end(); ++i) {
+        if ((*i)->column() > 0) continue;
+        QString hostName = (*i)->text();
+        lobby->joinGame(hostName);
+        return;
+    }
 }
 
 /**
  * @brief The event handler which is called after a game was selected from the list of open games.
  */
 void LobbyWindow::gameSelectionChanged() {
-
+    QList<QTableWidgetItem*> selected = ui->gamesTable->selectedItems();
+    ui->joinButton->setEnabled(!selected.empty());
 }

@@ -134,11 +134,11 @@ void Lobby::receivePacket() {
         input.setVersion(QDataStream::Qt_4_0);
         if (blockSize == 0) {
             // read the block size
-            if (socket.bytesAvailable() < sizeof(quint32)) return;
+            if ((unsigned)socket.bytesAvailable() < sizeof(quint32)) return;
             input >> blockSize;
         }
         // read the message itself
-        if (socket.bytesAvailable() < blockSize) return;
+        if ((quint32)socket.bytesAvailable() < blockSize) return;
         Message* msg = Message::readMessage(input);
         if (msg != NULL) {
             switch (msg->type) {

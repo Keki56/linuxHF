@@ -276,10 +276,10 @@ void Lobby::onGameRemoved(const QString& hostName) {
 void Lobby::startGame(const QString& opponentName) {
     if (isGameRunning()) {
         // this player is the host
-        controller->opponentJoined(opponentName);
+        controller->onOpponentJoined(opponentName);
     } else {
         controller = new Controller(false, this);
-        controller->opponentJoined(opponentName);
+        controller->onOpponentJoined(opponentName);
     }
 }
 

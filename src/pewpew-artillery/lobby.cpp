@@ -134,7 +134,7 @@ void Lobby::receivePacket() {
         input.setVersion(QDataStream::Qt_4_0);
         if (blockSize == 0) {
             // read the block size
-            if (socket.bytesAvailable() < sizeof(quint32)) return;
+            if ((unsigned)socket.bytesAvailable() < sizeof(quint32)) return;
             input >> blockSize;
         }
         // read the message itself
@@ -166,6 +166,12 @@ void Lobby::receivePacket() {
                 case MSGT_GAME_REMOVED: {
                     StringMessage* strmsg = static_cast<StringMessage*>(msg);
                     onGameRemoved(strmsg->str);
+                    break;
+                }
+                case MSGT_PLAYER_STEPPED: {
+                    QuadDoubleMessage* qdmsg = (QuadDoubleMessage*)msg;
+                    double* data = qdmsg->data;
+                    controller->onMessageReceived(data[0], data[1], data[2], data[3]);
                     break;
                 }
                 default:
@@ -256,6 +262,17 @@ int main(int argc, char *argv[])
     Controller controller(false);
 /*    GameWindow w2(&controller);
     w2.show();*/
+
+  /*  double data[4];
+    data[0] = 2;
+    data[1] = 4;
+    data[2] = 6;
+    data[3] = 8;
+    QTextStream out(stdout);
+    out << data;
+    out << "ZZZ";
+    out << data[0];*/
+
 
     return a.exec();
 }

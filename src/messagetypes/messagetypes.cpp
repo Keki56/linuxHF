@@ -44,13 +44,20 @@ QDataStream& SimpleMessage::operator>>(QDataStream& stream) {
     return stream;
 }
 
-
 QDataStream& StringMessage::operator<<(QDataStream& stream) const {
     return (stream << type << str);
 }
 
 QDataStream& StringMessage::operator>>(QDataStream& stream) {
     return (stream >> str);
+}
+
+QDataStream& QuadDoubleMessage::operator<<(QDataStream& stream) const {
+    return stream << type << data[0] << data[1] << data[2] << data[3];
+}
+
+QDataStream& QuadDoubleMessage::operator>>(QDataStream& stream) {
+    return (stream >> data[0] >> data[1] >> data[2] >> data[3]);
 }
 
 QDataStream& operator<<(QDataStream& stream, const Message& msg) {

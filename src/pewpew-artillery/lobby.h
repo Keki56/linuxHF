@@ -51,6 +51,7 @@ private:
     void onConnected(const QString& address);
     void onGameCreated(const QString& hostName, const QString& gameName);
     void onGameRemoved(const QString& hostName);
+    void startGame(const QString& opponentName);
 };
 
 #endif // LOBBY_H

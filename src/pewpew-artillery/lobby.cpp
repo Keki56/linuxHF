@@ -109,6 +109,7 @@ void Lobby::newGame(const QString& gameName) {
     msg.type = MSGT_NEW_GAME;
     msg.str = gameName;
     sendMessage(msg);
+    controller = new Controller(true, this);
 }
 
 /**
@@ -175,6 +176,11 @@ void Lobby::receivePacket() {
                 case MSGT_GAME_REMOVED: {
                     StringMessage* strmsg = static_cast<StringMessage*>(msg);
                     onGameRemoved(strmsg->str);
+                    break;
+                }
+                case MSGT_GAME_STARTED: {
+                    StringMessage* strmsg = static_cast<StringMessage*>(msg);
+                    startGame(strmsg->str);
                     break;
                 }
                 case MSGT_GAME_CLOSED: {
@@ -261,6 +267,20 @@ void Lobby::onGameCreated(const QString& hostName, const QString& gameName) {
 void Lobby::onGameRemoved(const QString& hostName) {
     openGames.remove(hostName);
     lobbywindow.removeGameFromList(hostName);
+}
+
+/**
+ * @brief Start the game with the given opponent.
+ * @param opponentName The name of the opponent.
+ */
+void Lobby::startGame(const QString& opponentName) {
+    if (isGameRunning()) {
+        // this player is the host
+        controller->opponentJoined(opponentName);
+    } else {
+        controller = new Controller(false, this);
+        controller->opponentJoined(opponentName);
+    }
 }
 
 /**

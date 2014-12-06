@@ -25,3 +25,7 @@ void Controller::onMessageReceived(double position, double angle, double power, 
     printf("Controller::onMessageReceived - position=%f angle=%f power=%f deltaHP=%f\n", position, angle, power, deltaHP);
 }
 
+void Controller::opponentJoined(const QString& name) {
+    printf("Controller::opponentJoined - name=%s\n", name.toLocal8Bit().data());
+}
+

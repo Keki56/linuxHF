@@ -82,11 +82,13 @@ void LobbyWindow::closeEvent(QCloseEvent* event) {
     if (lobby->isGameRunning()) {
         if (QMessageBox::question(this, tr("PewPew Artillery"), tr("Van futó játék folyamatban. Tényleg ki akarsz lépni?")) == QMessageBox::Yes) {
             event->accept();
+            qApp->quit();
         } else {
             event->ignore();
         }
     } else {
         event->accept();
+        qApp->quit();
     }
 }
 

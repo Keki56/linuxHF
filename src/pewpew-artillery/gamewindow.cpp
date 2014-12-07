@@ -170,13 +170,15 @@ void GameWindow::refresh() {
     }
 }
 
-void GameWindow::localFireButtonClicked(){
-    controller->fireLocalPlayer();
+/**
+ * @brief Set the fire ui elements enabled
+ */
+void GameWindow::setFireEnabled(bool enabled){
+    ui->gameControlsPanel->setEnabled(enabled);
 }
 
-//TODO törölni
-void GameWindow::remoteFireButtonClicked(){
-    //controller->fireRemotePlayer();
+void GameWindow::fireButtonClicked(){
+    controller->fireLocalPlayer();
 }
 
 /**
@@ -192,9 +194,4 @@ void GameWindow::sendButtonClicked() {
  */
 bool GameWindow::canMove() const {
     return engine->getLocalTurn() && controller->hasGameStarted();
-}
-
-//TODO The followig methods are only for testing
-void GameWindow::setSliderValue(int) {
-    // ui->localAngleSlider->setValue(value);
 }

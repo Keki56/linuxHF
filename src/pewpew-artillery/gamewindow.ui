@@ -339,7 +339,7 @@
      <x>0</x>
      <y>0</y>
      <width>703</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
   </widget>
@@ -347,22 +347,6 @@
  </widget>
  <resources/>
  <connections>
-  <connection>
-   <sender>fireButton</sender>
-   <signal>clicked()</signal>
-   <receiver>GameWindow</receiver>
-   <slot>localFireButtonClicked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>219</x>
-     <y>440</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>351</x>
-     <y>241</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>sendButton</sender>
    <signal>clicked()</signal>
@@ -372,6 +356,22 @@
     <hint type="sourcelabel">
      <x>654</x>
      <y>441</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>351</x>
+     <y>241</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>fireButton</sender>
+   <signal>clicked()</signal>
+   <receiver>GameWindow</receiver>
+   <slot>localFireButtonClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>219</x>
+     <y>436</y>
     </hint>
     <hint type="destinationlabel">
      <x>351</x>

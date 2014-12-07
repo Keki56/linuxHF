@@ -33,12 +33,10 @@ public:
     ~GameWindow();
 
     void refresh();
-    //TODO The followig methods are only for testing
-    void setSliderValue(int);
+    void setFireEnabled(bool enabled);
 
 public slots:
-    void localFireButtonClicked();
-    void remoteFireButtonClicked();
+    void fireButtonClicked();
     void sendButtonClicked();
 
 private:

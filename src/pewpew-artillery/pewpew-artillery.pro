@@ -60,3 +60,6 @@ CONFIG(debug, debug|release):OBJECTS_DIR = $$PWD/../../build/pewpew-artillery/de
 CONFIG(debug, debug|release):MOC_DIR = $$PWD/../../build/pewpew-artillery/debug
 CONFIG(debug, debug|release):RCC_DIR = $$PWD/../../build/pewpew-artillery/debug
 CONFIG(debug, debug|release):UI_DIR = $$PWD/../../build/pewpew-artillery/debug
+
+RESOURCES += \
+    sprites.qrc

@@ -70,6 +70,7 @@ public:
     double getRemotePlayerHP() const;
 
     bool getLocalLeft() const;
+    bool getLocalTurn() const;
 
     Position getBulletPosition(double deltaTime);
 };

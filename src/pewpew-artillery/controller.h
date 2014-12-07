@@ -14,8 +14,8 @@ class Controller : public QObject
 
 private:  
     Lobby* lobby;
-    GameWindow window;
     GameEngine engine;
+    GameWindow window;
     bool isLocalTurn;
     QString opponentName;
 public:
@@ -31,12 +31,14 @@ public:
     void onChangePosition(direction direction);
     void onChangeAngle(direction direction);
     void onChangePower(double power);
-
+    void onSendChat();
 
     void onMessageReceived(double position, double angle, double power, double deltaHP);
     void onOpponentJoined(const QString& name);
     void onOpponentQuit();
     void onWindowClosed();
+
+    bool hasGameStarted() const;
 
 signals:
 

@@ -172,6 +172,10 @@ bool GameEngine::getLocalLeft() const{
     return isLocalLeft;
 }
 
+bool GameEngine::getLocalTurn() const {
+    return isLocalTurn;
+}
+
 
 GameEngine::Position GameEngine::getBulletPosition(double deltaTime){
     //Nincs még implementálva

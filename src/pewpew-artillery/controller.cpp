@@ -10,12 +10,14 @@
 Controller::Controller(bool localStarts, Lobby *parent) :
     QObject(parent),
     lobby(parent),
-    window(this),
     engine(localStarts, true),
-    isLocalTurn(localStarts)
+    window(this, &engine),
+    isLocalTurn(localStarts),
+    opponentName("")
 
 {
     window.show();
+    window.refresh();
 }
 
 bool Controller::fireRemotePlayer(){
@@ -87,4 +89,8 @@ void Controller::onOpponentQuit() {
 
 void Controller::onWindowClosed() {
     printf("Controller::onWindowClosed\n");
+}
+
+bool Controller::hasGameStarted() const {
+    return !opponentName.isEmpty();
 }

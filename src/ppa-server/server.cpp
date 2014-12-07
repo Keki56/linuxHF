@@ -88,7 +88,8 @@ void Server::receivePacket() {
                     closeGame(&players[socket]);
                     break;
                 }
-                case MSGT_PLAYER_MOVED: {
+                case MSGT_PLAYER_MOVED:
+                case MSGT_INGAME_CHAT_MESSAGE: {
                     Player* opponent = getOpponent(&players[socket]);
                     if (opponent != NULL) sendTo(opponent->socket, *msg);
                     break;

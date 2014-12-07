@@ -78,6 +78,9 @@
             <bold>true</bold>
            </font>
           </property>
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
           <property name="text">
            <string>TextLabel</string>
           </property>
@@ -307,6 +310,9 @@
           <height>0</height>
          </size>
         </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
       <item>
@@ -372,6 +378,22 @@
     <hint type="sourcelabel">
      <x>654</x>
      <y>441</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>351</x>
+     <y>241</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>chatInputBox</sender>
+   <signal>returnPressed()</signal>
+   <receiver>GameWindow</receiver>
+   <slot>sendButtonClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>524</x>
+     <y>440</y>
     </hint>
     <hint type="destinationlabel">
      <x>351</x>

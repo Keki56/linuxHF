@@ -176,6 +176,11 @@ void Lobby::receivePacket() {
                     lobbywindow.printChat(strmsg->str);
                     break;
                 }
+                case MSGT_INGAME_CHAT_MESSAGE: {
+                    StringMessage* strmsg = static_cast<StringMessage*>(msg);
+                    if (controller != NULL) controller->onReceiveChat(strmsg->str);
+                    break;
+                }
                 case MSGT_GAME_CREATED: {
                     StringMessage* strmsg = static_cast<StringMessage*>(msg);
                     QStringList strings = strmsg->str.split('\n');

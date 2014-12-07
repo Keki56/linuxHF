@@ -15,6 +15,7 @@ Message* Message::readMessage(QDataStream& stream) {
         case MSGT_CONNECTION_REQUEST:
         case MSGT_PLAYER_DISCONNECTED:
         case MSGT_CHAT_MESSAGE:
+        case MSGT_INGAME_CHAT_MESSAGE:
         case MSGT_GAME_CREATED:
         case MSGT_GAME_REMOVED:
         case MSGT_GAME_STARTED:

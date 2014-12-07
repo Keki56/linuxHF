@@ -3,6 +3,7 @@
 #include "lobby.h"
 #include <stdio.h>
 #include <QApplication>
+#include "messagetypes.h"
 
 #define STEP_SIZE 0.01
 #define TURN_STEP 0.1256637     //PI / 25
@@ -65,6 +66,26 @@ void Controller::onChangePower(double power){
     } else {
         //nem megengedett
     }
+}
+
+/**
+ * @brief Send a message through the in-game chat.
+ * @param message The message to be sent.
+ */
+void Controller::onSendChat(const QString& message) {
+    StringMessage msg;
+    msg.type = MSGT_INGAME_CHAT_MESSAGE;
+    msg.str = QString("%1: %2").arg(lobby->getPlayerName(), message);
+    window.printChat(msg.str);
+    lobby->sendMessage(msg);
+}
+
+/**
+ * @brief Receive a chat message.
+ * @param message The message received.
+ */
+void Controller::onReceiveChat(const QString& message) {
+    window.printChat(message);
 }
 
 void Controller::onMessageReceived(double position, double angle, double power, double deltaHP){

@@ -143,7 +143,11 @@ void LobbyWindow::connectToServerClicked() {
  * @brief The event handler which is called when clicking "Disconnect" in the menu.
  */
 void LobbyWindow::disconnectClicked() {
-    if (QMessageBox::question(this, tr("PewPew Artillery"), tr("Van futó játék folyamatban. Tényleg le akarsz csatlakozni?")) == QMessageBox::Yes) {
+    if (lobby->isGameRunning()) {
+        if (QMessageBox::question(this, tr("PewPew Artillery"), tr("Van futó játék folyamatban. Tényleg le akarsz csatlakozni?")) == QMessageBox::Yes) {
+            lobby->disconnectFromServer();
+        }
+    } else {
         lobby->disconnectFromServer();
     }
 }
@@ -155,6 +159,7 @@ void LobbyWindow::disconnectClicked() {
 void LobbyWindow::connected(const QString& address) {
     ui->newGameButton->setEnabled(true);
     ui->chatButton->setEnabled(true);
+    ui->chatInputBox->setEnabled(true);
     statusBar()->showMessage(tr("Csatlakozatva a szerverhez: %1").arg(address), 5000);
 }
 
@@ -166,6 +171,7 @@ void LobbyWindow::disconnected() {
     ui->joinButton->setEnabled(false);
     ui->chatButton->setEnabled(false);
     ui->chatInputBox->clear();
+    ui->chatInputBox->setEnabled(false);
     ui->chatBox->clear();
     while (ui->gamesTable->rowCount() > 0) {
         ui->gamesTable->removeRow(0);

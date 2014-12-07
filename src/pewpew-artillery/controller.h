@@ -31,7 +31,8 @@ public:
     void onChangePosition(direction direction);
     void onChangeAngle(direction direction);
     void onChangePower(double power);
-    void onSendChat();
+    void onSendChat(const QString& message);
+    void onReceiveChat(const QString& message);
 
     void onMessageReceived(double position, double angle, double power, double deltaHP);
     void onOpponentJoined(const QString& name);

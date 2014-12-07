@@ -35,6 +35,7 @@ public:
     void refresh();
     //TODO The followig methods are only for testing
     void setSliderValue(int);
+    void printChat(const QString& line);
 
 public slots:
     void localFireButtonClicked();

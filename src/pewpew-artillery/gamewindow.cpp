@@ -7,6 +7,7 @@
 #include <QMessageBox>
 #include <QTextStream>
 #include <QBitmap>
+#include <QtMath>
 
 /**
  * @brief The main constructor of the main window.
@@ -28,15 +29,12 @@ GameWindow::GameWindow(Controller* controller, GameEngine* engine, QWidget *pare
     QPixmap leftTankImage(":/sprites/tank_left_noturret.png");
     QBitmap mask = leftTankImage.createMaskFromColor(Qt::white);
     leftTankImage.setMask(mask);
-    QPixmap leftTurretImage(":/sprites/turret_left.png");
-    mask = leftTurretImage.createMaskFromColor(Qt::white);
-    leftTurretImage.setMask(mask);
+    QPixmap turretImage(":/sprites/turret.png");
+    mask = turretImage.createMaskFromColor(Qt::white);
+    turretImage.setMask(mask);
     QPixmap rightTankImage(":/sprites/tank_right_noturret.png");
     mask = rightTankImage.createMaskFromColor(Qt::white);
     rightTankImage.setMask(mask);
-    QPixmap rightTurretImage(":/sprites/turret_right.png");
-    mask = rightTankImage.createMaskFromColor(Qt::white);
-    rightTurretImage.setMask(mask);
 
     // add items to the scene
     tankLeft = new QGraphicsPixmapItem(leftTankImage);
@@ -44,16 +42,16 @@ GameWindow::GameWindow(Controller* controller, GameEngine* engine, QWidget *pare
     double spriteScale = 0.1 / leftTankImage.width();
     tankLeft->setScale(spriteScale);
     scene.addItem(tankLeft);
-    turretLeft = new QGraphicsPixmapItem(leftTurretImage, tankLeft);
-    turretLeft->setTransformOriginPoint(0, leftTurretImage.height() / 2.0);
+    turretLeft = new QGraphicsPixmapItem(turretImage, tankLeft);
+    turretLeft->setTransformOriginPoint(0, turretImage.height() / 2.0);
     turretLeft->setPos(QPointF(leftTankImage.width() * 0.5, leftTankImage.height() * 0.15) - turretLeft->mapToParent(turretLeft->transformOriginPoint()));
 
     tankRight = new QGraphicsPixmapItem(rightTankImage);
     tankRight->setTransformOriginPoint(rightTankImage.width() / 2.0, rightTankImage.height());
     tankRight->setScale(spriteScale);
     scene.addItem(tankRight);
-    turretRight = new QGraphicsPixmapItem(rightTurretImage, tankRight);
-    turretRight->setTransformOriginPoint(rightTurretImage.width(), rightTurretImage.height() / 2.0);
+    turretRight = new QGraphicsPixmapItem(turretImage, tankRight);
+    turretLeft->setTransformOriginPoint(0, turretImage.height() / 2.0);
     turretRight->setPos(QPointF(rightTankImage.width() * 0.5, rightTankImage.height() * 0.15) - turretRight->mapToParent(turretRight->transformOriginPoint()));
 }
 
@@ -140,18 +138,19 @@ void GameWindow::refresh() {
     double rightAngle = localLeft ? engine->getRemotePlayerAngle() : engine->getLocalPlayerAngle();
     double leftHP = localLeft ? engine->getLocalPlayerHP() : engine->getRemotePlayerHP();
     double rightHP = localLeft ? engine->getRemotePlayerHP(): engine->getLocalPlayerHP();
-    // tankLeft->setPos(QPointF(leftPos, 1) - tankLeft->mapToParent(tankLeft->transformOriginPoint()));
-    // tankRight->setPos(QPointF(rightPos, 1) - tankRight->mapToParent(tankRight->transformOriginPoint()));
-    tankLeft->setPos(QPointF(0.2, 1) - tankLeft->mapToParent(tankLeft->transformOriginPoint()));
-    tankRight->setPos(QPointF(0.8, 1) - tankRight->mapToParent(tankRight->transformOriginPoint()));
-    // TODO: set right position, angles
+    tankLeft->setPos(QPointF(leftPos, 1) - tankLeft->mapToParent(tankLeft->transformOriginPoint()));
+    tankRight->setPos(QPointF(rightPos, 1) - tankRight->mapToParent(tankRight->transformOriginPoint()));
+    // tankLeft->setPos(QPointF(0.2, 1) - tankLeft->mapToParent(tankLeft->transformOriginPoint()));
+    // tankRight->setPos(QPointF(0.8, 1) - tankRight->mapToParent(tankRight->transformOriginPoint()));
+    turretLeft->setRotation(-qRadiansToDegrees(leftAngle));
+    turretRight->setRotation(-qRadiansToDegrees(rightAngle));
     ui->leftHPIndicator->display(leftHP);
     ui->rightHPIndicator->display(rightHP);
     ui->fireButton->setEnabled(canMove());
     ui->sendButton->setEnabled(controller->hasGameStarted());
     ui->chatInputBox->setEnabled(controller->hasGameStarted());
     if (controller->hasGameStarted()) {
-        if (localLeft && engine->getLocalTurn()) {
+        if (!localLeft ^ engine->getLocalTurn()) {
             ui->leftPlayerLabel->setFrameStyle(QFrame::Box);
             ui->rightPlayerLabel->setFrameStyle(QFrame::NoFrame);
         } else {
@@ -176,7 +175,10 @@ void GameWindow::remoteFireButtonClicked(){
  * @brief Send a chat message.
  */
 void GameWindow::sendButtonClicked() {
-
+    QString message = ui->chatInputBox->text();
+    if (message.isEmpty()) return;
+    ui->chatInputBox->clear();
+    controller->onSendChat(message);
 }
 
 /**
@@ -190,4 +192,12 @@ bool GameWindow::canMove() const {
 //TODO The followig methods are only for testing
 void GameWindow::setSliderValue(int) {
     // ui->localAngleSlider->setValue(value);
+}
+
+/**
+ * @brief Print a new line to the chat panel.
+ * @param line The line to be added.
+ */
+void GameWindow::printChat(const QString& line) {
+    ui->chatBox->appendPlainText(line);
 }

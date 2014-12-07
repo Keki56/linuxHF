@@ -117,12 +117,20 @@
     <item>
      <layout class="QVBoxLayout" name="chatPanel">
       <item>
-       <widget class="QPlainTextEdit" name="chatBox"/>
+       <widget class="QPlainTextEdit" name="chatBox">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item>
        <layout class="QHBoxLayout" name="chatBottomPanel">
         <item>
-         <widget class="QLineEdit" name="chatInputBox"/>
+         <widget class="QLineEdit" name="chatInputBox">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="QPushButton" name="chatButton">

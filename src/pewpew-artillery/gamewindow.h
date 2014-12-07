@@ -41,6 +41,7 @@ public slots:
     void localFireButtonClicked();
     void remoteFireButtonClicked();
     void sendButtonClicked();
+    void powerChanged(int value);
 
 private:
     void updateViewTransform();

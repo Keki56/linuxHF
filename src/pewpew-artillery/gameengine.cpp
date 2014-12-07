@@ -177,8 +177,8 @@ bool GameEngine::getLocalTurn() const {
 }
 
 
-GameEngine::Position GameEngine::getBulletPosition(double deltaTime){
+QPointF GameEngine::getBulletPosition(double deltaTime){
     //Nincs még implementálva
-    Position position;
+    QPointF position;
     return position;
 }

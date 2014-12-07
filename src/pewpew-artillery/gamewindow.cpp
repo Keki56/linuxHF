@@ -182,6 +182,14 @@ void GameWindow::sendButtonClicked() {
 }
 
 /**
+ * @brief Event handler called after the power was changed.
+ * @param value The new value of the power.
+ */
+void GameWindow::powerChanged(int value) {
+    controller->onChangePower(value);
+}
+
+/**
  * @brief Return whether the local player can make a move.
  * @return True if the local player can move.
  */

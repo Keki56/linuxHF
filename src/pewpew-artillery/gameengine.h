@@ -2,6 +2,7 @@
 #define GAMEENGINE_H
 
 #include <qstring.h>
+#include <QPointF>
 
 class GameEngine
 {
@@ -29,11 +30,6 @@ private:
     bool positionValidator(Player* player, double position) const;
     bool angleValidator(double angle) const;
 public:
-    struct Position {
-        double x;
-        double y;
-    };
-
     GameEngine(bool isLocalStart, bool isLocalLeft);
 
     bool fireRemotePlayer(double position, double angle, double power, double deltaHP);
@@ -72,7 +68,7 @@ public:
     bool getLocalLeft() const;
     bool getLocalTurn() const;
 
-    Position getBulletPosition(double deltaTime);
+    QPointF getBulletPosition(double deltaTime);
 };
 
 #endif // GAMEENGINE_H

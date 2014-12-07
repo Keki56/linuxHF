@@ -63,9 +63,13 @@ public:
 
     double getLocalPlayerPosition() const;
     double getLocalPlayerAngle() const;
+    double getLocalPlayerHP() const;
 
-    int getLocalPlayerHp();
-    int getRemotePlayerHp();
+    double getRemotePlayerPosition() const;
+    double getRemotePlayerAngle() const;
+    double getRemotePlayerHP() const;
+
+    bool isLocalLeft() const;
 
     Position getBulletPosition(double deltaTime);
 };

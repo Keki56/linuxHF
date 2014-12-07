@@ -36,7 +36,6 @@ public:
 
     GameEngine(bool isLocalStart, bool isLocalLeft);
 
-    bool setLocalPlayer(double position, double angle, double power);       //TODO törölni.
     bool fireRemotePlayer(double position, double angle, double power, double deltaHP);
 
     /**
@@ -61,6 +60,9 @@ public:
     bool setLocalPlayerPower(double power);
 
     bool fireLocalPlayer();
+
+    double getLocalPlayerPosition() const;
+    double getLocalPlayerAngle() const;
 
     int getLocalPlayerHp();
     int getRemotePlayerHp();

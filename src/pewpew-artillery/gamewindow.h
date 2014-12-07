@@ -16,6 +16,7 @@ public:
     ~GameWindow();
 
 protected:
+    virtual void keyPressEvent(QKeyEvent* event);
     virtual void closeEvent(QCloseEvent *event);
 private:
     Ui::GameWindow *ui;

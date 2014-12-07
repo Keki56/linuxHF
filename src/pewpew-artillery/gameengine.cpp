@@ -141,6 +141,14 @@ bool GameEngine::fireLocalPlayer(){
     }
 }
 
+double GameEngine::getLocalPlayerPosition() const{
+    return localPlayer.position;
+}
+
+double GameEngine::getLocalPlayerAngle() const{
+    return localPlayer.angle;
+}
+
 int GameEngine::getLocalPlayerHp(){
     return localPlayer.hp;
 }

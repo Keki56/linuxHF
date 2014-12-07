@@ -16,12 +16,20 @@ private:
     GameWindow window;
     GameEngine engine;
     bool isLocalTurn;
+    QString& opponentName;
 public:
+    enum direction {LEFTtoRIGHT = 1, RIGHTtoLEFT = -1,
+                    COUNTERCLOCKWISE = 1, CLOCKWISE = -1};
+
     explicit Controller(bool localStarts, Lobby *parent = 0);
 
-    bool setRemotePlayer(double position, double angle, double power);
+    //bool setRemotePlayer(double position, double angle, double power);
     bool fireRemotePlayer();        //csak debug célra!!!
     bool fireLocalPlayer();
+
+    void onChangePosition(direction direction) const;
+    void onChangeAngle(direction direction) const;
+
 
     void onMessageReceived(double position, double angle, double power, double deltaHP);
     void onOpponentJoined(const QString& name);

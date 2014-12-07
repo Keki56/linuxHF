@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <QDataStream>
 
+//Kíváncsi komment: Miért nem tettük a MessageType-t a Message osztályon belülre. Miért jó, hogy a globális scope-ban létezik?
 enum MessageType {
     MSGT_CONNECTION_REQUEST,
     MSGT_CONNECTION_ACCEPTED,

@@ -3,12 +3,16 @@
 #include "lobby.h"
 #include <stdio.h>
 
+#define STEP_SIZE 0.01
+#define TURN_STEP 0.1256637     //PI / 25
+
 Controller::Controller(bool localStarts, Lobby *parent) :
     isLocalTurn(localStarts),
     QObject(parent),
     lobby(parent),
     window(this),
-    engine(localStarts)
+    engine(localStarts),
+    opponentName(NULL)
 {
     window.show();
 }
@@ -21,14 +25,44 @@ bool Controller::fireLocalPlayer(){
     printf("Controller::fireLocaPlayer\n");
 }
 
+/**
+ * @brief Local player changes his position by one step.
+ */
+void Controller::onChangePosition(direction direction) const {
+    double newPosition = engine.getLocalPlayerPosition() + direction*STEP_SIZE;
+    if (engine.setLocalPlayerPosition(newPosition)) {
+        //megengedett elmozdulás
+    } else {
+        //nem megengedett elmozdulás (vagy nem is a helyi játékos jön)
+    }
+}
+
+/**
+ * @brief Local player changes his cannon's angle by one step
+ */
+void Controller::onChangeAngle(direction direction) const {
+    double newAngle = engine.getLocalPlayerAngle() + direction*TURN_STEP;
+    if (engine.setLocalPlayerAngle(newAngle)){
+        //megengedett ágyúállás
+    } else {
+        //nem megengedett
+    }
+}
+
 void Controller::onMessageReceived(double position, double angle, double power, double deltaHP){
     printf("Controller::onMessageReceived - position=%f angle=%f power=%f deltaHP=%f\n", position, angle, power, deltaHP);
 
-
+    if (engine.fireRemotePlayer(position, angle, power, deltaHP)) {
+        window.setEnabled(true);
+    } else {
+        printf("Controller:onMessageReveiced - Incorrect data error.\n");
+        exit -1;
+    }
 }
 
 void Controller::onOpponentJoined(const QString& name) {
     printf("Controller::onOpponentJoined - name=%s\n", name.toLocal8Bit().data());
+    opponentName = name;
 }
 
 void Controller::onOpponentQuit() {

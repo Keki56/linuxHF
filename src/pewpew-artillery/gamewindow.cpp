@@ -91,8 +91,14 @@ void GameWindow::keyPressEvent(QKeyEvent *event){
  * @param event The event passed to the window.
  */
 void GameWindow::closeEvent(QCloseEvent *event){
-    controller->onWindowClosed();
-    event->accept();
+    int ret = QMessageBox::warning(this, tr("PewPew Artillery"), tr("Biztosan be akarja zárni a játék ablakot?\nAz ablak bezárásával kilép a játékból."),
+                                  QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Yes);
+    if (ret == QMessageBox::Yes) {
+        event->accept();
+        controller->onWindowClosed();
+    } else {
+        event->ignore();
+    }
 }
 
 /**
@@ -168,8 +174,9 @@ void GameWindow::localFireButtonClicked(){
     controller->fireLocalPlayer();
 }
 
+//TODO törölni
 void GameWindow::remoteFireButtonClicked(){
-    controller->fireRemotePlayer();
+    //controller->fireRemotePlayer();
 }
 
 /**

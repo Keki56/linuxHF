@@ -24,8 +24,6 @@ public:
 
     explicit Controller(bool localStarts, Lobby *parent = 0);
 
-    //bool setRemotePlayer(double position, double angle, double power);
-    bool fireRemotePlayer();        //csak debug célra!!!
     bool fireLocalPlayer();
 
     void onChangePosition(direction direction);

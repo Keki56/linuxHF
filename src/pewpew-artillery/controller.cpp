@@ -3,6 +3,7 @@
 #include "lobby.h"
 #include <stdio.h>
 #include <QApplication>
+#include <QMessageBox>
 
 #define STEP_SIZE 0.01
 #define TURN_STEP 0.1256637     //PI / 25
@@ -20,10 +21,10 @@ Controller::Controller(bool localStarts, Lobby *parent) :
     window.refresh();
 }
 
-bool Controller::fireRemotePlayer(){
+/*bool Controller::fireRemotePlayer(){
     printf("Controller::fireRemotePlayer\n");
     return true;
-}
+}*/
 
 bool Controller::fireLocalPlayer(){
     printf("Controller::fireLocaPlayer\n");
@@ -88,7 +89,7 @@ void Controller::onOpponentQuit() {
 }
 
 void Controller::onWindowClosed() {
-    printf("Controller::onWindowClosed\n");
+    lobby->gameClosed();
 }
 
 bool Controller::hasGameStarted() const {

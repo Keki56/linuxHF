@@ -152,12 +152,24 @@ double GameEngine::getLocalPlayerAngle() const{
     return localPlayer.angle;
 }
 
-int GameEngine::getLocalPlayerHp(){
+double GameEngine::getLocalPlayerHP() const{
     return localPlayer.hp;
 }
 
-int GameEngine::getRemotePlayerHp(){
+double GameEngine::getRemotePlayerPosition() const{
+    return remotePlayer.position;
+}
+
+double GameEngine::getRemotePlayerAngle() const{
+    return remotePlayer.angle;
+}
+
+double GameEngine::getRemotePlayerHP() const{
     return remotePlayer.hp;
+}
+
+bool GameEngine::getLocalLeft() const{
+    return isLocalLeft;
 }
 
 

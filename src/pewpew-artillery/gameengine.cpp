@@ -153,7 +153,7 @@ double GameEngine::getLocalPlayerHP() const{
     return localPlayer.hp;
 }
 
-double GameEngine::getRemotelayerPosition() const{
+double GameEngine::getRemotePlayerPosition() const{
     return remotePlayer.position;
 }
 
@@ -165,7 +165,7 @@ double GameEngine::getRemotePlayerHP() const{
     return remotePlayer.hp;
 }
 
-bool GameEngine::isLocalLeft() const{
+bool GameEngine::getLocalLeft() const{
     return isLocalLeft;
 }
 

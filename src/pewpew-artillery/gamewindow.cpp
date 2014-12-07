@@ -16,12 +16,22 @@ GameWindow::GameWindow(Controller* controller, QWidget *parent) :
 }
 
 void GameWindow::keyPressEvent(QKeyEvent *event){
-    if (Qt::Key_A == event->key()) {
-        controller->onChangePosition(Controller.RIGHTtoLEFT);
-    } else if (Qt::Key_D == event->key()) {
-        controller->onChangePosition(Controller.LEFTtoRIGHT);
-    } else {
-        QMainWindow.keyPressEvent(event);
+    switch (event->key()) {
+    case Qt::Key_A:
+        controller->onChangePosition(Controller::RIGHTtoLEFT);
+        break;
+    case Qt::Key_D:
+        controller->onChangePosition(Controller::LEFTtoRIGHT);
+        break;
+    case Qt::Key_W:
+        controller->onChangeAngle(Controller::COUNTERCLOCKWISE);
+        break;
+    case Qt::Key_S:
+        controller->onChangeAngle(Controller::CLOCKWISE);
+        break;
+    default:
+        QMainWindow::keyPressEvent(event);
+        break;
     }
 }
 
@@ -41,4 +51,9 @@ void GameWindow::localFireButtonClicked(){
 
 void GameWindow::remoteFireButtonClicked(){
     controller->fireRemotePlayer();
+}
+
+//TODO The followig methods are only for testing
+void GameWindow::setSliderValue(int value) {
+    ui->localAngleSlider->setValue(value);
 }

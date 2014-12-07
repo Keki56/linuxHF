@@ -11,8 +11,8 @@ Controller::Controller(bool localStarts, Lobby *parent) :
     QObject(parent),
     lobby(parent),
     window(this),
-    engine(localStarts),
-    opponentName(NULL)
+    engine(localStarts, true)
+
 {
     window.show();
 }
@@ -28,7 +28,7 @@ bool Controller::fireLocalPlayer(){
 /**
  * @brief Local player changes his position by one step.
  */
-void Controller::onChangePosition(direction direction) const {
+void Controller::onChangePosition(direction direction) {
     double newPosition = engine.getLocalPlayerPosition() + direction*STEP_SIZE;
     if (engine.setLocalPlayerPosition(newPosition)) {
         //megengedett elmozdulás
@@ -40,10 +40,23 @@ void Controller::onChangePosition(direction direction) const {
 /**
  * @brief Local player changes his cannon's angle by one step
  */
-void Controller::onChangeAngle(direction direction) const {
+void Controller::onChangeAngle(direction direction) {
     double newAngle = engine.getLocalPlayerAngle() + direction*TURN_STEP;
     if (engine.setLocalPlayerAngle(newAngle)){
         //megengedett ágyúállás
+        int value = newAngle * 31.51268;
+        window.setSliderValue(value);
+    } else {
+        //nem megengedett
+    }
+}
+
+/**
+ * @brief Local player changes his fire power
+ */
+void Controller::onChangePower(double power){
+    if (engine.setLocalPlayerPower(power)) {
+        //megengedett állítás
     } else {
         //nem megengedett
     }

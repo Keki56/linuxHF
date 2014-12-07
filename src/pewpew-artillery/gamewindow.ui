@@ -31,6 +31,9 @@
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
          <widget class="QSlider" name="localAngleSlider">
+          <property name="value">
+           <number>0</number>
+          </property>
           <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>

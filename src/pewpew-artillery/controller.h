@@ -16,7 +16,7 @@ private:
     GameWindow window;
     GameEngine engine;
     bool isLocalTurn;
-    QString& opponentName;
+    QString opponentName;
 public:
     enum direction {LEFTtoRIGHT = 1, RIGHTtoLEFT = -1,
                     COUNTERCLOCKWISE = 1, CLOCKWISE = -1};
@@ -27,8 +27,9 @@ public:
     bool fireRemotePlayer();        //csak debug célra!!!
     bool fireLocalPlayer();
 
-    void onChangePosition(direction direction) const;
-    void onChangeAngle(direction direction) const;
+    void onChangePosition(direction direction);
+    void onChangeAngle(direction direction);
+    void onChangePower(double power);
 
 
     void onMessageReceived(double position, double angle, double power, double deltaHP);

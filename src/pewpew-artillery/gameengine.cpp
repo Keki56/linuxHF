@@ -75,7 +75,7 @@ bool GameEngine::angleValidator(double angle) const {
     return (angle > 0.0 && angle < M_PI);
 }
 
-bool GameEngine::setLocalPlayer(double position, double angle, double power){
+/*bool GameEngine::setLocalPlayer(double position, double angle, double power){
     if (isLocalTurn) {
         localPlayer.position = position;
         localPlayer.angle = angle;
@@ -84,7 +84,7 @@ bool GameEngine::setLocalPlayer(double position, double angle, double power){
     } else {
         return false;
     }
-}
+}*/
 
 
 //------------------------------------

@@ -15,6 +15,9 @@
 #ifndef M_PI_4
 #define M_PI_4		0.78539816339744830962
 #endif
+#ifndef M_PI
+#define M_PI		3.14159265358979323846
+#endif
 
 GameEngine::GameEngine(bool isLocalStart, bool isLocalLeft):
     isLocalTurn(isLocalStart),

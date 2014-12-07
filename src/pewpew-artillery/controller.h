@@ -10,8 +10,9 @@ class Lobby;
 
 class Controller : public QObject
 {
-private:
     Q_OBJECT
+
+private:  
     Lobby* lobby;
     GameWindow window;
     GameEngine engine;

@@ -2,16 +2,17 @@
 #include "gamewindow.h"
 #include "lobby.h"
 #include <stdio.h>
+#include <QApplication>
 
 #define STEP_SIZE 0.01
 #define TURN_STEP 0.1256637     //PI / 25
 
 Controller::Controller(bool localStarts, Lobby *parent) :
-    isLocalTurn(localStarts),
     QObject(parent),
     lobby(parent),
     window(this),
-    engine(localStarts, true)
+    engine(localStarts, true),
+    isLocalTurn(localStarts)
 
 {
     window.show();
@@ -19,10 +20,12 @@ Controller::Controller(bool localStarts, Lobby *parent) :
 
 bool Controller::fireRemotePlayer(){
     printf("Controller::fireRemotePlayer\n");
+    return true;
 }
 
 bool Controller::fireLocalPlayer(){
     printf("Controller::fireLocaPlayer\n");
+    return true;
 }
 
 /**
@@ -69,7 +72,7 @@ void Controller::onMessageReceived(double position, double angle, double power, 
         window.setEnabled(true);
     } else {
         printf("Controller:onMessageReveiced - Incorrect data error.\n");
-        exit -1;
+        qApp->exit(-1);
     }
 }
 

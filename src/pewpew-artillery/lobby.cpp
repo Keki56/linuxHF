@@ -57,6 +57,8 @@ void Lobby::connectToServer(const QString& nickname, const QString& address, int
  * @brief Disconnect the client from the server.
  */
 void Lobby::disconnectFromServer() {
+    if (controller != NULL) delete controller;
+    controller = NULL;
     playerName = "";
     socket.close();
     emit disconnected();
@@ -237,6 +239,8 @@ void Lobby::gameClosed() {
     SimpleMessage msg;
     msg.type = MSGT_GAME_CLOSED;
     lobbywindow.refreshButtons();
+    controller->deleteLater();
+    controller = NULL;
 }
 
 /**

@@ -14,7 +14,7 @@ Controller::Controller(bool localStarts, Lobby *parent) :
     lobby(parent),
     engine(localStarts, localStarts),
     window(this, &engine),
-    isLocalTurn(localStarts),
+    //isLocalTurn(localStarts),
     opponentName("")
 
 {
@@ -120,8 +120,6 @@ void Controller::onReceiveChat(const QString& message) {
 }
 
 void Controller::fireLocalPlayer(){
-    printf("Controller::fireLocaPlayer\n");
-
     double oldHP = engine.getLocalPlayerHP();
     if (engine.fireLocalPlayer()) {
         //window.setFireEnabled(false);
@@ -135,13 +133,17 @@ void Controller::fireLocalPlayer(){
 
 void Controller::onMessageReceived(double position, double angle, double power, double deltaHP){
     printf("Controller::onMessageReceived - position=%f angle=%f power=%f deltaHP=%f\n", position, angle, power, deltaHP);
-
-    if (engine.fireRemotePlayer(position, angle, power, deltaHP)) {
-        window.setFireEnabled(true);
-    } else {
-        printf("Controller:onMessageReveiced - Incorrect data error.\n");
-        qApp->exit(-1);
+    if (animation != NULL) {
+        printf("Controller::onMessageReceived - Message arrived while animating. It is imopossible, so there must be an error or a bug. Message is dropped\n");
+        return;
     }
+    this->deltaHP = deltaHP;
+    engine.setRemotePlayerPower(power);
+    animation = new Animation(this,
+                              engine.getRemotePlayerPosition(), position,
+                              engine.getRemotePlayerAngle(), angle);
+    animation->startAnimation();
+    connect(animation, SIGNAL(animationFinished()), SLOT(animationFinished()));
 }
 
 void Controller::onOpponentJoined(const QString& name) {
@@ -194,4 +196,12 @@ void Controller::animationFinished() {
     animation->deleteLater();
     animation = NULL;
     QMessageBox::information(&window, "info", "The animation has finished.");
+
+    double remotePlayerHPOld = engine.getRemotePlayerHP();
+    engine.fireRemotePlayer();
+    double deltaHPDifference = (remotePlayerHPOld - engine.getRemotePlayerHP()) - deltaHP;
+    if (deltaHPDifference > 0.1 || deltaHPDifference < -0.1) {
+        printf("Controller::animationFinished - Difference between local and remote deltaHP is greater than 0.1");
+        qApp->exit(-1);
+    }
 }

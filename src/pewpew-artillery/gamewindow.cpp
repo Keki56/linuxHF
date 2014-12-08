@@ -187,7 +187,7 @@ void GameWindow::setFireEnabled(bool enabled){
 }
 
 void GameWindow::fireButtonClicked(){
-    controller->onChangePower(ui->powerSlider->value() * 100);
+    controller->onChangePower((double)ui->powerSlider->value() / 20.0);  //Maximum 5 legyen a power
     controller->fireLocalPlayer();
     //refresh();
 }

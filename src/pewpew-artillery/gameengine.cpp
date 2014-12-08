@@ -2,14 +2,16 @@
 #include <cmath>
 #include <stdio.h>
 
+#include <QDebug>
+
 //A pálya 0.0-tól 1.0-ig tart
 
 #define g 9.81                      //a gracitációs gyorsulás
-#define MAX_V 100                   //a lövedék maximális kezdősebessége
+//#define MAX_V 100                   //a lövedék maximális kezdősebessége
 
 #define WALL_LEFT 0.45              //a fal bal széle
 #define WALL_RIGHT 0.55             //a fal jobb széle
-#define WALL_TOP 0.00001                //a fal magassága
+#define WALL_TOP 0.01               //a fal magassága
 #define DEFAULT_LEFT_POSITION 0.2   //a játékosok alapértelmezett pozíciója     |-x-P1-----WALL-----P2-x-|
 #define DEFAULT_RIGHT_POSITION 0.8
 #define RADIUS 0.04                  //mennyir távolodhatnak el a játékosok a kiindulópozíciójuktól
@@ -45,8 +47,8 @@ GameEngine::GameEngine(bool isLocalStart, bool isLocalLeft):
 }
 
 double GameEngine::getTrajectoryHeight(Player* p, double x){
-    double t = (x - p->position) / (p->power * std::cos(p->angle));
-    return t * (std::sin(p->angle) - g*t/2);
+    double t = std::abs(x - p->position) / (p->power * std::cos(p->angle));
+    return t * (p->power * std::sin(p->angle) - g*t/2);
 }
 
 bool GameEngine::wallHit(Player* player){
@@ -56,14 +58,14 @@ bool GameEngine::wallHit(Player* player){
 }
 
 double GameEngine::getImpactPosition(Player* player) {
-    double dS = 2 * (player->power * MAX_V)*(player->power * MAX_V) * std::cos(player->angle) * std::sin(player->angle) / g;
+    double dS = 2 * player->power*player->power * std::cos(player->angle) * std::sin(player->angle) / g;
     return player->position + dS;
  }
 
 bool GameEngine::firePlayer(Player* source, Player* target) {
     if (!wallHit(source)) {
         double impactPosition = getImpactPosition(source);
-        printf("GameEngine::firePlayer - impactPosition=%f target->position=%f\n", impactPosition, target->position);         //TODO törölni
+        qDebug() << QString("impactPosition=%1").arg(impactPosition);
         if (impactPosition-0.05 < target->position || impactPosition+0.05 > target->position) {     //Eltalálta
             target->power -= 10;
             return true;
@@ -82,21 +84,6 @@ bool GameEngine::angleValidator(double angle) const {
 }
 
 //------------------------------------
-
-bool GameEngine::fireRemotePlayer(double position, double angle, double power, double deltaHP){
-    if (!isLocalTurn && positionValidator(&remotePlayer, position) && angleValidator(angle)) {      //Elvileg nem érkezhetne abnormális adat.
-        remotePlayer.position = position;
-        remotePlayer.angle = angle;
-        remotePlayer.power = power;
-
-        firePlayer(&remotePlayer, &localPlayer);
-        isLocalTurn = true;
-
-        return true;
-    } else {
-        return false;
-    }
-}
 
 bool GameEngine::setLocalPlayerPosition(double position) {
     if (isLocalTurn && positionValidator(&localPlayer, position)) {
@@ -156,8 +143,40 @@ bool GameEngine::setRemotePlayerPower(double power) {
 
 bool GameEngine::fireLocalPlayer(){
     if (isLocalTurn) {
+        printf("GameEngine::fireLocalPlayer");
+
+        //DEBUG
+        //localPlayer.position = 0.2;
+        //localPlayer.angle = 0.7854;
+        //localPlayer.power = 2.426;
+        //DEBUG
+
         firePlayer(&localPlayer, &remotePlayer);
         isLocalTurn = false;
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/*bool GameEngine::fireRemotePlayer(double position, double angle, double power, double deltaHP){
+    if (!isLocalTurn && positionValidator(&remotePlayer, position) && angleValidator(angle)) {      //Elvileg nem érkezhetne abnormális adat.
+        remotePlayer.position = position;
+        remotePlayer.angle = angle;
+        remotePlayer.power = power;
+
+        firePlayer(&remotePlayer, &localPlayer);
+        isLocalTurn = true;
+
+        return true;
+    } else {
+        return false;
+    }
+}*/
+
+bool GameEngine::fireRemotePlayer(){
+    if (!isLocalTurn) {
+        firePlayer(&remotePlayer, &localPlayer);
         return true;
     } else {
         return false;
@@ -196,7 +215,11 @@ bool GameEngine::getLocalTurn() const {
     return isLocalTurn;
 }
 
-
+/**
+ * @brief Get the position of the last fired bullet
+ * @param deltaTime
+ * @return bullet position in 2D
+ */
 QPointF GameEngine::getBulletPosition(double deltaTime){
     Player* player;
     if (isLocalTurn)

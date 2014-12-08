@@ -16,9 +16,10 @@ private:
     Lobby* lobby;
     GameEngine engine;
     GameWindow window;
-    bool isLocalTurn;
+    //bool isLocalTurn;
     QString opponentName;
     Animation* animation = NULL;
+    double deltaHP;
 
     void sendMoveMessage(double deltaHP);
 public:

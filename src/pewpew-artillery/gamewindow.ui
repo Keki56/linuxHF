@@ -217,6 +217,9 @@
           </item>
           <item>
            <widget class="QSlider" name="powerSlider">
+            <property name="value">
+             <number>3</number>
+            </property>
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -355,7 +358,7 @@
      <x>0</x>
      <y>0</y>
      <width>703</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
   </widget>

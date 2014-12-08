@@ -32,8 +32,6 @@ private:
 public:
     GameEngine(bool isLocalStart, bool isLocalLeft);
 
-    bool fireRemotePlayer(double position, double angle, double power, double deltaHP);
-
     /**
      * @brief setLPPosition
      * @param position
@@ -60,6 +58,8 @@ public:
     bool setRemotePlayerPower(double power);
 
     bool fireLocalPlayer();
+    //bool fireRemotePlayer(double position, double angle, double power, double deltaHP);
+    bool fireRemotePlayer();
 
     double getLocalPlayerPosition() const;
     double getLocalPlayerAngle() const;

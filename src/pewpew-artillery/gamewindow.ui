@@ -355,7 +355,7 @@
      <x>0</x>
      <y>0</y>
      <width>703</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>
@@ -386,8 +386,8 @@
    <slot>fireButtonClicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>224</x>
-     <y>442</y>
+     <x>320</x>
+     <y>422</y>
     </hint>
     <hint type="destinationlabel">
      <x>265</x>
@@ -404,6 +404,38 @@
     <hint type="sourcelabel">
      <x>219</x>
      <y>440</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>351</x>
+     <y>241</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>chatInputBox</sender>
+   <signal>returnPressed()</signal>
+   <receiver>GameWindow</receiver>
+   <slot>sendButtonClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>524</x>
+     <y>440</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>351</x>
+     <y>241</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>powerSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>GameWindow</receiver>
+   <slot>powerChanged(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>219</x>
+     <y>384</y>
     </hint>
     <hint type="destinationlabel">
      <x>351</x>

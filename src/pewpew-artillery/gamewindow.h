@@ -43,6 +43,8 @@ public slots:
     void sendButtonClicked();
     void powerChanged(int value);
 
+    /* TEMP */ void testButtonClicked();
+
 private:
     void updateViewTransform();
     bool canMove() const;

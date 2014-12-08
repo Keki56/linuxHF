@@ -5,8 +5,8 @@
 #include <QString>
 #include "gameengine.h"
 #include "gamewindow.h"
+#include "animation.h"
 class Lobby;
-
 
 class Controller : public QObject
 {
@@ -18,6 +18,7 @@ private:
     GameWindow window;
     bool isLocalTurn;
     QString opponentName;
+    Animation* animation = NULL;
 
     void sendMoveMessage(double deltaHP);
 public:
@@ -28,6 +29,8 @@ public:
 
     void onChangePosition(direction direction);
     void onChangeAngle(direction direction);
+    void onChangeRemotePosition(double position);
+    void onChangeRemoteAngle(double angle);
     void onChangePower(double power);
     void onSendChat(const QString& message);
     void onReceiveChat(const QString& message);
@@ -41,10 +44,15 @@ public:
     void onWindowClosed();
 
     bool hasGameStarted() const;
+    QString getLocalPlayerName() const;
+    QString getRemotePlayerName() const;
+
+    /* TEMP */ void testAnimation();
 
 signals:
 
 public slots:
+    void animationFinished();
 
 };
 

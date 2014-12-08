@@ -158,6 +158,10 @@ void GameWindow::refresh() {
     // enable/disable GUI elements
     ui->leftHPIndicator->display(leftHP);
     ui->rightHPIndicator->display(rightHP);
+    QString leftName = localLeft ? controller->getLocalPlayerName() : controller->getRemotePlayerName();
+    QString rightName = localLeft ? controller->getRemotePlayerName() : controller->getLocalPlayerName();
+    ui->leftPlayerLabel->setText(leftName);
+    ui->rightPlayerLabel->setText(rightName);
     ui->fireButton->setEnabled(canMove());
     ui->sendButton->setEnabled(controller->hasGameStarted());
     ui->chatInputBox->setEnabled(controller->hasGameStarted());
@@ -203,6 +207,11 @@ void GameWindow::sendButtonClicked() {
  */
 void GameWindow::powerChanged(int value) {
     controller->onChangePower(value);
+}
+
+/* TEMP */
+void GameWindow::testButtonClicked() {
+    controller->testAnimation();
 }
 
 /**

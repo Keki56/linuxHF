@@ -61,6 +61,34 @@ void Controller::onChangeAngle(direction direction) {
 }
 
 /**
+ * @brief The remote player changes his position during an animation.
+ * @param position The position to set.
+ */
+void Controller::onChangeRemotePosition(double position) {
+    if (engine.setRemotePlayerPosition(position)) {
+        //megengedett elmozdulás
+        window.refresh();
+    } else {
+        //nem megengedett elmozdulás (vagy nem is a távoli játékos jön)
+        return;
+    }
+}
+
+/**
+ * @brief The remote player changes his cannon's angle during an animation.
+ * @param angle The angle to set.
+ */
+void Controller::onChangeRemoteAngle(double angle) {
+    if (engine.setRemotePlayerAngle(angle)){
+        //megengedett ágyúállás
+        window.refresh();
+    } else {
+        //nem megengedett
+        return;
+    }
+}
+
+/**
  * @brief Local player changes his fire power
  */
 void Controller::onChangePower(double power){
@@ -132,4 +160,38 @@ void Controller::onWindowClosed() {
 
 bool Controller::hasGameStarted() const {
     return !opponentName.isEmpty();
+}
+
+/**
+ * @brief Get the name of the local player.
+ * @return The name of the local player.
+ */
+QString Controller::getLocalPlayerName() const {
+    return lobby->getPlayerName();
+}
+
+/**
+ * @brief Get the name of the remote player.
+ * @return The name of the remote player.
+ */
+QString Controller::getRemotePlayerName() const {
+    return opponentName;
+}
+
+/* TEMP */
+void Controller::testAnimation() {
+    if (animation != NULL) return;
+    animation = new Animation(this, 0.85, 0.75, 0, 5);
+    animation->startAnimation();
+    connect(animation, SIGNAL(animationFinished()), SLOT(animationFinished()));
+}
+
+/**
+ * @brief Event handler after the animation has finished;
+ */
+void Controller::animationFinished() {
+    if (animation == NULL) return;
+    animation->deleteLater();
+    animation = NULL;
+    QMessageBox::information(&window, "info", "The animation has finished.");
 }

@@ -85,7 +85,7 @@
            <enum>QFrame::NoFrame</enum>
           </property>
           <property name="text">
-           <string>TextLabel</string>
+           <string/>
           </property>
          </widget>
         </item>
@@ -136,7 +136,7 @@
            </font>
           </property>
           <property name="text">
-           <string>TextLabel</string>
+           <string/>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -232,6 +232,13 @@
             </property>
             <property name="text">
              <string>Tűz</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="testButton">
+            <property name="text">
+             <string>Teszt</string>
             </property>
            </widget>
           </item>
@@ -420,10 +427,27 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>testButton</sender>
+   <signal>clicked()</signal>
+   <receiver>GameWindow</receiver>
+   <slot>testButtonClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>219</x>
+     <y>440</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>351</x>
+     <y>241</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>localFireButtonClicked()</slot>
   <slot>sendButtonClicked()</slot>
   <slot>powerChanged(int)</slot>
+  <slot>testButtonClicked()</slot>
  </slots>
 </ui>

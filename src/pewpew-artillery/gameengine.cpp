@@ -124,6 +124,34 @@ bool GameEngine::setLocalPlayerPower(double power){
     }
 }
 
+bool GameEngine::setRemotePlayerPosition(double position) {
+    if (!isLocalTurn && positionValidator(&remotePlayer, position)) {
+        remotePlayer.position = position;
+        printf("Position=%f\n", position);
+        return true;
+    } else {
+        return false;
+    }
+}
+
+bool GameEngine::setRemotePlayerAngle(double angle) {
+    if (!isLocalTurn && angleValidator(angle)) {
+        remotePlayer.angle = angle;
+        return true;
+    } else {
+        return false;
+    }
+}
+
+bool GameEngine::setRemotePlayerPower(double power) {
+    if (!isLocalTurn) {
+        remotePlayer.power = power;
+        return true;
+    } else {
+        return false;
+    }
+}
+
 bool GameEngine::fireLocalPlayer(){
     if (isLocalTurn) {
         firePlayer(&localPlayer, &remotePlayer);

@@ -34,7 +34,8 @@ SOURCES +=\
     gamewindow.cpp \
     controller.cpp \
     connecttoserverdialog.cpp \
-    lobby.cpp
+    lobby.cpp \
+    animation.cpp
 
 HEADERS  += \
     lobbywindow.h \
@@ -43,7 +44,8 @@ HEADERS  += \
     gamewindow.h \
     controller.h \
     connecttoserverdialog.h \
-    lobby.h
+    lobby.h \
+    animation.h
 
 FORMS    += lobbywindow.ui \
     gamewindow.ui \

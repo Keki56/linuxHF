@@ -55,6 +55,10 @@ public:
      */
     bool setLocalPlayerPower(double power);
 
+    bool setRemotePlayerPosition(double position);
+    bool setRemotePlayerAngle(double angle);
+    bool setRemotePlayerPower(double power);
+
     bool fireLocalPlayer();
 
     double getLocalPlayerPosition() const;

@@ -12,7 +12,7 @@
 Controller::Controller(bool localStarts, Lobby *parent) :
     QObject(parent),
     lobby(parent),
-    engine(localStarts, true),
+    engine(localStarts, localStarts),
     window(this, &engine),
     isLocalTurn(localStarts),
     opponentName("")
@@ -96,7 +96,7 @@ void Controller::fireLocalPlayer(){
 
     double oldHP = engine.getLocalPlayerHP();
     if (engine.fireLocalPlayer()) {
-        window.setFireEnabled(false);
+        //window.setFireEnabled(false);
         double deltaHP = oldHP - engine.getLocalPlayerHP();
         sendMoveMessage(deltaHP);
     } else {

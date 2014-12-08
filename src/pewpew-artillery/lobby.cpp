@@ -315,19 +315,8 @@ int main(int argc, char *argv[])
     Lobby lobby;
     lobby.showWindow();
 
-    Controller controller(true, &lobby);
-/*    GameWindow w2(&controller);
-    w2.show();*/
-
-  /*  double data[4];
-    data[0] = 2;
-    data[1] = 4;
-    data[2] = 6;
-    data[3] = 8;
-    QTextStream out(stdout);
-    out << data;
-    out << "ZZZ";
-    out << data[0];*/
+/*    Controller controller(true, &lobby);
+    controller.onOpponentJoined("Vendég");*/
 
 
     return a.exec();

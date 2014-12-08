@@ -29,6 +29,7 @@ private:
     bool firePlayer(Player* source, Player* target);
     bool positionValidator(Player* player, double position) const;
     bool angleValidator(double angle) const;
+    void damage(Player* player, double impactPosition);
 public:
     GameEngine(bool isLocalStart, bool isLocalLeft);
 

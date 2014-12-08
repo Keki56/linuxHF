@@ -22,24 +22,29 @@ private:
     double deltaHP;
 
     void sendMoveMessage(double deltaHP);
+    void checkPlayersAlive();
 public:
     enum direction {LEFTtoRIGHT = 1, RIGHTtoLEFT = -1,
                     COUNTERCLOCKWISE = 1, CLOCKWISE = -1};
 
     explicit Controller(bool localStarts, Lobby *parent = 0);
 
-    void onChangePosition(direction direction);
-    void onChangeAngle(direction direction);
+    void onChangeLocalPosition(direction direction);
+    void onChangeLocalAngle(direction direction);
+    void onChangeLocalPower(double power);
+    void fireLocalPlayer();
+
     void onChangeRemotePosition(double position);
     void onChangeRemoteAngle(double angle);
-    void onChangePower(double power);
-    void onSendChat(const QString& message);
-    void onReceiveChat(const QString& message);
-    void fireLocalPlayer();
 
     void onMessageReceived(double position, double angle, double power, double deltaHP);
     void onOpponentJoined(const QString& name);
     void onOpponentQuit();
+
+    //void gameFinished(bool isLocalPlayerWin);
+
+    void onSendChat(const QString& message);
+    void onReceiveChat(const QString& message);
 
     void onSendChat();
     void onWindowClosed();

@@ -66,10 +66,10 @@ void GameWindow::keyPressEvent(QKeyEvent *event){
     QMainWindow::keyPressEvent(event);
     switch (event->key()) {
     case Qt::Key_A:
-        controller->onChangePosition(Controller::RIGHTtoLEFT);
+        controller->onChangeLocalPosition(Controller::RIGHTtoLEFT);
         break;
     case Qt::Key_D: {
-        controller->onChangePosition(Controller::LEFTtoRIGHT);
+        controller->onChangeLocalPosition(Controller::LEFTtoRIGHT);
         /*QList<QGraphicsItem*> items = ui->gameView->items();
         for (QList<QGraphicsItem*>::iterator i = items.begin(); i != items.end(); ++i) {
             (*i)->setPos((*i)->pos() + QPointF(2, 0.0));
@@ -79,10 +79,10 @@ void GameWindow::keyPressEvent(QKeyEvent *event){
         break;
         }
     case Qt::Key_W:
-        controller->onChangeAngle(Controller::COUNTERCLOCKWISE);
+        controller->onChangeLocalAngle(Controller::COUNTERCLOCKWISE);
         break;
     case Qt::Key_S:
-        controller->onChangeAngle(Controller::CLOCKWISE);
+        controller->onChangeLocalAngle(Controller::CLOCKWISE);
         break;
     default:
         QMainWindow::keyPressEvent(event);
@@ -187,7 +187,7 @@ void GameWindow::setFireEnabled(bool enabled){
 }
 
 void GameWindow::fireButtonClicked(){
-    controller->onChangePower((double)ui->powerSlider->value() / 20.0);  //Maximum 5 legyen a power
+    controller->onChangeLocalPower((double)ui->powerSlider->value() / 20.0);  //Maximum 5 legyen a power
     controller->fireLocalPlayer();
     //refresh();
 }
@@ -207,7 +207,7 @@ void GameWindow::sendButtonClicked() {
  * @param value The new value of the power.
  */
 void GameWindow::powerChanged(int value) {
-    controller->onChangePower(value);
+    controller->onChangeLocalPower(value);
 }
 
 /* TEMP */

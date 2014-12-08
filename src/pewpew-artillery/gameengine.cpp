@@ -14,7 +14,10 @@
 #define WALL_TOP 0.01               //a fal magassága
 #define DEFAULT_LEFT_POSITION 0.2   //a játékosok alapértelmezett pozíciója     |-x-P1-----WALL-----P2-x-|
 #define DEFAULT_RIGHT_POSITION 0.8
-#define RADIUS 0.04                  //mennyir távolodhatnak el a játékosok a kiindulópozíciójuktól
+#define RADIUS 0.15                  //mennyire távolodhatnak el a játékosok a kiindulópozíciójuktól
+#define IMPACT_RADIUS 1              //a becsapódástól maximum mekkora távolságra sebez a lövedék
+#define MAX_HP 100                   //maxminális, kezdeti életerő
+#define MAX_DAMAGE 20                //maximális sebződés telitalálat esetén
 #ifndef M_PI_4
 #define M_PI_4		0.78539816339744830962
 #endif
@@ -43,7 +46,7 @@ GameEngine::GameEngine(bool isLocalStart, bool isLocalLeft):
         remotePlayer.position = remotePlayer.defaultPosition = DEFAULT_LEFT_POSITION;
         remotePlayer.angle = M_PI_4;
     }
-    localPlayer.hp = remotePlayer.hp = 100;
+    localPlayer.hp = remotePlayer.hp = MAX_HP;
 }
 
 double GameEngine::getTrajectoryHeight(Player* p, double x){
@@ -62,14 +65,20 @@ double GameEngine::getImpactPosition(Player* player) {
     return player->position + dS;
  }
 
+void GameEngine::damage(Player *player, double impactPosition){
+    double impDist = std::abs(player->position - impactPosition);
+    if (impDist < IMPACT_RADIUS) {
+        player->hp -= MAX_DAMAGE - MAX_DAMAGE * (impDist / IMPACT_RADIUS);
+    }
+}
+
 bool GameEngine::firePlayer(Player* source, Player* target) {
     if (!wallHit(source)) {
         double impactPosition = getImpactPosition(source);
         qDebug() << QString("impactPosition=%1").arg(impactPosition);
-        if (impactPosition-0.05 < target->position || impactPosition+0.05 > target->position) {     //Eltalálta
-            target->power -= 10;
-            return true;
-        }
+        damage(source, impactPosition);     //Magunkba is belelőhetunk
+        damage(target, impactPosition);
+        return true;
     }
     printf("GameEngine::firePlayer - falat ért\n");
     return false;
@@ -82,6 +91,8 @@ bool GameEngine::positionValidator(Player *player, double position) const{
 bool GameEngine::angleValidator(double angle) const {
     return (angle > 0.0 && angle < M_PI);
 }
+
+
 
 //------------------------------------
 

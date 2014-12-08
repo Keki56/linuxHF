@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <QApplication>
 #include <QMessageBox>
+#include <QDebug>
 
 #define STEP_SIZE 0.01
 #define TURN_STEP 0.1256637     //PI / 25
@@ -33,9 +34,21 @@ void Controller::sendMoveMessage(double deltaHP){
 }
 
 /**
+ * @brief Checks both players are alive
+ */
+void Controller::checkPlayersAlive() {
+    if (engine.getLocalPlayerHP() <= 0.0) {
+        qDebug() << "Remote player win!";
+    } else if (engine.getRemotePlayerHP() <= 0.0) {
+        qDebug() << "Local player win!";
+    }
+
+}
+
+/**
  * @brief Local player changes his position by one step.
  */
-void Controller::onChangePosition(direction direction) {
+void Controller::onChangeLocalPosition(direction direction) {
     double newPosition = engine.getLocalPlayerPosition() + direction*STEP_SIZE;
     if (engine.setLocalPlayerPosition(newPosition)) {
         //megengedett elmozdulás
@@ -49,7 +62,7 @@ void Controller::onChangePosition(direction direction) {
 /**
  * @brief Local player changes his cannon's angle by one step
  */
-void Controller::onChangeAngle(direction direction) {
+void Controller::onChangeLocalAngle(direction direction) {
     double newAngle = engine.getLocalPlayerAngle() + direction*TURN_STEP;
     if (engine.setLocalPlayerAngle(newAngle)){
         //megengedett ágyúállás        
@@ -91,7 +104,7 @@ void Controller::onChangeRemoteAngle(double angle) {
 /**
  * @brief Local player changes his fire power
  */
-void Controller::onChangePower(double power){
+void Controller::onChangeLocalPower(double power){
     if (engine.setLocalPlayerPower(power)) {
         //megengedett állítás
     } else {
@@ -125,6 +138,7 @@ void Controller::fireLocalPlayer(){
         //window.setFireEnabled(false);
         double deltaHP = oldHP - engine.getLocalPlayerHP();
         sendMoveMessage(deltaHP);
+        checkPlayersAlive();
     } else {
         printf("Controller:fireLocalPlayer - LocalPlayer tried to fire out of his turn.\n");
         qApp->exit(-1);
@@ -153,8 +167,16 @@ void Controller::onOpponentJoined(const QString& name) {
 }
 
 void Controller::onOpponentQuit() {
-    printf("Controller::onOpponentQuit\n");
+    printf("Controller::onOpponentQuit\n"); //TODO törölni
+    QMessageBox::information(&window, tr("PewPew Altillery"), opponentName.append(tr(" kilépett.")));
 }
+
+/*void Controller::gameFinished(bool isLocalPlayerWin){
+    if (isLocalPlayerWin)
+        qDebug << "Local player win!";
+    else
+        qDebug << "Remote player win!";
+}*/
 
 void Controller::onWindowClosed() {
     lobby->gameClosed();
@@ -199,6 +221,7 @@ void Controller::animationFinished() {
 
     double remotePlayerHPOld = engine.getRemotePlayerHP();
     engine.fireRemotePlayer();
+    checkPlayersAlive();
     double deltaHPDifference = (remotePlayerHPOld - engine.getRemotePlayerHP()) - deltaHP;
     if (deltaHPDifference > 0.1 || deltaHPDifference < -0.1) {
         printf("Controller::animationFinished - Difference between local and remote deltaHP is greater than 0.1");

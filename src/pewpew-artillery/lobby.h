@@ -30,7 +30,7 @@ public:
     void connectToServer(const QString& nickname, const QString& address, int port);
     void disconnectFromServer();
     void showWindow();
-    void sendChat(const QString& line);
+    void sendChat(const QString& line); 
     bool isGameRunning() const;
     bool isConnected() const;
     QString getPlayerName() const;

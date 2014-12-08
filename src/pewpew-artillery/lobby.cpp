@@ -200,9 +200,7 @@ void Lobby::receivePacket() {
                     break;
                 }
                 case MSGT_GAME_CLOSED: {
-                    /***************
-                     * TODO: handle opponent quitting
-                     **************/
+                    if (controller != NULL) controller->onOpponentQuit();
                     break;
                 }
                 case MSGT_PLAYER_MOVED: {

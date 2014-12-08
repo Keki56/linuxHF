@@ -20,6 +20,7 @@ Controller::Controller(bool localStarts, Lobby *parent) :
 {
     window.show();
     window.refresh();
+    window.showWaitingForOpponentDialog();
 }
 
 void Controller::sendMoveMessage(double deltaHP){

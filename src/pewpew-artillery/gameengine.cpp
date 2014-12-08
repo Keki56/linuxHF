@@ -1,5 +1,6 @@
 #include "gameengine.h"
-#include <math.h>
+#include <cmath>
+#include <stdio.h>
 
 //A pálya 0.0-tól 1.0-ig tart
 
@@ -11,7 +12,7 @@
 #define WALL_TOP 0.3                //a fal magassága
 #define DEFAULT_LEFT_POSITION 0.2   //a játékosok alapértelmezett pozíciója     |-x-P1-----WALL-----P2-x-|
 #define DEFAULT_RIGHT_POSITION 0.8
-#define RADIUS 0.2                  //mennyir távolodhatnak el a játékosok a kiindulópozíciójuktól
+#define RADIUS 0.04                  //mennyir távolodhatnak el a játékosok a kiindulópozíciójuktól
 #ifndef M_PI_4
 #define M_PI_4		0.78539816339744830962
 #endif
@@ -30,22 +31,22 @@ GameEngine::GameEngine(bool isLocalStart, bool isLocalLeft):
 
     //init players
     if(isLocalLeft) {
-        localPlayer.defaultPosition = DEFAULT_LEFT_POSITION;
+        localPlayer.position = localPlayer.defaultPosition = DEFAULT_LEFT_POSITION;
         localPlayer.angle = M_PI_4;
-        remotePlayer.defaultPosition = DEFAULT_RIGHT_POSITION;
+        remotePlayer.position = remotePlayer.defaultPosition = DEFAULT_RIGHT_POSITION;
         remotePlayer.angle = M_PI_4 * 3;
     } else {
-        localPlayer.defaultPosition = DEFAULT_RIGHT_POSITION;
+        localPlayer.position = localPlayer.defaultPosition = DEFAULT_RIGHT_POSITION;
         localPlayer.angle = M_PI_4 * 3;
-        remotePlayer.defaultPosition = DEFAULT_LEFT_POSITION;
+        remotePlayer.position = remotePlayer.defaultPosition = DEFAULT_LEFT_POSITION;
         remotePlayer.angle = M_PI_4;
     }
     localPlayer.hp = remotePlayer.hp = 100;
 }
 
 double GameEngine::getTrajectoryHeight(Player* p, double x){
-    double t = (x - p->position) / (p->power * cos(p->angle));
-    return t * (sin(p->angle) - g*t/2);
+    double t = (x - p->position) / (p->power * std::cos(p->angle));
+    return t * (std::sin(p->angle) - g*t/2);
 }
 
 bool GameEngine::wallHit(Player* player){
@@ -55,7 +56,7 @@ bool GameEngine::wallHit(Player* player){
 }
 
 double GameEngine::getImpactPosition(Player* player) {
-    double dS = 2 * (player->power * MAX_V)*(player->power * MAX_V) * cos(player->angle) * sin(player->angle) / g;
+    double dS = 2 * (player->power * MAX_V)*(player->power * MAX_V) * std::cos(player->angle) * std::sin(player->angle) / g;
     return player->position + dS;
  }
 
@@ -71,24 +72,12 @@ bool GameEngine::firePlayer(Player* source, Player* target) {
 }
 
 bool GameEngine::positionValidator(Player *player, double position) const{
-    return abs(position - player->defaultPosition) < RADIUS ? true : false;
+    return std::abs(position - player->defaultPosition) < RADIUS ? true : false;
 }
 
 bool GameEngine::angleValidator(double angle) const {
     return (angle > 0.0 && angle < M_PI);
 }
-
-/*bool GameEngine::setLocalPlayer(double position, double angle, double power){
-    if (isLocalTurn) {
-        localPlayer.position = position;
-        localPlayer.angle = angle;
-        localPlayer.power = power;
-        return true;
-    } else {
-        return false;
-    }
-}*/
-
 
 //------------------------------------
 
@@ -110,6 +99,7 @@ bool GameEngine::fireRemotePlayer(double position, double angle, double power, d
 bool GameEngine::setLocalPlayerPosition(double position) {
     if (isLocalTurn && positionValidator(&localPlayer, position)) {
         localPlayer.position = position;
+        printf("Position=%f\n", position);
         return true;
     } else {
         return false;
@@ -178,7 +168,14 @@ bool GameEngine::getLocalTurn() const {
 
 
 QPointF GameEngine::getBulletPosition(double deltaTime){
-    //Nincs még implementálva
-    QPointF position;
+    Player* player;
+    if (isLocalTurn)
+        player = &remotePlayer;
+    else
+        player = &localPlayer;
+
+    double x = player->power * std::cos(player->angle) * deltaTime;
+    double y = player->power * std::sin(player->angle) * deltaTime - g / 2 * deltaTime * deltaTime;
+    QPointF position(x,y);
     return position;
 }

@@ -317,7 +317,7 @@ int main(int argc, char *argv[])
     Lobby lobby;
     lobby.showWindow();
 
-    Controller controller(false);
+    Controller controller(true, &lobby);
 /*    GameWindow w2(&controller);
     w2.show();*/
 

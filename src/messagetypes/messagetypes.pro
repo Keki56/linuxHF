@@ -22,14 +22,14 @@ unix:!symbian {
     INSTALLS += target
 }
 
-Release:DESTDIR = ../../build/messagetypes/release
-Release:OBJECTS_DIR = ../../build/messagetypes/release
-Release:MOC_DIR = ../../build/messagetypes/release
-Release:RCC_DIR = ../../build/messagetypes/release
-Release:UI_DIR = ../../build/messagetypes/release
+CONFIG(release, debug|release):DESTDIR = $$PWD/../../build/messagetypes/release
+CONFIG(release, debug|release):OBJECTS_DIR = $$PWD/../../build/messagetypes/release
+CONFIG(release, debug|release):MOC_DIR = $$PWD/../../build/messagetypes/release
+CONFIG(release, debug|release):RCC_DIR = $$PWD/../../build/messagetypes/release
+CONFIG(release, debug|release):UI_DIR = $$PWD/../../build/messagetypes/release
 
-Debug:DESTDIR = ../../build/messagetypes/debug
-Debug:OBJECTS_DIR = ../../build/messagetypes/debug
-Debug:MOC_DIR = ../../build/messagetypes/debug
-Debug:RCC_DIR = ../../build/messagetypes/debug
-Debug:UI_DIR = ../../build/messagetypes/debug
+CONFIG(debug, debug|release):DESTDIR = $$PWD/../../build/messagetypes/debug
+CONFIG(debug, debug|release):OBJECTS_DIR = $$PWD/../../build/messagetypes/debug
+CONFIG(debug, debug|release):MOC_DIR = $$PWD/../../build/messagetypes/debug
+CONFIG(debug, debug|release):RCC_DIR = $$PWD/../../build/messagetypes/debug
+CONFIG(debug, debug|release):UI_DIR = $$PWD/../../build/messagetypes/debug

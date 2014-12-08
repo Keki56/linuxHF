@@ -53,6 +53,9 @@ GameWindow::GameWindow(Controller* controller, GameEngine* engine, QWidget *pare
     turretRight = new QGraphicsPixmapItem(turretImage, tankRight);
     turretLeft->setTransformOriginPoint(0, turretImage.height() / 2.0);
     turretRight->setPos(QPointF(rightTankImage.width() * 0.5, rightTankImage.height() * 0.15) - turretRight->mapToParent(turretRight->transformOriginPoint()));
+
+    tankLeft->setPos(QPointF(0.2, 1) - tankLeft->mapToParent(tankLeft->transformOriginPoint()));
+    tankRight->setPos(QPointF(0.8, 1) - tankRight->mapToParent(tankRight->transformOriginPoint()));
 }
 
 /**
@@ -60,22 +63,25 @@ GameWindow::GameWindow(Controller* controller, GameEngine* engine, QWidget *pare
  * @param event The event passed to the window.
  */
 void GameWindow::keyPressEvent(QKeyEvent *event){
-    QTextStream output(stdout);
+    QMainWindow::keyPressEvent(event);
     switch (event->key()) {
     case Qt::Key_A:
-        output << "A";
         controller->onChangePosition(Controller::RIGHTtoLEFT);
         break;
-    case Qt::Key_D:
-        output << "D";
+    case Qt::Key_D: {
         controller->onChangePosition(Controller::LEFTtoRIGHT);
+        /*QList<QGraphicsItem*> items = ui->gameView->items();
+        for (QList<QGraphicsItem*>::iterator i = items.begin(); i != items.end(); ++i) {
+            (*i)->setPos((*i)->pos() + QPointF(2, 0.0));
+            //return;
+        }*/
+        // tankLeft->setPos(QPointF(0.2, 1) - tankLeft->mapToParent(tankLeft->transformOriginPoint()));
         break;
+        }
     case Qt::Key_W:
-        output << "W";
         controller->onChangeAngle(Controller::COUNTERCLOCKWISE);
         break;
     case Qt::Key_S:
-        output << "S";
         controller->onChangeAngle(Controller::CLOCKWISE);
         break;
     default:
@@ -89,8 +95,13 @@ void GameWindow::keyPressEvent(QKeyEvent *event){
  * @param event The event passed to the window.
  */
 void GameWindow::closeEvent(QCloseEvent *event){
-    controller->onWindowClosed();
-    event->accept();
+    int ret = QMessageBox::question(this, tr("PewPew Artillery"), tr("Biztosan be akarod zárni a játék ablakot?\nAz ablak bezárásával kilépsz a játékból."));
+    if (ret == QMessageBox::Yes) {
+        event->accept();
+        controller->onWindowClosed();
+    } else {
+        event->ignore();
+    }
 }
 
 /**
@@ -131,6 +142,7 @@ GameWindow::~GameWindow() {
  * @brief Refresh the game window according to the game engine.
  */
 void GameWindow::refresh() {
+    // get values from the engine
     bool localLeft = engine->getLocalLeft();
     double leftPos = localLeft ? engine->getLocalPlayerPosition() : engine->getRemotePlayerPosition();
     double rightPos = localLeft ? engine->getRemotePlayerPosition() : engine->getLocalPlayerPosition();
@@ -138,12 +150,12 @@ void GameWindow::refresh() {
     double rightAngle = localLeft ? engine->getRemotePlayerAngle() : engine->getLocalPlayerAngle();
     double leftHP = localLeft ? engine->getLocalPlayerHP() : engine->getRemotePlayerHP();
     double rightHP = localLeft ? engine->getRemotePlayerHP(): engine->getLocalPlayerHP();
-    tankLeft->setPos(QPointF(leftPos, 1) - tankLeft->mapToParent(tankLeft->transformOriginPoint()));
-    tankRight->setPos(QPointF(rightPos, 1) - tankRight->mapToParent(tankRight->transformOriginPoint()));
-    // tankLeft->setPos(QPointF(0.2, 1) - tankLeft->mapToParent(tankLeft->transformOriginPoint()));
-    // tankRight->setPos(QPointF(0.8, 1) - tankRight->mapToParent(tankRight->transformOriginPoint()));
+    // move the sprites
+    tankLeft->setPos(QPointF(leftPos, 1) - tankLeft->transformOriginPoint());
+    tankRight->setPos(QPointF(rightPos, 1) - tankRight->transformOriginPoint());
     turretLeft->setRotation(-qRadiansToDegrees(leftAngle));
     turretRight->setRotation(-qRadiansToDegrees(rightAngle));
+    // enable/disable GUI elements
     ui->leftHPIndicator->display(leftHP);
     ui->rightHPIndicator->display(rightHP);
     ui->fireButton->setEnabled(canMove());
@@ -163,12 +175,16 @@ void GameWindow::refresh() {
     }
 }
 
-void GameWindow::localFireButtonClicked(){
-    controller->fireLocalPlayer();
+/**
+ * @brief Set the fire ui elements enabled
+ */
+void GameWindow::setFireEnabled(bool enabled){
+    ui->gameControlsPanel->setEnabled(enabled);
 }
 
-void GameWindow::remoteFireButtonClicked(){
-    controller->fireRemotePlayer();
+void GameWindow::fireButtonClicked(){
+    controller->fireLocalPlayer();
+    //refresh();
 }
 
 /**
@@ -209,3 +225,4 @@ void GameWindow::setSliderValue(int) {
 void GameWindow::printChat(const QString& line) {
     ui->chatBox->appendPlainText(line);
 }
+

@@ -18,25 +18,26 @@ private:
     GameWindow window;
     bool isLocalTurn;
     QString opponentName;
+
+    void sendMoveMessage(double deltaHP);
 public:
     enum direction {LEFTtoRIGHT = 1, RIGHTtoLEFT = -1,
                     COUNTERCLOCKWISE = 1, CLOCKWISE = -1};
 
     explicit Controller(bool localStarts, Lobby *parent = 0);
 
-    //bool setRemotePlayer(double position, double angle, double power);
-    bool fireRemotePlayer();        //csak debug célra!!!
-    bool fireLocalPlayer();
-
     void onChangePosition(direction direction);
     void onChangeAngle(direction direction);
     void onChangePower(double power);
     void onSendChat(const QString& message);
     void onReceiveChat(const QString& message);
+    void fireLocalPlayer();
 
     void onMessageReceived(double position, double angle, double power, double deltaHP);
     void onOpponentJoined(const QString& name);
     void onOpponentQuit();
+
+    void onSendChat();
     void onWindowClosed();
 
     bool hasGameStarted() const;
@@ -44,8 +45,6 @@ public:
 signals:
 
 public slots:
-
-
 
 };
 

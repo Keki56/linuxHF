@@ -36,10 +36,10 @@ public:
     //TODO The followig methods are only for testing
     void setSliderValue(int);
     void printChat(const QString& line);
+    void setFireEnabled(bool enabled);
 
 public slots:
-    void localFireButtonClicked();
-    void remoteFireButtonClicked();
+    void fireButtonClicked();
     void sendButtonClicked();
     void powerChanged(int value);
 

@@ -28,6 +28,9 @@
         <property name="interactive">
          <bool>false</bool>
         </property>
+        <property name="viewportUpdateMode">
+         <enum>QGraphicsView::FullViewportUpdate</enum>
+        </property>
        </widget>
       </item>
       <item>

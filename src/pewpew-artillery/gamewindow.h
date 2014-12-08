@@ -33,7 +33,7 @@ public:
     ~GameWindow();
 
     void refresh();
-    void setFireEnabled(bool enabled);
+    void setFireEnabled(bool enabled);//Balázs szerint ez nem kell, mert erről gondoskodik a refresh-ben.
 
 public slots:
     void fireButtonClicked();

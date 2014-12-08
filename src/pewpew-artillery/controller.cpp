@@ -20,6 +20,7 @@ Controller::Controller(bool localStarts, Lobby *parent) :
 {
     window.show();
     window.refresh();
+    window.showWaitingForOpponentDialog();
 }
 
 void Controller::sendMoveMessage(double deltaHP){
@@ -99,6 +100,7 @@ void Controller::onMessageReceived(double position, double angle, double power, 
 void Controller::onOpponentJoined(const QString& name) {
     printf("Controller::onOpponentJoined - name=%s\n", name.toLocal8Bit().data());
     opponentName = name;
+    window.refresh();
 }
 
 void Controller::onOpponentQuit() {

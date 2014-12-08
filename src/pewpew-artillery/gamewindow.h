@@ -33,8 +33,6 @@ public:
     ~GameWindow();
 
     void refresh();
-    //TODO The followig methods are only for testing
-    void setSliderValue(int);
     void printChat(const QString& line);
     void setFireEnabled(bool enabled);//Balázs szerint ez nem kell, mert erről gondoskodik a refresh-ben.
 

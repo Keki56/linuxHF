@@ -355,7 +355,7 @@
      <x>0</x>
      <y>0</y>
      <width>703</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
   </widget>
@@ -363,22 +363,6 @@
  </widget>
  <resources/>
  <connections>
-  <connection>
-   <sender>fireButton</sender>
-   <signal>clicked()</signal>
-   <receiver>GameWindow</receiver>
-   <slot>localFireButtonClicked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>219</x>
-     <y>440</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>351</x>
-     <y>241</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>sendButton</sender>
    <signal>clicked()</signal>
@@ -396,34 +380,18 @@
    </hints>
   </connection>
   <connection>
-   <sender>chatInputBox</sender>
-   <signal>returnPressed()</signal>
+   <sender>fireButton</sender>
+   <signal>clicked()</signal>
    <receiver>GameWindow</receiver>
-   <slot>sendButtonClicked()</slot>
+   <slot>fireButtonClicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>524</x>
-     <y>440</y>
+     <x>224</x>
+     <y>442</y>
     </hint>
     <hint type="destinationlabel">
-     <x>351</x>
-     <y>241</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>powerSlider</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>GameWindow</receiver>
-   <slot>powerChanged(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>219</x>
-     <y>413</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>351</x>
-     <y>241</y>
+     <x>265</x>
+     <y>205</y>
     </hint>
    </hints>
   </connection>
@@ -445,9 +413,9 @@
   </connection>
  </connections>
  <slots>
-  <slot>localFireButtonClicked()</slot>
   <slot>sendButtonClicked()</slot>
   <slot>powerChanged(int)</slot>
   <slot>testButtonClicked()</slot>
+  <slot>fireButtonClicked()</slot>
  </slots>
 </ui>

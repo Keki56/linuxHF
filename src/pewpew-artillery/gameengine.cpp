@@ -9,7 +9,7 @@
 
 #define WALL_LEFT 0.45              //a fal bal széle
 #define WALL_RIGHT 0.55             //a fal jobb széle
-#define WALL_TOP 0.3                //a fal magassága
+#define WALL_TOP 0.00001                //a fal magassága
 #define DEFAULT_LEFT_POSITION 0.2   //a játékosok alapértelmezett pozíciója     |-x-P1-----WALL-----P2-x-|
 #define DEFAULT_RIGHT_POSITION 0.8
 #define RADIUS 0.04                  //mennyir távolodhatnak el a játékosok a kiindulópozíciójuktól
@@ -63,11 +63,13 @@ double GameEngine::getImpactPosition(Player* player) {
 bool GameEngine::firePlayer(Player* source, Player* target) {
     if (!wallHit(source)) {
         double impactPosition = getImpactPosition(source);
+        printf("GameEngine::firePlayer - impactPosition=%f target->position=%f\n", impactPosition, target->position);         //TODO törölni
         if (impactPosition-0.05 < target->position || impactPosition+0.05 > target->position) {     //Eltalálta
             target->power -= 10;
             return true;
         }
     }
+    printf("GameEngine::firePlayer - falat ért\n");
     return false;
 }
 

@@ -187,6 +187,7 @@ void GameWindow::setFireEnabled(bool enabled){
 }
 
 void GameWindow::fireButtonClicked(){
+    controller->onChangePower(ui->powerSlider->value() * 100);
     controller->fireLocalPlayer();
     //refresh();
 }
@@ -220,11 +221,6 @@ void GameWindow::testButtonClicked() {
  */
 bool GameWindow::canMove() const {
     return engine->getLocalTurn() && controller->hasGameStarted();
-}
-
-//TODO The followig methods are only for testing
-void GameWindow::setSliderValue(int) {
-    // ui->localAngleSlider->setValue(value);
 }
 
 /**

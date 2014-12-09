@@ -28,7 +28,7 @@ void Controller::sendMoveMessage(double deltaHP){
     msg.type = MSGT_PLAYER_MOVED;
     msg.data[0] = engine.getLocalPlayerPosition();
     msg.data[1] = engine.getLocalPlayerAngle();
-    msg.data[2] = engine.getLocalPlayerHP();
+    msg.data[2] = engine.getLocalPlayerPower();
     msg.data[3] = deltaHP;
     lobby->sendMessage(msg);
 }
@@ -133,11 +133,11 @@ void Controller::onReceiveChat(const QString& message) {
 }
 
 void Controller::fireLocalPlayer(){
-    double oldHP = engine.getLocalPlayerHP();
+    double oldHP = engine.getRemotePlayerHP();
     if (engine.fireLocalPlayer()) {
         //window.setFireEnabled(false);
         window.refresh();
-        double deltaHP = oldHP - engine.getLocalPlayerHP();
+        double deltaHP = oldHP - engine.getRemotePlayerHP();
         sendMoveMessage(deltaHP);
         checkPlayersAlive();
     } else {
@@ -218,12 +218,14 @@ void Controller::animationFinished() {
     if (animation == NULL) return;
     animation->deleteLater();
     animation = NULL;
-    QMessageBox::information(&window, "info", "The animation has finished.");
+    //QMessageBox::information(&window, "info", "The animation has finished.");
+    qDebug() << "Controller::animationFinished - The animation has finished.";
 
-    double remotePlayerHPOld = engine.getRemotePlayerHP();
+    double localPlayerHPOld = engine.getLocalPlayerHP();
     engine.fireRemotePlayer();
+    window.refresh();
     checkPlayersAlive();
-    double deltaHPDifference = (remotePlayerHPOld - engine.getRemotePlayerHP()) - deltaHP;
+    double deltaHPDifference = (localPlayerHPOld - engine.getLocalPlayerHP()) - deltaHP;
     if (deltaHPDifference > 0.1 || deltaHPDifference < -0.1) {
         printf("Controller::animationFinished - Difference between local and remote deltaHP is greater than 0.1");
         qApp->exit(-1);

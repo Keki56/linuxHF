@@ -1,6 +1,7 @@
 #include "animation.h"
 #include "controller.h"
 #include <QTextStream>
+#include <QDebug>
 
 #define STEP_SIZE 0.01
 #define TURN_STEP 0.1256637     //PI / 25
@@ -56,6 +57,7 @@ void Animation::timerEvent(QTimerEvent*) {
              if ((moveDir > 0) ^ (pos < endPos)) {
                 animState = ANST_ANGLE;
                 startTime = QTime::currentTime();
+                qDebug() << "Mozgás animáció vége";
              }
              controller->onChangeRemotePosition(pos);
         break; }
@@ -64,11 +66,13 @@ void Animation::timerEvent(QTimerEvent*) {
              if ((angleDir > 0) ^ (angle < endAngle)) {
                 animState = ANST_SHOT;
                 startTime = QTime::currentTime();
+                qDebug() << "Ágyú animáció vége";
              }
              controller->onChangeRemoteAngle(angle);
         break; }
         case ANST_SHOT: {
             killTimer(timerID);
+            qDebug() << "Teljes animáció vége";
             emit animationFinished();
         break; }
     }

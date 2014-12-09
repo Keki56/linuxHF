@@ -15,7 +15,7 @@
 #define DEFAULT_LEFT_POSITION 0.2   //a játékosok alapértelmezett pozíciója     |-x-P1-----WALL-----P2-x-|
 #define DEFAULT_RIGHT_POSITION 0.8
 #define RADIUS 0.15                  //mennyire távolodhatnak el a játékosok a kiindulópozíciójuktól
-#define IMPACT_RADIUS 1              //a becsapódástól maximum mekkora távolságra sebez a lövedék
+#define IMPACT_RADIUS 0.1            //a becsapódástól maximum mekkora távolságra sebez a lövedék
 #define MAX_HP 100                   //maxminális, kezdeti életerő
 #define MAX_DAMAGE 20                //maximális sebződés telitalálat esetén
 #ifndef M_PI_4
@@ -139,7 +139,7 @@ bool GameEngine::setLocalPlayerPower(double power){
 bool GameEngine::setRemotePlayerPosition(double position) {
     if (!isLocalTurn && positionValidator(&remotePlayer, position)) {
         remotePlayer.position = position;
-        printf("Position=%f\n", position);
+        //printf("Position=%f\n", position);      //TODO törölni
         return true;
     } else {
         return false;
@@ -149,6 +149,7 @@ bool GameEngine::setRemotePlayerPosition(double position) {
 bool GameEngine::setRemotePlayerAngle(double angle) {
     if (!isLocalTurn && angleValidator(angle)) {
         remotePlayer.angle = angle;
+        //printf("Angle=%f\n", angle);             //TODO törölni
         return true;
     } else {
         return false;
@@ -184,7 +185,9 @@ bool GameEngine::fireLocalPlayer(){
 
 bool GameEngine::fireRemotePlayer(){
     if (!isLocalTurn) {
+        qDebug() << "GameEngine::fireRemotePlayer()";
         firePlayer(&remotePlayer, &localPlayer);
+        isLocalTurn = true;
         return true;
     } else {
         return false;
@@ -197,6 +200,10 @@ double GameEngine::getLocalPlayerPosition() const{
 
 double GameEngine::getLocalPlayerAngle() const{
     return localPlayer.angle;
+}
+
+double GameEngine::getLocalPlayerPower() const{
+    return localPlayer.power;
 }
 
 double GameEngine::getLocalPlayerHP() const{

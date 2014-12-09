@@ -64,6 +64,7 @@ public:
 
     double getLocalPlayerPosition() const;
     double getLocalPlayerAngle() const;
+    double getLocalPlayerPower() const;
     double getLocalPlayerHP() const;
 
     double getRemotePlayerPosition() const;

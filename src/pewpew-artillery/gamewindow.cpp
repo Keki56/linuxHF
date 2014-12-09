@@ -210,7 +210,7 @@ void GameWindow::sendButtonClicked() {
  * @param value The new value of the power.
  */
 void GameWindow::powerChanged(int value) {
-    controller->onChangeLocalPower(value);
+    //controller->onChangeLocalPower(value);
 }
 
 /* TEMP */

@@ -50,14 +50,25 @@ GameEngine::GameEngine(bool isLocalStart, bool isLocalLeft):
 }
 
 double GameEngine::getTrajectoryHeight(Player* p, double x){
+    //algo No.1
     double t = std::abs(x - p->position) / (p->power * std::cos(p->angle));
-    return t * (p->power * std::sin(p->angle) - g*t/2);
+    double result1 = t * (p->power * std::sin(p->angle) - g*t/2);
+    //algo No.2
+    double s = std::abs(x - p->position);
+    double result2 = s * (std::sin(p->angle) - g * s / (2 * p->power * p->power));
+    qDebug() << QString("1 t=%1 result1=%2").arg(t).arg(result1);
+    qDebug() << QString("2 s=%1 resutl2=%2").arg(s).arg(result2);
+
+
+    return result2;
 }
 
 bool GameEngine::wallHit(Player* player){
+    qDebug("Wall.left");
     double left = getTrajectoryHeight(player, wall.left);
+    qDebug("Wall.eight");
     double right = getTrajectoryHeight(player, wall.right);
-    return (left <= wall.top || right <= wall.right);
+    return (left <= wall.top || right <= wall.top);
 }
 
 double GameEngine::getImpactPosition(Player* player) {
@@ -73,6 +84,7 @@ void GameEngine::damage(Player *player, double impactPosition){
 }
 
 bool GameEngine::firePlayer(Player* source, Player* target) {
+    qDebug() << QString("position=%1\nangle=%2\npower=%3\n").arg(source->position).arg(source->angle).arg(source->power);
     if (!wallHit(source)) {
         double impactPosition = getImpactPosition(source);
         qDebug() << QString("impactPosition=%1").arg(impactPosition);
@@ -169,21 +181,6 @@ bool GameEngine::fireLocalPlayer(){
         return false;
     }
 }
-
-/*bool GameEngine::fireRemotePlayer(double position, double angle, double power, double deltaHP){
-    if (!isLocalTurn && positionValidator(&remotePlayer, position) && angleValidator(angle)) {      //Elvileg nem érkezhetne abnormális adat.
-        remotePlayer.position = position;
-        remotePlayer.angle = angle;
-        remotePlayer.power = power;
-
-        firePlayer(&remotePlayer, &localPlayer);
-        isLocalTurn = true;
-
-        return true;
-    } else {
-        return false;
-    }
-}*/
 
 bool GameEngine::fireRemotePlayer(){
     if (!isLocalTurn) {

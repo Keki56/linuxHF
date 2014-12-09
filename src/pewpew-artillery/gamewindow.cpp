@@ -186,6 +186,9 @@ void GameWindow::setFireEnabled(bool enabled){
     ui->gameControlsPanel->setEnabled(enabled);
 }
 
+/**
+ * @brief Player pressed fire button
+ */
 void GameWindow::fireButtonClicked(){
     controller->onChangeLocalPower((double)ui->powerSlider->value() / 20.0);  //Maximum 5 legyen a power
     controller->fireLocalPlayer();

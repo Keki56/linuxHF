@@ -136,6 +136,7 @@ void Controller::fireLocalPlayer(){
     double oldHP = engine.getLocalPlayerHP();
     if (engine.fireLocalPlayer()) {
         //window.setFireEnabled(false);
+        window.refresh();
         double deltaHP = oldHP - engine.getLocalPlayerHP();
         sendMoveMessage(deltaHP);
         checkPlayersAlive();

@@ -133,6 +133,7 @@ void Controller::onReceiveChat(const QString& message) {
 }
 
 void Controller::fireLocalPlayer(){
+    qDebug() << "ontroller::fireLocalPlayer()";
     double oldHP = engine.getRemotePlayerHP();
     if (engine.fireLocalPlayer()) {
         //window.setFireEnabled(false);
@@ -147,6 +148,7 @@ void Controller::fireLocalPlayer(){
 }
 
 void Controller::onMessageReceived(double position, double angle, double power, double deltaHP){
+    qDebug() << "Controller::onMessageReceived";
     printf("Controller::onMessageReceived - position=%f angle=%f power=%f deltaHP=%f\n", position, angle, power, deltaHP);
     if (animation != NULL) {
         printf("Controller::onMessageReceived - Message arrived while animating. It is imopossible, so there must be an error or a bug. Message is dropped\n");
@@ -222,6 +224,7 @@ void Controller::animationFinished() {
     qDebug() << "Controller::animationFinished - The animation has finished.";
 
     double localPlayerHPOld = engine.getLocalPlayerHP();
+    qDebug() << "Controller - remote player fired";
     engine.fireRemotePlayer();
     window.refresh();
     checkPlayersAlive();

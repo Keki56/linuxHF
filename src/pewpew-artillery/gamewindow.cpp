@@ -176,9 +176,9 @@ void GameWindow::refresh() {
     ui->leftPlayerLabel->setText(leftName);
     ui->rightPlayerLabel->setText(rightName);
     ui->fireButton->setEnabled(canMove());
-    ui->sendButton->setEnabled(controller->hasGameStarted());
+    ui->sendButton->setEnabled(controller->hasGameStarted() && !controller->isAnimationRunning());
     ui->chatInputBox->setEnabled(controller->hasGameStarted());
-    if (controller->hasGameStarted() && !controller->isAnimationRunning()) {
+    if (controller->hasGameStarted()) {
         if (!localLeft ^ engine->getLocalTurn()) {
             ui->leftPlayerLabel->setFrameStyle(QFrame::Box);
             ui->rightPlayerLabel->setFrameStyle(QFrame::NoFrame);

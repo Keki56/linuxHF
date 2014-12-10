@@ -7,10 +7,7 @@
 #include <QMessageBox>
 #include <QBitmap>
 #include <QtMath>
-
-//#define WALL_LEFT 0.45              //a fal bal széle
-//#define WALL_RIGHT 0.55             //a fal jobb széle
-//#define WALL_TOP 0.01               //a fal magassága
+#include <QDebug>
 
 /**
  * @brief The main constructor of the main window.
@@ -172,6 +169,7 @@ void GameWindow::refresh() {
     turretRight->setRotation(-qRadiansToDegrees(rightAngle));
     if (bulletPos.x() < -0.5) {
         bullet->setVisible(false);
+        qDebug() << "BULLET SHOULD DISAPPEAR";
     } else {
         bullet->setVisible(true);
         bullet->setPos(QPointF(bulletPos.x(), 1 - bulletPos.y()) - bullet->transformOriginPoint());

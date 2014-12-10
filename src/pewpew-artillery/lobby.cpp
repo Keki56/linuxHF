@@ -238,9 +238,10 @@ void Lobby::gameClosed() {
     if (controller == NULL) return;
     SimpleMessage msg;
     msg.type = MSGT_GAME_CLOSED;
-    lobbywindow.refreshButtons();
+    sendMessage(msg);
     controller->deleteLater();
     controller = NULL;
+    lobbywindow.refreshButtons();
 }
 
 /**

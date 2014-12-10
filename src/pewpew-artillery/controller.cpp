@@ -136,12 +136,20 @@ void Controller::onReceiveChat(const QString& message) {
 void Controller::fireLocalPlayer(){
     qDebug() << "ontroller::fireLocalPlayer()";
     double oldHP = engine.getRemotePlayerHP();
-    if (engine.fireLocalPlayer()) {
+    double bulletTime = engine.fireLocalPlayer();
+    if (bulletTime >= 0) {
         //window.setFireEnabled(false);
-        window.refresh();
         double deltaHP = oldHP - engine.getRemotePlayerHP();
         sendMoveMessage(deltaHP);
         checkPlayersAlive();
+        if (animation != NULL) {
+            printf("Controller::fireLocalPlayer - Az ellenfél lövésanimációja alatt már a helyi játékos tud mozgni és lőni. Ez nem ideális, de egyenlőre így van.\n");
+            window.refresh();
+        } else {
+            animation = new Animation(this, bulletTime);
+            animation->startAnimation();
+            connect(animation, SIGNAL(animationFinished()), SLOT(fireAnimationFinnished()));
+        }
     } else {
         printf("Controller:fireLocalPlayer - LocalPlayer tried to fire out of his turn.\n");
         qApp->exit(-1);
@@ -150,7 +158,7 @@ void Controller::fireLocalPlayer(){
 
 void Controller::onMessageReceived(double position, double angle, double power, double deltaHP){
     qDebug() << "Controller::onMessageReceived";
-    printf("Controller::onMessageReceived - position=%f angle=%f power=%f deltaHP=%f\n", position, angle, power, deltaHP);
+    qDebug() << QString("Controller::onMessageReceived - position=%1 angle=%2 power=%3 deltaHP=%4").arg(position).arg(angle).arg(power).arg(deltaHP);
     if (animation != NULL) {
         printf("Controller::onMessageReceived - Message arrived while animating. It is imopossible, so there must be an error or a bug. Message is dropped\n");
         return;
@@ -180,6 +188,7 @@ void Controller::onOpponentQuit() {
  * @param time
  */
 void Controller::animateBullet(double deltaTime) {
+    qDebug() << QString("Controller::animateBullet(%1)").arg(deltaTime);
     bulletPosition = engine.getBulletPosition(deltaTime);
     window.refresh();
 }
@@ -244,7 +253,7 @@ void Controller::playerAnimationFinished() {
     checkPlayersAlive();
     double deltaHPDifference = (localPlayerHPOld - engine.getLocalPlayerHP()) - deltaHP;
     if (deltaHPDifference > 0.1 || deltaHPDifference < -0.1) {
-        printf("Controller::animationFinished - Difference between local and remote deltaHP is greater than 0.1");
+        printf("Controller::animationFinished - Difference between local and remote deltaHP is %f > 0.1", deltaHPDifference);
         qApp->exit(-1);
     }
     animation = new Animation(this, bulletTime);

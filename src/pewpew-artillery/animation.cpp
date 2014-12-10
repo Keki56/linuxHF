@@ -55,22 +55,28 @@ void Animation::timerEvent(QTimerEvent*) {
     int elapsed = startTime.msecsTo(QTime::currentTime());
     switch (animState) {
         case ANST_POSITION: {
-             double pos = startPos + (elapsed / 1000.0) * (endPos - startPos);
-             if ((moveDir > 0) ^ (pos < endPos)) {
+             double deltaPos = endPos - startPos;
+             double pos = startPos + (elapsed / 1000.0) * deltaPos;
+             if ((moveDir > 0) ^ (pos < endPos) || (deltaPos == 0.0)) {
+                controller->onChangeRemotePosition(endPos);
                 animState = ANST_ANGLE;
                 startTime = QTime::currentTime();
                 qDebug() << "Mozgás animáció vége";
+             } else {
+                 controller->onChangeRemotePosition(pos);
              }
-             controller->onChangeRemotePosition(pos);
         break; }
         case ANST_ANGLE: {
-            double angle = startAngle + (elapsed / 1000.0) * (endAngle - startAngle);
-             if ((angleDir > 0) ^ (angle < endAngle)) {
+            double deltaAngle = endAngle - startAngle;
+            double angle = startAngle + (elapsed / 1000.0) * deltaAngle;
+             if ((angleDir > 0) ^ (angle < endAngle) || (deltaAngle == 0.0)) {
+                controller->onChangeRemoteAngle(endAngle);
                 killTimer(timerID);
                 qDebug() << "Játékos mozgásának aminációjának vége";
                 emit animationFinished();
+             } else {
+                 controller->onChangeRemoteAngle(angle);
              }
-             controller->onChangeRemoteAngle(angle);
         break; }
         case ANST_SHOT: {
             if (elapsed > time){

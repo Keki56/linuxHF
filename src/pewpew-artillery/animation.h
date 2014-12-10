@@ -20,15 +20,19 @@ Q_OBJECT
 private:
     Controller* controller;
     AnimationState animState;
+
     double startPos, endPos;
     double startAngle, endAngle;
     int timerID;
     int moveDir, angleDir;
+
+    double time;
+
     QTime startTime;
 
 public:
     Animation(Controller* parent, double startPos, double endPos, double startAngle, double endAngle);
-    Animation(Controller* parent);
+    Animation(Controller* parent, double time);
 
     void startAnimation();
 

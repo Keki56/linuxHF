@@ -29,11 +29,13 @@ Animation::Animation(Controller *parent, double startPos, double endPos, double 
 /**
  * @brief Contructor for animating a shot.
  * @param parent The controller instance.
+ * @param time The length of the firing time (milicesonds).
  */
-Animation::Animation(Controller* parent) :
+Animation::Animation(Controller* parent, double time) :
     QObject(parent),
     controller(parent),
-    animState(ANST_SHOT)
+    animState(ANST_SHOT),
+    time(time)
 {
 
 }
@@ -64,16 +66,19 @@ void Animation::timerEvent(QTimerEvent*) {
         case ANST_ANGLE: {
             double angle = startAngle + (elapsed / 1000.0) * (endAngle - startAngle);
              if ((angleDir > 0) ^ (angle < endAngle)) {
-                animState = ANST_SHOT;
-                startTime = QTime::currentTime();
-                qDebug() << "Ágyú animáció vége";
+                killTimer(timerID);
+                qDebug() << "Játékos mozgásának aminációjának vége";
+                emit animationFinished();
              }
              controller->onChangeRemoteAngle(angle);
         break; }
         case ANST_SHOT: {
-            killTimer(timerID);
-            qDebug() << "Teljes animáció vége";
-            emit animationFinished();
+            if (elapsed > time){
+                killTimer(timerID);
+                qDebug() << "Lövés aminációjának vége";
+                emit animationFinished();
+            }
+            controller->animateBullet(elapsed);
         break; }
     }
 }

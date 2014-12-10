@@ -35,6 +35,7 @@ GameWindow::GameWindow(Controller* controller, GameEngine* engine, QWidget *pare
     QPixmap rightTankImage(":/sprites/tank_right_noturret.png");
     mask = rightTankImage.createMaskFromColor(Qt::white);
     rightTankImage.setMask(mask);
+    QPixmap bulletImage = rightTankImage;
 
     // add items to the scene
     tankLeft = new QGraphicsPixmapItem(leftTankImage);
@@ -54,8 +55,14 @@ GameWindow::GameWindow(Controller* controller, GameEngine* engine, QWidget *pare
     turretLeft->setTransformOriginPoint(0, turretImage.height() / 2.0);
     turretRight->setPos(QPointF(rightTankImage.width() * 0.5, rightTankImage.height() * 0.15) - turretRight->mapToParent(turretRight->transformOriginPoint()));
 
+    bullet = new QGraphicsPixmapItem(bulletImage);
+    bullet->setTransformOriginPoint(rightTankImage.width() / 2.0, rightTankImage.height());
+    bullet->setScale(spriteScale);
+    scene.addItem(bullet);
+
     tankLeft->setPos(QPointF(0.2, 1) - tankLeft->mapToParent(tankLeft->transformOriginPoint()));
     tankRight->setPos(QPointF(0.8, 1) - tankRight->mapToParent(tankRight->transformOriginPoint()));
+    bullet->setPos(QPointF(0.8, 1.3) - tankRight->mapToParent(tankRight->transformOriginPoint()));
 }
 
 /**
@@ -150,11 +157,17 @@ void GameWindow::refresh() {
     double rightAngle = localLeft ? engine->getRemotePlayerAngle() : engine->getLocalPlayerAngle();
     double leftHP = localLeft ? engine->getLocalPlayerHP() : engine->getRemotePlayerHP();
     double rightHP = localLeft ? engine->getRemotePlayerHP(): engine->getLocalPlayerHP();
+    QPointF bulletPos = controller->getBulletPosition();
     // move the sprites
     tankLeft->setPos(QPointF(leftPos, 1) - tankLeft->transformOriginPoint());
     tankRight->setPos(QPointF(rightPos, 1) - tankRight->transformOriginPoint());
     turretLeft->setRotation(-qRadiansToDegrees(leftAngle));
     turretRight->setRotation(-qRadiansToDegrees(rightAngle));
+    if (bulletPos != QPointF(-1,-1)){
+        bullet->setPos(bulletPos - bullet->transformOriginPoint());
+    } else {
+        bullet->setPos(QPointF(0.8, 1.3) - tankRight->mapToParent(tankRight->transformOriginPoint()));
+    }
     // enable/disable GUI elements
     ui->leftHPIndicator->display(leftHP);
     ui->rightHPIndicator->display(rightHP);

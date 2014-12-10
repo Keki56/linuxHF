@@ -63,17 +63,33 @@ double GameEngine::getTrajectoryHeight(Player* p, double x){
     return result2;
 }
 
+/**
+ * @brief Calculate when the bullet hits the wall
+ * @return The time when the bullet hits the wall or -1, if not.
+ */
 bool GameEngine::wallHit(Player* player){
     qDebug("Wall.left");
-    double left = getTrajectoryHeight(player, wall.left);
+    double leftH = getTrajectoryHeight(player, wall.left);
     qDebug("Wall.eight");
-    double right = getTrajectoryHeight(player, wall.right);
-    return (left <= wall.top || right <= wall.top);
+    double rightH = getTrajectoryHeight(player, wall.right);
+    double crashTime = -1;
+    if (leftH <= wall.top){
+        crashTime = (wall.left - player->position) / (player->power * std::cos(player->angle));
+    }
+    if (rightH <= wall.top){
+        double crashTimeR = (wall.right - player->position) / (player->power * std::cos(player->angle));
+        if (crashTime == -1) {
+            crashTime = crashTimeR;
+        } else if (crashTimeR < crashTime) {
+            crashTime = crashTimeR;
+        }
+    }
+    return crashTime;
 }
 
-double GameEngine::getImpactPosition(Player* player) {
-    double dS = 2 * player->power*player->power * std::cos(player->angle) * std::sin(player->angle) / g;
-    return player->position + dS;
+double GameEngine::getImpactTime(Player* player) {
+    double dT = 2 * player->power * std::sin(player->angle) / g;
+    return dT;
  }
 
 void GameEngine::damage(Player *player, double impactPosition){
@@ -83,17 +99,25 @@ void GameEngine::damage(Player *player, double impactPosition){
     }
 }
 
-bool GameEngine::firePlayer(Player* source, Player* target) {
+/**
+ * @brief Perform a firing.
+ * @param source - This player fires.
+ * @param target - This player is the enemy.
+ * @return - the time it takes the bullet strikes
+ */
+double GameEngine::firePlayer(Player* source, Player* target) {
     qDebug() << QString("position=%1\nangle=%2\npower=%3\n").arg(source->position).arg(source->angle).arg(source->power);
-    if (!wallHit(source)) {
-        double impactPosition = getImpactPosition(source);
+    double wallHitTime = wallHit(source);
+    if (wallHitTime > 0) {
+        double impactTime = getImpactTime(source);
+        double impactPosition = source->position + impactTime * source->power * std::cos(source->angle);
         qDebug() << QString("impactPosition=%1").arg(impactPosition);
         damage(source, impactPosition);     //Magunkba is belelőhetunk
         damage(target, impactPosition);
-        return true;
+        return impactTime;
+    } else {
+        return wallHitTime;
     }
-    printf("GameEngine::firePlayer - falat ért\n");
-    return false;
 }
 
 bool GameEngine::positionValidator(Player *player, double position) const{
@@ -165,7 +189,7 @@ bool GameEngine::setRemotePlayerPower(double power) {
     }
 }
 
-bool GameEngine::fireLocalPlayer(){
+double GameEngine::fireLocalPlayer(){
     if (isLocalTurn) {
         printf("GameEngine::fireLocalPlayer");
 
@@ -175,22 +199,20 @@ bool GameEngine::fireLocalPlayer(){
         //localPlayer.power = 2.426;
         //DEBUG
 
-        firePlayer(&localPlayer, &remotePlayer);
         isLocalTurn = false;
-        return true;
+        return firePlayer(&localPlayer, &remotePlayer);
     } else {
-        return false;
+        return -1;
     }
 }
 
-bool GameEngine::fireRemotePlayer(){
+double GameEngine::fireRemotePlayer(){
     if (!isLocalTurn) {
         qDebug() << "GameEngine::fireRemotePlayer()";
-        firePlayer(&remotePlayer, &localPlayer);
         isLocalTurn = true;
-        return true;
+        return firePlayer(&remotePlayer, &localPlayer);
     } else {
-        return false;
+        return -1;
     }
 }
 

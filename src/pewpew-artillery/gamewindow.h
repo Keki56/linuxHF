@@ -20,7 +20,7 @@ private:
     Controller* controller;
     GameEngine* engine;
     QGraphicsScene scene;
-    QGraphicsPixmapItem* tankLeft, *tankRight, *turretLeft, *turretRight;
+    QGraphicsPixmapItem *tankLeft, *tankRight, *turretLeft, *turretRight, *bullet;
 
 protected:
     virtual void keyPressEvent(QKeyEvent* event);

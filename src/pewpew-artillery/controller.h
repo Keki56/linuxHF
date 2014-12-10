@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QString>
+#include <QPointF>
 #include "gameengine.h"
 #include "gamewindow.h"
 #include "animation.h"
@@ -19,6 +20,7 @@ private:
     //bool isLocalTurn;
     QString opponentName;
     Animation* animation = NULL;
+    QPointF bulletPosition;
     double deltaHP;
 
     void sendMoveMessage(double deltaHP);
@@ -41,6 +43,8 @@ public:
     void onOpponentJoined(const QString& name);
     void onOpponentQuit();
 
+    void animateBullet(double deltaTime);
+
     //void gameFinished(bool isLocalPlayerWin);
 
     void onSendChat(const QString& message);
@@ -52,13 +56,16 @@ public:
     bool hasGameStarted() const;
     QString getLocalPlayerName() const;
     QString getRemotePlayerName() const;
+    QPointF getBulletPosition() const;
+
 
     /* TEMP */ void testAnimation();
 
 signals:
 
 public slots:
-    void animationFinished();
+    void playerAnimationFinished();
+    void fireAnimationFinnished();
 
 };
 

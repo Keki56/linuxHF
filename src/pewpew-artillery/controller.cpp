@@ -16,7 +16,8 @@ Controller::Controller(bool localStarts, Lobby *parent) :
     engine(localStarts, localStarts),
     window(this, &engine),
     //isLocalTurn(localStarts),
-    opponentName("")
+    opponentName(""),
+    bulletPosition(-1,-1)
 
 {
     window.show();
@@ -160,7 +161,7 @@ void Controller::onMessageReceived(double position, double angle, double power, 
                               engine.getRemotePlayerPosition(), position,
                               engine.getRemotePlayerAngle(), angle);
     animation->startAnimation();
-    connect(animation, SIGNAL(animationFinished()), SLOT(animationFinished()));
+    connect(animation, SIGNAL(animationFinished()), SLOT(playerAnimationFinished()));
 }
 
 void Controller::onOpponentJoined(const QString& name) {
@@ -172,6 +173,15 @@ void Controller::onOpponentJoined(const QString& name) {
 void Controller::onOpponentQuit() {
     printf("Controller::onOpponentQuit\n"); //TODO törölni
     QMessageBox::information(&window, tr("PewPew Altillery"), opponentName.append(tr(" kilépett.")));
+}
+
+/**
+ * @brief Controller::animateBullet
+ * @param time
+ */
+void Controller::animateBullet(double deltaTime) {
+    bulletPosition = engine.getBulletPosition(deltaTime);
+    window.refresh();
 }
 
 /*void Controller::gameFinished(bool isLocalPlayerWin){
@@ -205,18 +215,22 @@ QString Controller::getRemotePlayerName() const {
     return opponentName;
 }
 
+QPointF Controller::getBulletPosition() const{
+    return bulletPosition;
+}
+
 /* TEMP */
 void Controller::testAnimation() {
     if (animation != NULL) return;
     animation = new Animation(this, 0.85, 0.75, 0, 5);
     animation->startAnimation();
-    connect(animation, SIGNAL(animationFinished()), SLOT(animationFinished()));
+    connect(animation, SIGNAL(animationFinished()), SLOT(playerAnimationFinished()));
 }
 
 /**
- * @brief Event handler after the animation has finished;
+ * @brief Event handler after remote player animation has finished;
  */
-void Controller::animationFinished() {
+void Controller::playerAnimationFinished() {
     if (animation == NULL) return;
     animation->deleteLater();
     animation = NULL;
@@ -225,12 +239,22 @@ void Controller::animationFinished() {
 
     double localPlayerHPOld = engine.getLocalPlayerHP();
     qDebug() << "Controller - remote player fired";
-    engine.fireRemotePlayer();
-    window.refresh();
+    double bulletTime = engine.fireRemotePlayer();      //TODO a helyi játékos a lövés animációja alatt már tud mászkálni. Elugrani nem tud a lövedék elöl, mert a lövés már ekkora kifejtette hatását, ilyenkor már csak az animáció megy. (Figyelni a GameEngine::getBulletPosition-re, ha ezen javítanék.)
+    //window.refresh();
     checkPlayersAlive();
     double deltaHPDifference = (localPlayerHPOld - engine.getLocalPlayerHP()) - deltaHP;
     if (deltaHPDifference > 0.1 || deltaHPDifference < -0.1) {
         printf("Controller::animationFinished - Difference between local and remote deltaHP is greater than 0.1");
         qApp->exit(-1);
     }
+    animation = new Animation(this, bulletTime);
+    animation->startAnimation();
+    connect(animation, SIGNAL(animationFinished()), SLOT(fireAnimationFinnished()));
+}
+
+void Controller::fireAnimationFinnished() {
+    if (animation == NULL) return;
+    animation->deleteLater();
+    animation = NULL;
+    bulletPosition = QPointF(-1, -1);
 }

@@ -25,8 +25,8 @@ private:
 
     double getTrajectoryHeight(Player* p, double x);
     bool wallHit(Player* player);
-    double getImpactPosition(Player* p);
-    bool firePlayer(Player* source, Player* target);
+    double getImpactTime(Player* p);
+    double firePlayer(Player* source, Player* target);
     bool positionValidator(Player* player, double position) const;
     bool angleValidator(double angle) const;
     void damage(Player* player, double impactPosition);
@@ -58,9 +58,8 @@ public:
     bool setRemotePlayerAngle(double angle);
     bool setRemotePlayerPower(double power);
 
-    bool fireLocalPlayer();
-    //bool fireRemotePlayer(double position, double angle, double power, double deltaHP);
-    bool fireRemotePlayer();
+    double fireLocalPlayer();
+    double fireRemotePlayer();
 
     double getLocalPlayerPosition() const;
     double getLocalPlayerAngle() const;

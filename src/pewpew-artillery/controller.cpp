@@ -18,10 +18,10 @@ Controller::Controller(bool localStarts, Lobby *parent) :
     //isLocalTurn(localStarts),
     opponentName(""),
     bulletPosition(-1,-1)
-
 {
     window.show();
     window.refresh();
+    window.refreshHP();
 }
 
 void Controller::sendMoveMessage(double deltaHP){
@@ -228,14 +228,6 @@ QPointF Controller::getBulletPosition() const{
     return bulletPosition;
 }
 
-/* TEMP */
-void Controller::testAnimation() {
-    if (animation != NULL) return;
-    animation = new Animation(this, 0.85, 0.75, 0, 5);
-    animation->startAnimation();
-    connect(animation, SIGNAL(animationFinished()), SLOT(playerAnimationFinished()));
-}
-
 /**
  * @brief Event handler after remote player animation has finished;
  */
@@ -266,4 +258,5 @@ void Controller::fireAnimationFinnished() {
     animation->deleteLater();
     animation = NULL;
     bulletPosition = QPointF(-1, -1);
+    window.refreshHP();
 }

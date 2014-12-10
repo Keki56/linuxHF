@@ -305,13 +305,6 @@
             </property>
            </widget>
           </item>
-          <item>
-           <widget class="QPushButton" name="testButton">
-            <property name="text">
-             <string>Teszt</string>
-            </property>
-           </widget>
-          </item>
          </layout>
         </item>
         <item>
@@ -466,22 +459,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>testButton</sender>
-   <signal>clicked()</signal>
-   <receiver>GameWindow</receiver>
-   <slot>testButtonClicked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>219</x>
-     <y>440</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>351</x>
-     <y>241</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>chatInputBox</sender>
    <signal>returnPressed()</signal>
    <receiver>GameWindow</receiver>
@@ -497,27 +474,9 @@
     </hint>
    </hints>
   </connection>
-  <connection>
-   <sender>powerSlider</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>GameWindow</receiver>
-   <slot>powerChanged(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>219</x>
-     <y>384</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>351</x>
-     <y>241</y>
-    </hint>
-   </hints>
-  </connection>
  </connections>
  <slots>
   <slot>sendButtonClicked()</slot>
-  <slot>powerChanged(int)</slot>
-  <slot>testButtonClicked()</slot>
   <slot>fireButtonClicked()</slot>
  </slots>
 </ui>

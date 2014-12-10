@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>sprites/tank_left.png</file>
         <file>sprites/tank_left_noturret.png</file>
         <file>sprites/tank_right_noturret.png</file>
         <file>sprites/turret.png</file>

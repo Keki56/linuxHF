@@ -37,15 +37,13 @@ public:
     ~GameWindow();
 
     void refresh();
+    void refreshHP();
     void printChat(const QString& line);
     void setFireEnabled(bool enabled);//Balázs szerint ez nem kell, mert erről gondoskodik a refresh-ben.
 
 public slots:
     void fireButtonClicked();
     void sendButtonClicked();
-    void powerChanged(int value);
-
-    /* TEMP */ void testButtonClicked();
 
 private:
     void updateViewTransform();

@@ -58,9 +58,6 @@ public:
     QString getRemotePlayerName() const;
     QPointF getBulletPosition() const;
 
-
-    /* TEMP */ void testAnimation();
-
 signals:
 
 public slots:

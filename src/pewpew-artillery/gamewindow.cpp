@@ -86,10 +86,18 @@ void GameWindow::keyPressEvent(QKeyEvent *event){
         break;
         }
     case Qt::Key_W:
-        controller->onChangeLocalAngle(Controller::COUNTERCLOCKWISE);
+        if (engine->getLocalLeft()) {
+            controller->onChangeLocalAngle(Controller::COUNTERCLOCKWISE);
+        } else {
+            controller->onChangeLocalAngle(Controller::CLOCKWISE);
+        }
         break;
     case Qt::Key_S:
-        controller->onChangeLocalAngle(Controller::CLOCKWISE);
+        if (engine->getLocalLeft()) {
+            controller->onChangeLocalAngle(Controller::CLOCKWISE);
+        } else {
+            controller->onChangeLocalAngle(Controller::COUNTERCLOCKWISE);
+        }
         break;
     default:
         QMainWindow::keyPressEvent(event);
@@ -155,8 +163,6 @@ void GameWindow::refresh() {
     double rightPos = localLeft ? engine->getRemotePlayerPosition() : engine->getLocalPlayerPosition();
     double leftAngle = localLeft ? engine->getLocalPlayerAngle() : engine->getRemotePlayerAngle();
     double rightAngle = localLeft ? engine->getRemotePlayerAngle() : engine->getLocalPlayerAngle();
-    double leftHP = localLeft ? engine->getLocalPlayerHP() : engine->getRemotePlayerHP();
-    double rightHP = localLeft ? engine->getRemotePlayerHP(): engine->getLocalPlayerHP();
     QPointF bulletPos = controller->getBulletPosition();
     // move the sprites
     tankLeft->setPos(QPointF(leftPos, 1) - tankLeft->transformOriginPoint());
@@ -169,8 +175,6 @@ void GameWindow::refresh() {
         bullet->setPos(QPointF(0.5, 0.1) - bullet->transformOriginPoint());
     }
     // enable/disable GUI elements
-    ui->leftHPIndicator->display(leftHP);
-    ui->rightHPIndicator->display(rightHP);
     QString leftName = localLeft ? controller->getLocalPlayerName() : controller->getRemotePlayerName();
     QString rightName = localLeft ? controller->getRemotePlayerName() : controller->getLocalPlayerName();
     ui->leftPlayerLabel->setText(leftName);
@@ -190,6 +194,17 @@ void GameWindow::refresh() {
         ui->leftPlayerLabel->setFrameStyle(QFrame::NoFrame);
         ui->rightPlayerLabel->setFrameStyle(QFrame::NoFrame);
     }
+}
+
+/**
+ * @brief Refresh the HP indicators.
+ */
+void GameWindow::refreshHP() {
+    bool localLeft = engine->getLocalLeft();
+    double leftHP = localLeft ? engine->getLocalPlayerHP() : engine->getRemotePlayerHP();
+    double rightHP = localLeft ? engine->getRemotePlayerHP(): engine->getLocalPlayerHP();
+    ui->leftHPIndicator->display(leftHP);
+    ui->rightHPIndicator->display(rightHP);
 }
 
 /**
@@ -216,19 +231,6 @@ void GameWindow::sendButtonClicked() {
     if (message.isEmpty()) return;
     ui->chatInputBox->clear();
     controller->onSendChat(message);
-}
-
-/**
- * @brief Event handler called after the power was changed.
- * @param value The new value of the power.
- */
-void GameWindow::powerChanged(int value) {
-    //controller->onChangeLocalPower(value);
-}
-
-/* TEMP */
-void GameWindow::testButtonClicked() {
-    controller->testAnimation();
 }
 
 /**

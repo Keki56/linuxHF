@@ -9,9 +9,9 @@
 #include <QBitmap>
 #include <QtMath>
 
-#define WALL_LEFT 0.45              //a fal bal széle
-#define WALL_RIGHT 0.55             //a fal jobb széle
-#define WALL_TOP 0.01               //a fal magassága
+//#define WALL_LEFT 0.45              //a fal bal széle
+//#define WALL_RIGHT 0.55             //a fal jobb széle
+//#define WALL_TOP 0.01               //a fal magassága
 
 /**
  * @brief The main constructor of the main window.

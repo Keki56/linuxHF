@@ -4,20 +4,7 @@
 
 #include <QDebug>
 
-//A pálya 0.0-tól 1.0-ig tart
-
 #define g 9.81                      //a gracitációs gyorsulás
-//#define MAX_V 100                   //a lövedék maximális kezdősebessége
-
-#define WALL_LEFT 0.45              //a fal bal széle
-#define WALL_RIGHT 0.55             //a fal jobb széle
-#define WALL_TOP 0.01               //a fal magassága
-#define DEFAULT_LEFT_POSITION 0.2   //a játékosok alapértelmezett pozíciója     |-x-P1-----WALL-----P2-x-|
-#define DEFAULT_RIGHT_POSITION 0.8
-#define RADIUS 0.15                  //mennyire távolodhatnak el a játékosok a kiindulópozíciójuktól
-#define IMPACT_RADIUS 0.1            //a becsapódástól maximum mekkora távolságra sebez a lövedék
-#define MAX_HP 100                   //maxminális, kezdeti életerő
-#define MAX_DAMAGE 20                //maximális sebződés telitalálat esetén
 #ifndef M_PI_4
 #define M_PI_4		0.78539816339744830962
 #endif
@@ -264,7 +251,7 @@ QPointF GameEngine::getBulletPosition(double deltaTime){
     else
         player = &localPlayer;
 
-    double x = player->power * std::cos(player->angle) * deltaTime;
+    double x = player->position + player->power * std::cos(player->angle) * deltaTime;
     double y = player->power * std::sin(player->angle) * deltaTime - g / 2 * deltaTime * deltaTime;
     QPointF position(x,y);
     return position;

@@ -141,9 +141,9 @@ void Controller::fireLocalPlayer(){
         //window.setFireEnabled(false);
         double deltaHP = oldHP - engine.getRemotePlayerHP();
         sendMoveMessage(deltaHP);
-        checkPlayersAlive();
         if (animation != NULL) {
             window.refresh();
+            checkPlayersAlive();
         } else {
             animation = new Animation(this, bulletTime);
             animation->startAnimation();
@@ -256,4 +256,5 @@ void Controller::fireAnimationFinnished() {
     animation = NULL;
     bulletPosition = QPointF(-1, -1);
     window.refreshHP();
+    checkPlayersAlive();
 }

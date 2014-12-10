@@ -315,8 +315,8 @@ int main(int argc, char *argv[])
     Lobby lobby;
     lobby.showWindow();
 
-    Controller controller(true, &lobby);
-    controller.onOpponentJoined("Vendég");
+    /*Controller controller(true, &lobby);
+    controller.onOpponentJoined("Vendég");*/
 
 
     return a.exec();

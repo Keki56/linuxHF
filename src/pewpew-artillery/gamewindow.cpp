@@ -77,7 +77,7 @@ GameWindow::GameWindow(Controller* controller, GameEngine* engine, QWidget *pare
  */
 void GameWindow::keyPressEvent(QKeyEvent *event){
     QMainWindow::keyPressEvent(event);
-    if (!controller->hasGameStarted() || controller->isAnimationRunning())
+    if (!controller->hasGameStarted() || controller->isAnimationRunning()) return;
     switch (event->key()) {
     case Qt::Key_A:
         controller->onChangeLocalPosition(Controller::RIGHTtoLEFT);

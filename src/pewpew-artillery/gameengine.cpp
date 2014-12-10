@@ -37,12 +37,12 @@ GameEngine::GameEngine(bool isLocalStart, bool isLocalLeft):
 double GameEngine::getTrajectoryHeight(Player* p, double x){
     //algo No.1
     double t = (x - p->position) / (p->power * std::cos(p->angle));
-    double result1 = t * (p->power * std::sin(p->angle) - g*t/2);
+    double result = t * (p->power * std::sin(p->angle) - g*t/2);
     //algo No.2
-    // double s = std::abs(x - p->position);
-    // double result2 = s * (std::sin(p->angle) - g * s / (2 * p->power * p->power));
+    //double s = std::abs(x - p->position);
+    //double result = s * (std::sin(p->angle) - g * s / (2 * p->power * p->power));
 
-    return result1;
+    return result;
 }
 
 /**
@@ -233,6 +233,8 @@ QPointF GameEngine::getBulletPosition(double deltaTime){
 
     double x = player->position + player->power * std::cos(player->angle) * deltaTime;
     double y = player->power * std::sin(player->angle) * deltaTime - g / 2 * deltaTime * deltaTime;
+
+    //double y = getTrajectoryHeight(player, x);
     QPointF position(x,y);
     return position;
 }

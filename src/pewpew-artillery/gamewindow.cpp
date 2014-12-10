@@ -7,7 +7,6 @@
 #include <QMessageBox>
 #include <QBitmap>
 #include <QtMath>
-#include <QDebug>
 
 /**
  * @brief The main constructor of the main window.
@@ -169,7 +168,6 @@ void GameWindow::refresh() {
     turretRight->setRotation(-qRadiansToDegrees(rightAngle));
     if (bulletPos.x() < -0.5) {
         bullet->setVisible(false);
-        qDebug() << "BULLET SHOULD DISAPPEAR";
     } else {
         bullet->setVisible(true);
         bullet->setPos(QPointF(bulletPos.x(), 1 - bulletPos.y()) - bullet->transformOriginPoint());

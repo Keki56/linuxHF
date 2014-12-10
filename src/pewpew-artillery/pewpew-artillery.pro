@@ -30,7 +30,6 @@ LIBS += -lmessagetypes
 SOURCES +=\
     lobbywindow.cpp \
     gameengine.cpp \
-    map.cpp \
     gamewindow.cpp \
     controller.cpp \
     connecttoserverdialog.cpp \
@@ -40,7 +39,6 @@ SOURCES +=\
 HEADERS  += \
     lobbywindow.h \
     gameengine.h \
-    map.h \
     gamewindow.h \
     controller.h \
     connecttoserverdialog.h \

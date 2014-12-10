@@ -5,7 +5,6 @@
 #include <stdio.h>
 #include <QApplication>
 #include <QMessageBox>
-#include <QDebug>
 
 #define STEP_SIZE 0.01
 #define TURN_STEP 0.1256637     //PI / 25
@@ -39,9 +38,9 @@ void Controller::sendMoveMessage(double deltaHP){
  */
 void Controller::checkPlayersAlive() {
     if (engine.getLocalPlayerHP() <= 0.0) {
-        qDebug() << "Remote player win!";
+
     } else if (engine.getRemotePlayerHP() <= 0.0) {
-        qDebug() << "Local player win!";
+
     }
 
 }
@@ -134,7 +133,6 @@ void Controller::onReceiveChat(const QString& message) {
 }
 
 void Controller::fireLocalPlayer(){
-    qDebug() << "ontroller::fireLocalPlayer()";
     double oldHP = engine.getRemotePlayerHP();
     double bulletTime = engine.fireLocalPlayer();
     if (bulletTime >= 0) {
@@ -143,7 +141,6 @@ void Controller::fireLocalPlayer(){
         sendMoveMessage(deltaHP);
         checkPlayersAlive();
         if (animation != NULL) {
-            printf("Controller::fireLocalPlayer - Az ellenfél lövésanimációja alatt már a helyi játékos tud mozgni és lőni. Ez nem ideális, de egyenlőre így van.\n");
             window.refresh();
         } else {
             animation = new Animation(this, bulletTime);
@@ -151,18 +148,12 @@ void Controller::fireLocalPlayer(){
             connect(animation, SIGNAL(animationFinished()), SLOT(fireAnimationFinnished()));
         }
     } else {
-        printf("Controller:fireLocalPlayer - LocalPlayer tried to fire out of his turn.\n");
         qApp->exit(-1);
     }
 }
 
 void Controller::onMessageReceived(double position, double angle, double power, double deltaHP){
-    qDebug() << "Controller::onMessageReceived";
-    qDebug() << QString("Controller::onMessageReceived - position=%1 angle=%2 power=%3 deltaHP=%4").arg(position).arg(angle).arg(power).arg(deltaHP);
-    if (animation != NULL) {
-        printf("Controller::onMessageReceived - Message arrived while animating. It is imopossible, so there must be an error or a bug. Message is dropped\n");
-        return;
-    }
+    if (animation != NULL) return;
     this->deltaHP = deltaHP;
     engine.setRemotePlayerPower(power);
     animation = new Animation(this,
@@ -173,13 +164,11 @@ void Controller::onMessageReceived(double position, double angle, double power, 
 }
 
 void Controller::onOpponentJoined(const QString& name) {
-    printf("Controller::onOpponentJoined - name=%s\n", name.toLocal8Bit().data());
     opponentName = name;
     window.refresh();
 }
 
 void Controller::onOpponentQuit() {
-    printf("Controller::onOpponentQuit\n"); //TODO törölni
     QMessageBox::information(&window, tr("PewPew Altillery"), opponentName.append(tr(" kilépett.")));
 }
 
@@ -188,24 +177,31 @@ void Controller::onOpponentQuit() {
  * @param time
  */
 void Controller::animateBullet(double deltaTime) {
-    qDebug() << QString("Controller::animateBullet(%1)").arg(deltaTime);
     bulletPosition = engine.getBulletPosition(deltaTime);
     window.refresh();
 }
 
-/*void Controller::gameFinished(bool isLocalPlayerWin){
-    if (isLocalPlayerWin)
-        qDebug << "Local player win!";
-    else
-        qDebug << "Remote player win!";
-}*/
-
+/**
+ * @brief Event handler after the window was closed.
+ */
 void Controller::onWindowClosed() {
     lobby->gameClosed();
 }
 
+/**
+ * @brief Chech whether the game has started.
+ * @return True if the game has started.
+ */
 bool Controller::hasGameStarted() const {
     return !opponentName.isEmpty();
+}
+
+/**
+ * @brief Check whether an animation is running.
+ * @return True if an animation is running.
+ */
+bool Controller::isAnimationRunning() const {
+    return (animation != NULL);
 }
 
 /**
@@ -235,17 +231,13 @@ void Controller::playerAnimationFinished() {
     if (animation == NULL) return;
     animation->deleteLater();
     animation = NULL;
-    //QMessageBox::information(&window, "info", "The animation has finished.");
-    qDebug() << "Controller::animationFinished - The animation has finished.";
 
     double localPlayerHPOld = engine.getLocalPlayerHP();
-    qDebug() << "Controller - remote player fired";
     double bulletTime = engine.fireRemotePlayer();      //TODO a helyi játékos a lövés animációja alatt már tud mászkálni. Elugrani nem tud a lövedék elöl, mert a lövés már ekkora kifejtette hatását, ilyenkor már csak az animáció megy. (Figyelni a GameEngine::getBulletPosition-re, ha ezen javítanék.)
     //window.refresh();
     checkPlayersAlive();
     double deltaHPDifference = (localPlayerHPOld - engine.getLocalPlayerHP()) - deltaHP;
     if (deltaHPDifference > 0.1 || deltaHPDifference < -0.1) {
-        printf("Controller::animationFinished - Difference between local and remote deltaHP is %f > 0.1", deltaHPDifference);
         qApp->exit(-1);
     }
     animation = new Animation(this, bulletTime);

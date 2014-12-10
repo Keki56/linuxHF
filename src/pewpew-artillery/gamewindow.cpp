@@ -5,7 +5,6 @@
 #include "ui_gamewindow.h"
 #include "controller.h"
 #include <QMessageBox>
-#include <QTextStream>
 #include <QBitmap>
 #include <QtMath>
 
@@ -77,6 +76,7 @@ GameWindow::GameWindow(Controller* controller, GameEngine* engine, QWidget *pare
  */
 void GameWindow::keyPressEvent(QKeyEvent *event){
     QMainWindow::keyPressEvent(event);
+    if (!controller->hasGameStarted() || controller->isAnimationRunning())
     switch (event->key()) {
     case Qt::Key_A:
         controller->onChangeLocalPosition(Controller::RIGHTtoLEFT);
@@ -178,7 +178,7 @@ void GameWindow::refresh() {
     ui->fireButton->setEnabled(canMove());
     ui->sendButton->setEnabled(controller->hasGameStarted());
     ui->chatInputBox->setEnabled(controller->hasGameStarted());
-    if (controller->hasGameStarted()) {
+    if (controller->hasGameStarted() && !controller->isAnimationRunning()) {
         if (!localLeft ^ engine->getLocalTurn()) {
             ui->leftPlayerLabel->setFrameStyle(QFrame::Box);
             ui->rightPlayerLabel->setFrameStyle(QFrame::NoFrame);

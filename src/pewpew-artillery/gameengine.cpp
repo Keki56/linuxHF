@@ -2,8 +2,6 @@
 #include <cmath>
 #include <stdio.h>
 
-#include <QDebug>
-
 #define g 9.81                      //a gracitációs gyorsulás
 #ifndef M_PI_4
 #define M_PI_4		0.78539816339744830962
@@ -38,14 +36,11 @@ GameEngine::GameEngine(bool isLocalStart, bool isLocalLeft):
 
 double GameEngine::getTrajectoryHeight(Player* p, double x){
     //algo No.1
-    double t = std::abs(x - p->position) / (p->power * std::cos(p->angle));
-    double result1 = t * (p->power * std::sin(p->angle) - g*t/2);
+    // double t = std::abs(x - p->position) / (p->power * std::cos(p->angle));
+    // double result1 = t * (p->power * std::sin(p->angle) - g*t/2);
     //algo No.2
     double s = std::abs(x - p->position);
     double result2 = s * (std::sin(p->angle) - g * s / (2 * p->power * p->power));
-    qDebug() << QString("1 t=%1 result1=%2").arg(t).arg(result1);
-    qDebug() << QString("2 s=%1 resutl2=%2").arg(s).arg(result2);
-
 
     return result2;
 }
@@ -55,9 +50,7 @@ double GameEngine::getTrajectoryHeight(Player* p, double x){
  * @return The time when the bullet hits the wall or -1, if not.
  */
 bool GameEngine::wallHit(Player* player){
-    qDebug("Wall.left");
     double leftH = getTrajectoryHeight(player, wall.left);
-    qDebug("Wall.eight");
     double rightH = getTrajectoryHeight(player, wall.right);
     double crashTime = -1;
     if (leftH <= wall.top){
@@ -93,12 +86,10 @@ void GameEngine::damage(Player *player, double impactPosition){
  * @return - the time it takes the bullet strikes
  */
 double GameEngine::firePlayer(Player* source, Player* target) {
-    qDebug() << QString("position=%1\nangle=%2\npower=%3\n").arg(source->position).arg(source->angle).arg(source->power);
     double wallHitTime = wallHit(source);
     if (wallHitTime > 0) {
         double impactTime = getImpactTime(source);
         double impactPosition = source->position + impactTime * source->power * std::cos(source->angle);
-        qDebug() << QString("impactPosition=%1").arg(impactPosition);
         damage(source, impactPosition);     //Magunkba is belelőhetunk
         damage(target, impactPosition);
         return impactTime;
@@ -122,7 +113,6 @@ bool GameEngine::angleValidator(double angle) const {
 bool GameEngine::setLocalPlayerPosition(double position) {
     if (isLocalTurn && positionValidator(&localPlayer, position)) {
         localPlayer.position = position;
-        printf("Position=%f\n", position);
         return true;
     } else {
         return false;
@@ -150,7 +140,6 @@ bool GameEngine::setLocalPlayerPower(double power){
 bool GameEngine::setRemotePlayerPosition(double position) {
     if (!isLocalTurn && positionValidator(&remotePlayer, position)) {
         remotePlayer.position = position;
-        //printf("Position=%f\n", position);      //TODO törölni
         return true;
     } else {
         return false;
@@ -160,7 +149,6 @@ bool GameEngine::setRemotePlayerPosition(double position) {
 bool GameEngine::setRemotePlayerAngle(double angle) {
     if (!isLocalTurn && angleValidator(angle)) {
         remotePlayer.angle = angle;
-        //printf("Angle=%f\n", angle);             //TODO törölni
         return true;
     } else {
         return false;
@@ -178,14 +166,6 @@ bool GameEngine::setRemotePlayerPower(double power) {
 
 double GameEngine::fireLocalPlayer(){
     if (isLocalTurn) {
-        printf("GameEngine::fireLocalPlayer");
-
-        //DEBUG
-        //localPlayer.position = 0.2;
-        //localPlayer.angle = 0.7854;
-        //localPlayer.power = 2.426;
-        //DEBUG
-
         isLocalTurn = false;
         return firePlayer(&localPlayer, &remotePlayer);
     } else {
@@ -195,7 +175,6 @@ double GameEngine::fireLocalPlayer(){
 
 double GameEngine::fireRemotePlayer(){
     if (!isLocalTurn) {
-        qDebug() << "GameEngine::fireRemotePlayer()";
         isLocalTurn = true;
         return firePlayer(&remotePlayer, &localPlayer);
     } else {

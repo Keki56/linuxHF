@@ -54,6 +54,7 @@ public:
     void onWindowClosed();
 
     bool hasGameStarted() const;
+    bool isAnimationRunning() const;
     QString getLocalPlayerName() const;
     QString getRemotePlayerName() const;
     QPointF getBulletPosition() const;

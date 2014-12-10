@@ -1,7 +1,5 @@
 #include "animation.h"
 #include "controller.h"
-#include <QTextStream>
-#include <QDebug>
 
 #define STEP_SIZE 0.01
 #define TURN_STEP 0.1256637     //PI / 25
@@ -57,12 +55,10 @@ void Animation::timerEvent(QTimerEvent*) {
         case ANST_POSITION: {
              double deltaPos = endPos - startPos;
              double pos = startPos + (elapsed / 1000.0) * deltaPos;
-             // if ((moveDir > 0) ^ (pos < endPos) || (deltaPos == 0.0)) {
              if (elapsed >= 1000) {
                 controller->onChangeRemotePosition(endPos);
                 animState = ANST_ANGLE;
                 startTime = QTime::currentTime();
-                qDebug() << "Mozgás animáció vége";
              } else {
                  controller->onChangeRemotePosition(pos);
              }
@@ -70,11 +66,9 @@ void Animation::timerEvent(QTimerEvent*) {
         case ANST_ANGLE: {
             double deltaAngle = endAngle - startAngle;
             double angle = startAngle + (elapsed / 1000.0) * deltaAngle;
-             // if ((angleDir > 0) ^ (angle < endAngle) || (deltaAngle == 0.0)) {
              if (elapsed >= 1000) {
                 controller->onChangeRemoteAngle(endAngle);
                 killTimer(timerID);
-                qDebug() << "Játékos mozgásának aminációjának vége";
                 emit animationFinished();
              } else {
                  controller->onChangeRemoteAngle(angle);
@@ -84,7 +78,6 @@ void Animation::timerEvent(QTimerEvent*) {
             double scaledElapsed = elapsed / 3000.0;
             if (scaledElapsed > time){
                 killTimer(timerID);
-                qDebug() << "Lövés aminációjának vége";
                 emit animationFinished();
             }
             controller->animateBullet(scaledElapsed);

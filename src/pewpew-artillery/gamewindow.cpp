@@ -56,13 +56,13 @@ GameWindow::GameWindow(Controller* controller, GameEngine* engine, QWidget *pare
     turretRight->setPos(QPointF(rightTankImage.width() * 0.5, rightTankImage.height() * 0.15) - turretRight->mapToParent(turretRight->transformOriginPoint()));
 
     bullet = new QGraphicsPixmapItem(bulletImage);
-    bullet->setTransformOriginPoint(rightTankImage.width() / 2.0, rightTankImage.height());
+    bullet->setTransformOriginPoint(rightTankImage.width() / 2.0, rightTankImage.height() / 2.0);
     bullet->setScale(spriteScale);
     scene.addItem(bullet);
 
     tankLeft->setPos(QPointF(0.2, 1) - tankLeft->mapToParent(tankLeft->transformOriginPoint()));
     tankRight->setPos(QPointF(0.8, 1) - tankRight->mapToParent(tankRight->transformOriginPoint()));
-    bullet->setPos(QPointF(0.8, 1.3) - tankRight->mapToParent(tankRight->transformOriginPoint()));
+    bullet->setPos(QPointF(0.5, 0.1) - bullet->mapToParent(bullet->transformOriginPoint()));
 }
 
 /**
@@ -164,9 +164,9 @@ void GameWindow::refresh() {
     turretLeft->setRotation(-qRadiansToDegrees(leftAngle));
     turretRight->setRotation(-qRadiansToDegrees(rightAngle));
     if (bulletPos != QPointF(-1,-1)){
-        bullet->setPos(bulletPos - bullet->transformOriginPoint());
+        bullet->setPos(QPointF(bulletPos.rx(), 1 - bulletPos.ry()) - bullet->transformOriginPoint());
     } else {
-        bullet->setPos(QPointF(0.8, 1.3) - tankRight->mapToParent(tankRight->transformOriginPoint()));
+        bullet->setPos(QPointF(0.5, 0.1) - bullet->mapToParent(bullet->transformOriginPoint()));
     }
     // enable/disable GUI elements
     ui->leftHPIndicator->display(leftHP);

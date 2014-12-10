@@ -79,12 +79,13 @@ void Animation::timerEvent(QTimerEvent*) {
              }
         break; }
         case ANST_SHOT: {
-            if (elapsed > time){
+            double scaledElapsed = elapsed / 30.0;
+            if (scaledElapsed > time){
                 killTimer(timerID);
                 qDebug() << "Lövés aminációjának vége";
                 emit animationFinished();
             }
-            controller->animateBullet(elapsed);
+            controller->animateBullet(scaledElapsed);
         break; }
     }
 }

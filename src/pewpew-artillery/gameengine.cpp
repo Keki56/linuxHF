@@ -49,7 +49,8 @@ double GameEngine::getTrajectoryHeight(Player* p, double x){
  * @brief Calculate when the bullet hits the wall
  * @return The time when the bullet hits the wall or -1, if not.
  */
-bool GameEngine::wallHit(Player* player){
+
+double GameEngine::wallHit(Player* player){
     double leftH = getTrajectoryHeight(player, wall.left);
     double rightH = getTrajectoryHeight(player, wall.right);
     double crashTime = -1;
@@ -87,7 +88,7 @@ void GameEngine::damage(Player *player, double impactPosition){
  */
 double GameEngine::firePlayer(Player* source, Player* target) {
     double wallHitTime = wallHit(source);
-    if (wallHitTime > 0) {
+    if (wallHitTime < 0) {
         double impactTime = getImpactTime(source);
         double impactPosition = source->position + impactTime * source->power * std::cos(source->angle);
         damage(source, impactPosition);     //Magunkba is belelőhetunk

@@ -38,9 +38,11 @@ void Controller::sendMoveMessage(double deltaHP){
  */
 void Controller::checkPlayersAlive() {
     if (engine.getLocalPlayerHP() <= 0.0) {
-
+        isGameFinished = true;
+        QMessageBox::information(&window, tr("PewPew Altillery"), tr("Vesztettél!"));
     } else if (engine.getRemotePlayerHP() <= 0.0) {
-
+        isGameFinished = true;
+        QMessageBox::information(&window, tr("PewPew Altillery"), tr("Győztél!"));
     }
 
 }
@@ -196,6 +198,10 @@ bool Controller::hasGameStarted() const {
     return !opponentName.isEmpty();
 }
 
+bool Controller::hasGameFinished() const {
+    return isGameFinished;
+}
+
 /**
  * @brief Check whether an animation is running.
  * @return True if an animation is running.
@@ -234,8 +240,6 @@ void Controller::playerAnimationFinished() {
 
     double localPlayerHPOld = engine.getLocalPlayerHP();
     double bulletTime = engine.fireRemotePlayer();      //TODO a helyi játékos a lövés animációja alatt már tud mászkálni. Elugrani nem tud a lövedék elöl, mert a lövés már ekkora kifejtette hatását, ilyenkor már csak az animáció megy. (Figyelni a GameEngine::getBulletPosition-re, ha ezen javítanék.)
-    //window.refresh();
-    checkPlayersAlive();
     double deltaHPDifference = (localPlayerHPOld - engine.getLocalPlayerHP()) - deltaHP;
     if (deltaHPDifference > 0.1 || deltaHPDifference < -0.1) {
         qApp->exit(-1);
@@ -243,6 +247,7 @@ void Controller::playerAnimationFinished() {
     animation = new Animation(this, bulletTime);
     animation->startAnimation();
     connect(animation, SIGNAL(animationFinished()), SLOT(fireAnimationFinnished()));
+    checkPlayersAlive();
 }
 
 void Controller::fireAnimationFinnished() {

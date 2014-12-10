@@ -37,7 +37,7 @@ private:
     bool isLocalTurn, isLocalLeft;
 
     double getTrajectoryHeight(Player* p, double x);
-    bool wallHit(Player* player);
+    double wallHit(Player* player);
     double getImpactTime(Player* p);
     double firePlayer(Player* source, Player* target);
     bool positionValidator(Player* player, double position) const;

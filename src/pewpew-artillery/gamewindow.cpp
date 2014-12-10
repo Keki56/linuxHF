@@ -9,6 +9,10 @@
 #include <QBitmap>
 #include <QtMath>
 
+#define WALL_LEFT 0.45              //a fal bal széle
+#define WALL_RIGHT 0.55             //a fal jobb széle
+#define WALL_TOP 0.01               //a fal magassága
+
 /**
  * @brief The main constructor of the main window.
  * @param controller The Controller instance.
@@ -35,7 +39,6 @@ GameWindow::GameWindow(Controller* controller, GameEngine* engine, QWidget *pare
     QPixmap rightTankImage(":/sprites/tank_right_noturret.png");
     mask = rightTankImage.createMaskFromColor(Qt::white);
     rightTankImage.setMask(mask);
-    QPixmap bulletImage = rightTankImage;
 
     // add items to the scene
     tankLeft = new QGraphicsPixmapItem(leftTankImage);
@@ -55,14 +58,17 @@ GameWindow::GameWindow(Controller* controller, GameEngine* engine, QWidget *pare
     turretLeft->setTransformOriginPoint(0, turretImage.height() / 2.0);
     turretRight->setPos(QPointF(rightTankImage.width() * 0.5, rightTankImage.height() * 0.15) - turretRight->mapToParent(turretRight->transformOriginPoint()));
 
-    bullet = new QGraphicsPixmapItem(bulletImage);
-    bullet->setTransformOriginPoint(rightTankImage.width() / 2.0, rightTankImage.height() / 2.0);
-    bullet->setScale(spriteScale);
-    scene.addItem(bullet);
+    QPen noPen(Qt::NoPen);
+    QBrush bulletBrush(Qt::black);
+    bullet = scene.addEllipse(-0.01, -0.01, 0.02, 0.02, noPen, bulletBrush);
 
-    tankLeft->setPos(QPointF(0.2, 1) - tankLeft->mapToParent(tankLeft->transformOriginPoint()));
-    tankRight->setPos(QPointF(0.8, 1) - tankRight->mapToParent(tankRight->transformOriginPoint()));
-    bullet->setPos(QPointF(0.5, 0.1) - bullet->mapToParent(bullet->transformOriginPoint()));
+    QBrush wallBrush(Qt::gray);
+    wall = scene.addRect(0, 0, WALL_RIGHT - WALL_LEFT, -WALL_TOP, noPen, wallBrush);
+
+    tankLeft->setPos(QPointF(0.2, 1) - tankLeft->transformOriginPoint());
+    tankRight->setPos(QPointF(0.8, 1) - tankRight->transformOriginPoint());
+    bullet->setPos(QPointF(0.5, 0.1) - bullet->transformOriginPoint());
+    wall->setPos(WALL_LEFT, 1);
 }
 
 /**
@@ -77,12 +83,6 @@ void GameWindow::keyPressEvent(QKeyEvent *event){
         break;
     case Qt::Key_D: {
         controller->onChangeLocalPosition(Controller::LEFTtoRIGHT);
-        /*QList<QGraphicsItem*> items = ui->gameView->items();
-        for (QList<QGraphicsItem*>::iterator i = items.begin(); i != items.end(); ++i) {
-            (*i)->setPos((*i)->pos() + QPointF(2, 0.0));
-            //return;
-        }*/
-        // tankLeft->setPos(QPointF(0.2, 1) - tankLeft->mapToParent(tankLeft->transformOriginPoint()));
         break;
         }
     case Qt::Key_W:
@@ -166,7 +166,7 @@ void GameWindow::refresh() {
     if (bulletPos != QPointF(-1,-1)){
         bullet->setPos(QPointF(bulletPos.rx(), 1 - bulletPos.ry()) - bullet->transformOriginPoint());
     } else {
-        bullet->setPos(QPointF(0.5, 0.1) - bullet->mapToParent(bullet->transformOriginPoint()));
+        bullet->setPos(QPointF(0.5, 0.1) - bullet->transformOriginPoint());
     }
     // enable/disable GUI elements
     ui->leftHPIndicator->display(leftHP);

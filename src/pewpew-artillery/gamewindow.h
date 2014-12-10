@@ -5,6 +5,8 @@
 #include "gameengine.h"
 #include <QGraphicsScene>
 #include <QGraphicsPixmapItem>
+#include <QGraphicsEllipseItem>
+#include <QGraphicsRectItem>
 
 class Controller;
 
@@ -20,7 +22,9 @@ private:
     Controller* controller;
     GameEngine* engine;
     QGraphicsScene scene;
-    QGraphicsPixmapItem *tankLeft, *tankRight, *turretLeft, *turretRight, *bullet;
+    QGraphicsPixmapItem *tankLeft, *tankRight, *turretLeft, *turretRight;
+    QGraphicsEllipseItem* bullet;
+    QGraphicsRectItem* wall;
 
 protected:
     virtual void keyPressEvent(QKeyEvent* event);

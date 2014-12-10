@@ -57,7 +57,8 @@ void Animation::timerEvent(QTimerEvent*) {
         case ANST_POSITION: {
              double deltaPos = endPos - startPos;
              double pos = startPos + (elapsed / 1000.0) * deltaPos;
-             if ((moveDir > 0) ^ (pos < endPos) || (deltaPos == 0.0)) {
+             // if ((moveDir > 0) ^ (pos < endPos) || (deltaPos == 0.0)) {
+             if (elapsed >= 1000) {
                 controller->onChangeRemotePosition(endPos);
                 animState = ANST_ANGLE;
                 startTime = QTime::currentTime();
@@ -69,7 +70,8 @@ void Animation::timerEvent(QTimerEvent*) {
         case ANST_ANGLE: {
             double deltaAngle = endAngle - startAngle;
             double angle = startAngle + (elapsed / 1000.0) * deltaAngle;
-             if ((angleDir > 0) ^ (angle < endAngle) || (deltaAngle == 0.0)) {
+             // if ((angleDir > 0) ^ (angle < endAngle) || (deltaAngle == 0.0)) {
+             if (elapsed >= 1000) {
                 controller->onChangeRemoteAngle(endAngle);
                 killTimer(timerID);
                 qDebug() << "Játékos mozgásának aminációjának vége";
@@ -79,7 +81,7 @@ void Animation::timerEvent(QTimerEvent*) {
              }
         break; }
         case ANST_SHOT: {
-            double scaledElapsed = elapsed / 30.0;
+            double scaledElapsed = elapsed / 3000.0;
             if (scaledElapsed > time){
                 killTimer(timerID);
                 qDebug() << "Lövés aminációjának vége";

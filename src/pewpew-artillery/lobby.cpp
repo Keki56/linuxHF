@@ -48,8 +48,7 @@ void Lobby::connectToServer(const QString& nickname, const QString& address, int
         sendMessage(msg);
     } else {
         // Could not connect
-        // QMessageBox::critical(&lobbywindow, tr("Hiba"), tr("A csatlakozás nem sikerült."));
-        QMessageBox::critical(&lobbywindow, tr("Hiba"), tr("%1").arg(socket.error()));
+        QMessageBox::critical(&lobbywindow, tr("Hiba"), tr("A csatlakozás nem sikerült."));
     }
 }
 
@@ -229,8 +228,6 @@ void Lobby::handleSocketError(QAbstractSocket::SocketError error) {
         QMessageBox::critical(&lobbywindow, tr("Hiba"), tr("Megszakadt a kapcsolat a szerverrel."));
         emit disconnected();
         socket.close();
-    } else {
-        QMessageBox::critical(&lobbywindow, tr("Hiba"), tr("Ismeretlen hálózati hiba"));
     }
 }
 
@@ -314,10 +311,6 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     Lobby lobby;
     lobby.showWindow();
-
-    Controller controller(true, &lobby);
-    controller.onOpponentJoined("Vendég");
-
 
     return a.exec();
 }

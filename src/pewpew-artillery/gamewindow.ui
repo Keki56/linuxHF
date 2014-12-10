@@ -19,9 +19,6 @@
      <layout class="QVBoxLayout" name="gamePanel">
       <item>
        <widget class="QGraphicsView" name="gameView">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
         <property name="palette">
          <palette>
           <active>
@@ -85,6 +82,9 @@
            </colorrole>
           </disabled>
          </palette>
+        </property>
+        <property name="lineWidth">
+         <number>0</number>
         </property>
         <property name="verticalScrollBarPolicy">
          <enum>Qt::ScrollBarAlwaysOff</enum>

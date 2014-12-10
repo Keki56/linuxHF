@@ -255,5 +255,6 @@ void Controller::fireAnimationFinnished() {
     animation->deleteLater();
     animation = NULL;
     bulletPosition = QPointF(-1, -1);
+    window.refresh();
     window.refreshHP();
 }

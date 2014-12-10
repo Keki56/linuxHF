@@ -77,7 +77,7 @@ GameWindow::GameWindow(Controller* controller, GameEngine* engine, QWidget *pare
  */
 void GameWindow::keyPressEvent(QKeyEvent *event){
     QMainWindow::keyPressEvent(event);
-    if (!controller->hasGameStarted() || controller->isAnimationRunning())
+    if (!controller->hasGameStarted() || controller->isAnimationRunning()) return;
     switch (event->key()) {
     case Qt::Key_A:
         controller->onChangeLocalPosition(Controller::RIGHTtoLEFT);
@@ -143,7 +143,7 @@ void GameWindow::showEvent(QShowEvent* event) {
  */
 void GameWindow::updateViewTransform(){
     ui->gameView->resetTransform();
-    ui->gameView->scale(ui->gameView->geometry().width(), ui->gameView->geometry().height());
+    ui->gameView->scale(ui->gameView->geometry().width() - 2, ui->gameView->geometry().height() - 4);
     ui->gameView->centerOn(0.5, 0.5);
 }
 
@@ -170,14 +170,19 @@ void GameWindow::refresh() {
     tankRight->setPos(QPointF(rightPos, 1) - tankRight->transformOriginPoint());
     turretLeft->setRotation(-qRadiansToDegrees(leftAngle));
     turretRight->setRotation(-qRadiansToDegrees(rightAngle));
-    bullet->setPos(QPointF(bulletPos.rx(), 1 - bulletPos.ry()) - bullet->transformOriginPoint());
+    if (bulletPos.x() < -0.5) {
+        bullet->setVisible(false);
+    } else {
+        bullet->setVisible(true);
+        bullet->setPos(QPointF(bulletPos.x(), 1 - bulletPos.y()) - bullet->transformOriginPoint());
+    }
     // enable/disable GUI elements
     QString leftName = localLeft ? controller->getLocalPlayerName() : controller->getRemotePlayerName();
     QString rightName = localLeft ? controller->getRemotePlayerName() : controller->getLocalPlayerName();
     ui->leftPlayerLabel->setText(leftName);
     ui->rightPlayerLabel->setText(rightName);
     ui->fireButton->setEnabled(canMove());
-    ui->sendButton->setEnabled(controller->hasGameStarted() && !controller->isAnimationRunning());
+    ui->sendButton->setEnabled(controller->hasGameStarted());
     ui->chatInputBox->setEnabled(controller->hasGameStarted());
     if (controller->hasGameStarted()) {
         if (!localLeft ^ engine->getLocalTurn()) {
@@ -235,7 +240,8 @@ void GameWindow::sendButtonClicked() {
  * @return True if the local player can move.
  */
 bool GameWindow::canMove() const {
-    return engine->getLocalTurn() && controller->hasGameStarted() && !controller->hasGameFinished();
+    return engine->getLocalTurn() && controller->hasGameStarted() && !controller->hasGameFinished() &&
+           !controller->hasGameFinished() && !controller->isAnimationRunning();
 }
 
 /**

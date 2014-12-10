@@ -36,13 +36,13 @@ GameEngine::GameEngine(bool isLocalStart, bool isLocalLeft):
 
 double GameEngine::getTrajectoryHeight(Player* p, double x){
     //algo No.1
-    // double t = std::abs(x - p->position) / (p->power * std::cos(p->angle));
-    // double result1 = t * (p->power * std::sin(p->angle) - g*t/2);
+    double t = (x - p->position) / (p->power * std::cos(p->angle));
+    double result1 = t * (p->power * std::sin(p->angle) - g*t/2);
     //algo No.2
-    double s = std::abs(x - p->position);
-    double result2 = s * (std::sin(p->angle) - g * s / (2 * p->power * p->power));
+    // double s = std::abs(x - p->position);
+    // double result2 = s * (std::sin(p->angle) - g * s / (2 * p->power * p->power));
 
-    return result2;
+    return result1;
 }
 
 /**

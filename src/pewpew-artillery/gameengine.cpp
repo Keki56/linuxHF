@@ -54,7 +54,7 @@ double GameEngine::getTrajectoryHeight(Player* p, double x){
  * @brief Calculate when the bullet hits the wall
  * @return The time when the bullet hits the wall or -1, if not.
  */
-bool GameEngine::wallHit(Player* player){
+double GameEngine::wallHit(Player* player){
     qDebug("Wall.left");
     double leftH = getTrajectoryHeight(player, wall.left);
     qDebug("Wall.eight");
@@ -95,7 +95,7 @@ void GameEngine::damage(Player *player, double impactPosition){
 double GameEngine::firePlayer(Player* source, Player* target) {
     qDebug() << QString("position=%1\nangle=%2\npower=%3\n").arg(source->position).arg(source->angle).arg(source->power);
     double wallHitTime = wallHit(source);
-    if (wallHitTime > 0) {
+    if (wallHitTime < 0) {
         double impactTime = getImpactTime(source);
         double impactPosition = source->position + impactTime * source->power * std::cos(source->angle);
         qDebug() << QString("impactPosition=%1").arg(impactPosition);

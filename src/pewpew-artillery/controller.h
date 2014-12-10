@@ -17,8 +17,8 @@ private:
     Lobby* lobby;
     GameEngine engine;
     GameWindow window;
-    //bool isLocalTurn;
     QString opponentName;
+    bool isGameFinished = false;
     Animation* animation = NULL;
     QPointF bulletPosition;
     double deltaHP;
@@ -54,6 +54,7 @@ public:
     void onWindowClosed();
 
     bool hasGameStarted() const;
+    bool hasGameFinished() const;
     QString getLocalPlayerName() const;
     QString getRemotePlayerName() const;
     QPointF getBulletPosition() const;

@@ -61,9 +61,10 @@ GameWindow::GameWindow(Controller* controller, GameEngine* engine, QWidget *pare
     QPen noPen(Qt::NoPen);
     QBrush bulletBrush(Qt::black);
     bullet = scene.addEllipse(-0.01, -0.01, 0.02, 0.02, noPen, bulletBrush);
+    bullet->setTransformOriginPoint(0.0, leftTankImage.height() * spriteScale);
 
     QBrush wallBrush(Qt::gray);
-    wall = scene.addRect(0, 0, WALL_RIGHT - WALL_LEFT, -WALL_TOP, noPen, wallBrush);
+    wall = scene.addRect(0, 0, WALL_RIGHT - WALL_LEFT, -WALL_TOP - leftTankImage.height() * spriteScale, noPen, wallBrush);
 
     tankLeft->setPos(QPointF(0.2, 1) - tankLeft->transformOriginPoint());
     tankRight->setPos(QPointF(0.8, 1) - tankRight->transformOriginPoint());
@@ -234,7 +235,7 @@ void GameWindow::sendButtonClicked() {
  * @return True if the local player can move.
  */
 bool GameWindow::canMove() const {
-    return engine->getLocalTurn() && controller->hasGameStarted();
+    return engine->getLocalTurn() && controller->hasGameStarted() && !controller->hasGameFinished();
 }
 
 /**

@@ -247,7 +247,7 @@ void Controller::playerAnimationFinished() {
     animation = new Animation(this, bulletTime);
     animation->startAnimation();
     connect(animation, SIGNAL(animationFinished()), SLOT(fireAnimationFinnished()));
-    checkPlayersAlive();
+    //checkPlayersAlive();
 }
 
 void Controller::fireAnimationFinnished() {

@@ -67,7 +67,7 @@ GameWindow::GameWindow(Controller* controller, GameEngine* engine, QWidget *pare
 
     tankLeft->setPos(QPointF(0.2, 1) - tankLeft->transformOriginPoint());
     tankRight->setPos(QPointF(0.8, 1) - tankRight->transformOriginPoint());
-    bullet->setPos(QPointF(0.5, 0.1) - bullet->transformOriginPoint());
+    bullet->setPos(QPointF(-1, -1) - bullet->transformOriginPoint());
     wall->setPos(WALL_LEFT, 1);
 }
 
@@ -169,11 +169,7 @@ void GameWindow::refresh() {
     tankRight->setPos(QPointF(rightPos, 1) - tankRight->transformOriginPoint());
     turretLeft->setRotation(-qRadiansToDegrees(leftAngle));
     turretRight->setRotation(-qRadiansToDegrees(rightAngle));
-    if (bulletPos != QPointF(-1,-1)){
-        bullet->setPos(QPointF(bulletPos.rx(), 1 - bulletPos.ry()) - bullet->transformOriginPoint());
-    } else {
-        bullet->setPos(QPointF(0.5, 0.1) - bullet->transformOriginPoint());
-    }
+    bullet->setPos(QPointF(bulletPos.rx(), 1 - bulletPos.ry()) - bullet->transformOriginPoint());
     // enable/disable GUI elements
     QString leftName = localLeft ? controller->getLocalPlayerName() : controller->getRemotePlayerName();
     QString rightName = localLeft ? controller->getRemotePlayerName() : controller->getLocalPlayerName();
